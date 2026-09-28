@@ -63,7 +63,7 @@ jobs:
           BALANZA_VERSION: ${{ env.COMMIT }}
 
       - name: Subir por SSH (rsync)
-        if: steps.config.outputs.listo == 'si' && env.SSH_HOST != ''
+        if: steps.config.outputs.listo == 'si' && env.SSH_HOST != '' && env.FTP_HOST == ''
         env:
           SSH_USUARIO: ${{ secrets.SSH_USUARIO }}
           SSH_PUERTO: ${{ secrets.SSH_PUERTO }}
@@ -127,8 +127,8 @@ jobs:
           echo "::notice title=Subida lista::Archivos sincronizados en $RUTA_APP y aplicación reiniciada."
           rm -f ~/.ssh/id_despliegue
 
-      - name: Subir por FTP seguro (si no hay SSH)
-        if: steps.config.outputs.listo == 'si' && env.SSH_HOST == '' && env.FTP_HOST != ''
+      - name: Subir por FTP seguro
+        if: steps.config.outputs.listo == 'si' && env.FTP_HOST != ''
         env:
           FTP_USUARIO: ${{ secrets.FTP_USUARIO }}
           FTP_CLAVE: ${{ secrets.FTP_CLAVE }}

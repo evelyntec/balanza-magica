@@ -27,3 +27,8 @@ jobs:
             fi
           done
           echo "::notice title=Resumen::Puertos que responden:${abiertos:- ninguno}"
+      - name: Certificado del servidor FTP
+        run: |
+          H="$(printf '%s' "$HOST" | tr -d '[:space:]')"
+          cert="$(timeout 20 openssl s_client -starttls ftp -connect "$H:21" -servername "$H" </dev/null 2>/dev/null | openssl x509 -noout -subject -ext subjectAltName 2>/dev/null | tr '\n' ' ' || true)"
+          echo "::notice title=Certificado FTP::${cert:-no se pudo leer}"
