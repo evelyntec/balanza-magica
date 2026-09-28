@@ -121,13 +121,14 @@ Detalle en [docs/seguridad.md](docs/seguridad.md).
 ```
 balanza-magica/
 ├── packages/nucleo/        Motor en TypeScript puro (sin dependencias)
-│   ├── mecanicas/          7 tipos de desafío: generan, evalúan, diagnostican y dan pistas
+│   ├── mecanicas/          23 tipos de desafío: generan, evalúan, diagnostican y dan pistas
 │   ├── curriculo.ts        8 islas, OA oficiales y etapas
 │   ├── reglas.ts           Puntos, rachas, adaptatividad, estrellas, rangos, insignias, tienda
 │   └── servicio/           Servicio autoritativo antitrampas (usado por el servidor y el modo práctica)
 ├── apps/servidor/          API Express 5 + MySQL/MariaDB, empaquetada en un solo archivo para cPanel
 ├── apps/juego/             React 19 + SVG propio (balanza, Gatito, frutas, islas)
-├── herramientas/analisis/  Informe pedagógico en Python (pandas + matplotlib)
+├── herramientas/analisis/  Informe pedagógico y reporte semanal por correo en Python (pandas + matplotlib)
+├── .github/workflows/      Pruebas, despliegue automático al hosting, demo y reporte semanal
 └── e2e/                    Juego completo en navegador real (Playwright)
 ```
 
@@ -146,11 +147,11 @@ python -m pytest herramientas/analisis
 ```
 
 - **300 000 ejercicios generados y verificados** en cada ejecución: solución única, números dentro del ámbito del OA
-  (0 a 20 en la balanza de 1° y 2°), sin negativos, respuesta que nunca aparece en la vista pública y retroalimentación para cada error.
+  (0 a 20 en la balanza de 1° y 2°), sin negativos antes de 7°, respuesta que nunca aparece en la vista pública y retroalimentación para cada error.
 - **Pruebas de propiedades** (fast-check) de la aritmética exacta y de la física de la balanza.
 - **Cada trampa de la tabla anterior tiene su prueba.**
 - **Recorrido completo en navegador:** la docente crea un curso, una estudiante se registra, juega una etapa entera
-  por la interfaz y obtiene 3 estrellas, en celular y en computador.
+  por la interfaz y obtiene 3 estrellas; además, se juegan por la interfaz las etapas de las 8 islas, en celular y en computador.
 - **Integración con MariaDB real:** la isla 1 completa, concurrencia, borrado en cascada y UTF-8.
 
 ## Ejecutar en tu computador
@@ -163,6 +164,14 @@ npm run build:demo       # Demo de un solo archivo: apps/juego/dist-demo/index.h
 ```
 
 Instalación en el hosting (V2Networks / cPanel): [docs/instalacion-cpanel.md](docs/instalacion-cpanel.md).
+
+## Despliegue continuo
+
+Cada cambio en `main` pasa por las pruebas; si todas pasan, GitHub Actions compila, sube la aplicación al hosting
+(SSH con rsync, o FTP seguro), la reinicia y comprueba en `/api/salud` que quedó en línea la versión nueva.
+Cada viernes, otro flujo descarga el registro del panel docente y envía a la docente un **reporte semanal por correo**:
+quién necesita apoyo, los errores más frecuentes con una sugerencia para la clase y el informe completo adjunto.
+Configuración paso a paso: [docs/despliegue.md](docs/despliegue.md).
 
 ## Análisis de datos
 
@@ -186,7 +195,7 @@ También hay consultas SQL de ejemplo en [apps/servidor/sql/consultas_docente.sq
 - [x] Isla 6: fórmulas con letras escritas desde tablas, figuras y situaciones; ecuaciones a · x + b = c en la balanza y con procedimiento formal; problemas con letras
 - [x] Isla 7: términos semejantes con sacos y globos (negativos), proporcionalidad directa, inversa o ninguna con gráfico, ax = b y x/a = b con sus inecuaciones, y modelación
 - [x] Isla 8: incógnita a ambos lados (balanza y procedimiento formal), funciones en diagramas sagitales, función afín (gráfico, tabla, traslación e interés simple) e inecuaciones lineales con coeficientes negativos
-- [ ] Despliegue automático desde GitHub al hosting y reporte semanal para la docente por correo
+- [x] Despliegue automático desde GitHub al hosting (SSH o FTP seguro, con verificación de la versión en línea) y reporte semanal para la docente por correo
 - [ ] Modo Detective: encontrar el error en la resolución de otro personaje
 - [ ] Tutor de pistas con IA
 

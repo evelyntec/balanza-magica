@@ -5,6 +5,17 @@
 import { build } from 'esbuild';
 import { cp, mkdir, rm, writeFile, readFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
+import { execSync } from 'node:child_process';
+
+// Versión = commit (en GitHub Actions viene en GITHUB_SHA). Sirve para comprobar que el despliegue quedó en línea.
+let version = process.env.BALANZA_VERSION ?? process.env.GITHUB_SHA ?? '';
+if (!version) {
+  try {
+    version = execSync('git rev-parse HEAD', { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim();
+  } catch {
+    version = 'local';
+  }
+}
 
 await rm('dist', { recursive: true, force: true });
 await mkdir('dist', { recursive: true });
@@ -19,6 +30,7 @@ await build({
   minify: false,
   sourcemap: false,
   legalComments: 'external',
+  define: { __BALANZA_VERSION__: JSON.stringify(version.slice(0, 12)) },
   logLevel: 'warning',
 });
 
@@ -35,4 +47,4 @@ await writeFile(
   'dist/package.json',
   JSON.stringify({ name: 'balanza-magica-servidor', version: pkg.version, private: true, main: 'app.cjs', scripts: { start: 'node app.cjs' }, engines: { node: '>=18' } }, null, 2),
 );
-console.log('Servidor empaquetado en apps/servidor/dist');
+console.log(`Servidor empaquetado en apps/servidor/dist (versión ${version.slice(0, 12)})`);

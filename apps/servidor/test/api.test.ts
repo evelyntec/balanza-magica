@@ -51,6 +51,8 @@ describe('seguridad HTTP', () => {
     expect(r.headers['content-security-policy']).toContain("frame-ancestors 'none'");
     expect(r.headers['x-content-type-options']).toBe('nosniff');
     expect(r.headers['cache-control']).toBe('no-store');
+    // El despliegue automático compara esta versión con el commit publicado.
+    expect(r.body).toMatchObject({ ok: true, version: 'desarrollo' });
   });
 
   it('CSRF: sin la cabecera propia o desde otro sitio se rechaza', async () => {

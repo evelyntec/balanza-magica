@@ -80,6 +80,11 @@ cPanel → **SSL/TLS Status** → marca el subdominio → **Run AutoSSL**. La co
 
 ## Actualizar a una nueva versión
 
+**Automático (recomendado):** configura una vez el despliegue desde GitHub siguiendo [despliegue.md](despliegue.md).
+Desde entonces, cada cambio en `main` que pase las pruebas se publica solo, y los viernes te llega el reporte semanal.
+
+**A mano:**
+
 1. `npm run build` en tu computador.
 2. Sube y extrae el nuevo `dist` sobre `balanza-app` (los datos están en MySQL, no se pierden).
 3. *Setup Node.js App* → **Restart**.

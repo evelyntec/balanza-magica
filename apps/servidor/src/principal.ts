@@ -11,6 +11,9 @@ import { AlmacenMemoria, ServicioJuego, hashClave, type Almacen } from '@balanza
 import { AlmacenMySQL } from './almacenMysql';
 import { crearApp } from './app';
 
+/** Commit con que se empaquetó el servidor (lo inyecta construir.mjs). */
+declare const __BALANZA_VERSION__: string;
+
 /** Lee un archivo .env simple si existe (cPanel también permite definirlas en el panel). */
 function cargarEnv(ruta: string): void {
   if (!existsSync(ruta)) return;
@@ -65,9 +68,10 @@ async function iniciar(): Promise<void> {
     produccion,
     origenes: (env.ORIGENES ?? '').split(',').map((o) => o.trim()).filter(Boolean),
     ...(estaticos ? { estaticos } : {}),
+    version: typeof __BALANZA_VERSION__ === 'string' ? __BALANZA_VERSION__ : 'desarrollo',
   });
 
-  app.listen(puerto, () => console.log(`[balanza] servidor escuchando en el puerto ${puerto}`));
+  app.listen(puerto, () => console.log(`[balanza] servidor escuchando en el puerto ${puerto} (versión ${typeof __BALANZA_VERSION__ === 'string' ? __BALANZA_VERSION__ : 'desarrollo'})`));
 }
 
 iniciar().catch((e) => {

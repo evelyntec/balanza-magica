@@ -24,6 +24,8 @@ export interface OpcionesApp {
   confiarProxy?: boolean | number | string;
   duracionCookieMs?: number;
   reloj?: () => number;
+  /** Versión publicada (commit), para comprobar un despliegue. */
+  version?: string;
 }
 
 declare module 'express-serve-static-core' {
@@ -145,7 +147,7 @@ export function crearApp(servicio: ServicioJuego, opciones: OpcionesApp) {
 
   const api = express.Router();
 
-  api.get('/salud', ruta(async () => ({ ok: true, hora: reloj() })));
+  api.get('/salud', ruta(async () => ({ ok: true, hora: reloj(), version: opciones.version ?? 'desarrollo' })));
   api.get('/apodos-sugeridos', ruta(async () => ({ apodos: sugerirApodos(6) })));
 
   // --- Cuentas ----------------------------------------------------------------
