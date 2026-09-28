@@ -200,7 +200,8 @@ describe('antitrampas', () => {
     expect((await espera(t.servicio.iniciarEtapa(t.ctx, '4-1'))).codigo).toBe('ETAPA_BLOQUEADA');
     expect((await espera(t.servicio.iniciarEtapa(t.ctx, '5-1'))).codigo).toBe('ETAPA_BLOQUEADA');
     expect((await espera(t.servicio.iniciarEtapa(t.ctx, '6-1'))).codigo).toBe('ETAPA_BLOQUEADA');
-    expect((await espera(t.servicio.iniciarEtapa(t.ctx, '7-1'))).codigo).toBe('NO_ENCONTRADO');
+    expect((await espera(t.servicio.iniciarEtapa(t.ctx, '7-1'))).codigo).toBe('ETAPA_BLOQUEADA');
+    expect((await espera(t.servicio.iniciarEtapa(t.ctx, '8-1'))).codigo).toBe('NO_ENCONTRADO');
     expect((await espera(t.servicio.iniciarEtapa(t.ctx, { id: '1-1' }))).codigo).toBe('NO_ENCONTRADO');
   });
 
@@ -344,7 +345,18 @@ describe('recorrido completo', () => {
     }
     const perfil = await t.servicio.perfil(t.ctx.jugadorId);
     expect(perfil.insignias).toEqual(expect.arrayContaining(['vence_6-J', 'isla_6_dorada', 'lenguaje_algebraico']));
-    expect(perfil.islas[6]!.accesible).toBe(false); // la isla 7 aún no existe
+    expect(perfil.islas[6]!.accesible).toBe(true); // vencer al Robot abre el Volcán
+  });
+
+  it('7° básico: jugar perfecto la isla 7 da 3 estrellas y vence al Dragón', async () => {
+    const t = await preparar({ nivel: 7 });
+    for (const id of ['7-1', '7-2', '7-3', '7-4', '7-J']) {
+      const fin = await completarEtapa(t, id);
+      expect(fin.estrellas).toBe(3);
+    }
+    const perfil = await t.servicio.perfil(t.ctx.jugadorId);
+    expect(perfil.insignias).toEqual(expect.arrayContaining(['vence_7-J', 'isla_7_dorada', 'sin_mezclar']));
+    expect(perfil.islas[7]!.accesible).toBe(false); // la isla 8 aún no existe
   });
 
   it('adivinar al azar rinde mucho menos que pensar', async () => {

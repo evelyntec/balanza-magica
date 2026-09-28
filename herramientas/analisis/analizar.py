@@ -52,6 +52,9 @@ NOMBRES_TIPO = {
     "grafico_solucion": "Graficar soluciones",
     "expresion": "Fórmulas con letras",
     "ecuacion_dos_pasos": "Ecuaciones de dos pasos",
+    "reducir": "Términos semejantes",
+    "proporcion": "Proporcionalidad",
+    "ecuacion_mult": "Ecuaciones e inecuaciones ax = b",
 }
 
 DIAGNOSTICOS = {
@@ -104,6 +107,13 @@ DIAGNOSTICOS = {
     "formula_evaluacion": "Error al evaluar la fórmula",
     "ecuacion_sin_dividir": "No reparte: deja 3x = 21",
     "ecuacion_orden": "Divide antes de quitar la constante",
+    "reducir_mezcla": "Junta términos no semejantes",
+    "reducir_signo": "Ignora el signo menos al reducir",
+    "reducir_signo_resultado": "Equivoca el signo del resultado",
+    "proporcion_tipo": "Confunde proporción directa e inversa",
+    "proporcion_afin": "Cree que toda relación creciente es directa",
+    "proporcion_aditiva": "Usa la estrategia aditiva",
+    "proporcion_inversa_directa": "Resuelve una inversa como directa",
 }
 
 

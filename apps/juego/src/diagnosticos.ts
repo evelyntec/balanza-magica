@@ -134,4 +134,23 @@ export const DIAGNOSTICOS_DOCENTE: Record<string, { titulo: string; sugerencia: 
     titulo: 'Divide antes de quitar la constante (26 ÷ 3 − 5)',
     sugerencia: 'Con la balanza: el 5 no está multiplicado por 3; primero se quita de ambos lados.',
   },
+  reducir_mezcla: {
+    titulo: 'Junta términos no semejantes (3x + 2y = 5x)',
+    sugerencia: 'Con sacos de colores: solo se juntan los de la misma letra. Pedir que ordenen por letra antes de sumar.',
+  },
+  reducir_signo: { titulo: 'Ignora el signo menos al reducir', sugerencia: 'Modelar los términos negativos como globos que anulan sacos (pares cero).' },
+  reducir_signo_resultado: { titulo: 'Equivoca el signo del resultado (−2x como 2x)', sugerencia: 'Preguntar: ¿hay más sacos o más globos? Eso define el signo.' },
+  proporcion_tipo: { titulo: 'Confunde proporción directa con inversa', sugerencia: 'Calcular en cada fila el cociente y el producto: el que se mantiene define el tipo.' },
+  proporcion_afin: {
+    titulo: 'Cree que toda relación creciente es proporcional directa',
+    sugerencia: 'Comparar el taxi (cobra al subir) con el precio por kilo: graficar y ver si la recta pasa por el origen.',
+  },
+  proporcion_aditiva: {
+    titulo: 'Usa la estrategia aditiva (4 → 6 entonces 6 → 8)',
+    sugerencia: 'Trabajar razones con tablas y dobles/mitades; la proporcionalidad es multiplicativa.',
+  },
+  proporcion_inversa_directa: {
+    titulo: 'Resuelve una proporción inversa como directa',
+    sugerencia: 'Situaciones como "más personas, menos horas": verificar que el producto se mantiene.',
+  },
 };

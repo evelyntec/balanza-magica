@@ -25,6 +25,8 @@ export interface SecretoProblema {
   correcta: number;
   x: number;
   tipos: ('correcta' | 'palabra_clave' | 'otra')[];
+  /** Mensaje propio para la trampa (si no, el de palabras clave). */
+  avisoTrampa?: string;
 }
 
 export interface RespuestaProblema {
@@ -185,14 +187,16 @@ export const problema: Mecanica<PublicoProblema, SecretoProblema, RespuestaProbl
       return {
         correcto: false,
         diagnostico: 'modelo_palabra_clave',
-        mensaje: 'Cuidado con las palabras clave: "más" no siempre significa sumar. Lee la historia: ¿qué número no conoces? Ese es la caja.',
+        mensaje:
+          secreto.avisoTrampa ??
+          'Cuidado con las palabras clave: "más" no siempre significa sumar. Lee la historia: ¿qué número no conoces? Ese es la caja.',
         solucion,
       };
     }
     if (!ecuacionBien) {
       return { correcto: false, diagnostico: 'modelo_errado', mensaje: 'Esa ecuación no cuenta la misma historia. Imagina la caja en el lugar de lo que no sabes.', solucion };
     }
-    return { correcto: false, diagnostico: 'operacion_inversa', mensaje: `La ecuación está bien, pero revisa el valor: pon tu número en la caja y comprueba si la igualdad se cumple.`, solucion };
+    return { correcto: false, diagnostico: 'operacion_inversa', mensaje: `La ecuación está bien, pero revisa el valor: pon tu número en la caja y comprueba si se cumple (y si es el que pide la pregunta).`, solucion };
   },
 
   solucion(publico, secreto) {

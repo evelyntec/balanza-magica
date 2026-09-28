@@ -282,6 +282,8 @@ export interface Estadisticas {
   sucesionesSeguidas?: number;
   /** Fórmulas escritas bien seguidas (insignia "Lenguaje algebraico"). */
   formulasSeguidas?: number;
+  /** Expresiones reducidas bien seguidas (insignia "Sin mezclar"). */
+  reduccionesSeguidas?: number;
 }
 
 export const estadisticasIniciales = (): Estadisticas => ({
@@ -314,6 +316,7 @@ export function actualizarEstadisticas(
   if ((item.tipo === 'patron_figuras' || item.tipo === 'patron_numerico') && item.resultado === 'perfecto') n.patronesPerfectos += 1;
   if (item.relacional) n.relacionalesSeguidos = esExito(item.resultado) ? n.relacionalesSeguidos + 1 : 0;
   if (item.tipo === 'problema') n.cuentosSeguidos = esExito(item.resultado) ? (n.cuentosSeguidos ?? 0) + 1 : 0;
+  if (item.tipo === 'reducir') n.reduccionesSeguidas = esExito(item.resultado) ? (n.reduccionesSeguidas ?? 0) + 1 : 0;
   if (item.tipo === 'expresion') n.formulasSeguidas = esExito(item.resultado) ? (n.formulasSeguidas ?? 0) + 1 : 0;
   if (item.tipo === 'sucesion') n.sucesionesSeguidas = esExito(item.resultado) ? (n.sucesionesSeguidas ?? 0) + 1 : 0;
   if (item.tipo === 'inecuacion') n.inecuacionesSeguidas = esExito(item.resultado) ? (n.inecuacionesSeguidas ?? 0) + 1 : 0;
@@ -353,6 +356,9 @@ export const INSIGNIAS: Insignia[] = [
   { id: 'isla_6_dorada', nombre: 'Ciudad dorada', descripcion: '3 estrellas en todas las etapas de la Ciudad.', icono: '🏙️', monedas: 100 },
   { id: 'vence_6-J', nombre: 'Robot descifrado', descripcion: 'Venciste al Robot Fórmulus.', icono: '🤖', monedas: 50 },
   { id: 'lenguaje_algebraico', nombre: 'Lenguaje algebraico', descripcion: '5 fórmulas seguidas escritas sin error.', icono: '🔤', monedas: 40 },
+  { id: 'isla_7_dorada', nombre: 'Volcán dorado', descripcion: '3 estrellas en todas las etapas del Volcán.', icono: '🌋', monedas: 100 },
+  { id: 'vence_7-J', nombre: 'Cenizas apagadas', descripcion: 'Venciste al Dragón de Ceniza.', icono: '🐉', monedas: 50 },
+  { id: 'sin_mezclar', nombre: 'Sin mezclar', descripcion: '5 expresiones seguidas reducidas sin error.', icono: '🎈', monedas: 40 },
   { id: 'muchas_soluciones', nombre: 'Muchas soluciones', descripcion: '5 inecuaciones seguidas con todas sus soluciones marcadas.', icono: '📏', monedas: 40 },
   { id: 'no_me_engana', nombre: 'Nadie me engaña', descripcion: '5 cuentos seguidos sin caer en la trampa de las palabras clave.', icono: '🕵️', monedas: 40 },
   { id: 'constancia_3', nombre: 'Constancia', descripcion: 'Jugaste en 3 días distintos.', icono: '📅', monedas: 20 },
@@ -386,6 +392,9 @@ export function insigniasGanadas(s: Estadisticas, progreso: Progreso, yaTiene: r
     isla_6_dorada: etapasDeIsla(6).every((e) => (progreso[e.id]?.estrellas ?? 0) >= 3),
     'vence_6-J': progreso['6-J']?.superada === true,
     lenguaje_algebraico: (s.formulasSeguidas ?? 0) >= 5,
+    isla_7_dorada: etapasDeIsla(7).every((e) => (progreso[e.id]?.estrellas ?? 0) >= 3),
+    'vence_7-J': progreso['7-J']?.superada === true,
+    sin_mezclar: (s.reduccionesSeguidas ?? 0) >= 5,
     'vence_1-J': progreso['1-J']?.superada === true,
     'vence_2-J': progreso['2-J']?.superada === true,
     constancia_3: s.dias.length >= 3,

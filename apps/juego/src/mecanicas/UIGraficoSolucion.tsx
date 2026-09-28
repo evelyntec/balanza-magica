@@ -54,7 +54,9 @@ const OPCIONES: { tipo: TipoGrafico; icono: string; texto: string }[] = [
 ];
 
 export function UIGraficoSolucion({ item, bloqueado, cierre, pistas, reintentos, alResponder, pie }: PropsMecanica) {
-  const p = item.publico as PublicoGrafico;
+  // También sirve para "Ecuaciones de lava" (7°), cuyo público trae el texto listo.
+  const p = item.publico as PublicoGrafico & { texto?: string };
+  const texto = p.texto ?? textoGrafico(p);
   const [tipo, setTipo] = useState<TipoGrafico | null>(null);
   useEffect(() => setTipo(null), [item.id]);
 
@@ -79,8 +81,8 @@ export function UIGraficoSolucion({ item, bloqueado, cierre, pistas, reintentos,
             {p.contexto}
           </div>
         ) : null}
-        <div className="ecuacion" style={{ color: '#fff', fontSize: 'clamp(1.9rem, 7vw, 2.8rem)' }} aria-label={`Resuelve ${textoGrafico(p)}`}>
-          {textoGrafico(p)}
+        <div className="ecuacion" style={{ color: '#fff', fontSize: 'clamp(1.9rem, 7vw, 2.8rem)' }} aria-label={`Resuelve ${texto}`}>
+          {texto}
         </div>
         <div className={`recta-grafico__marco ${reintentos > 0 ? 'sacudir' : ''}`} key={reintentos}>
           <Recta p={p} dibujos={dibujos} borde={borde} />

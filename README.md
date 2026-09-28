@@ -34,6 +34,10 @@ Creado por **Evelyn Álvarez Vásquez**, Profesora de Educación General Básica
 |---|---|
 | ![Fórmula con letras](docs/capturas/celular-formula-palitos.png) | ![Ecuación de dos pasos en la balanza](docs/capturas/celular-ecuacion-dos-pasos.png) |
 
+| Globos y sacos (7°) | Ríos proporcionales (7°, computador) |
+|---|---|
+| ![Términos semejantes con sacos y globos](docs/capturas/celular-globos-sacos.png) | ![Tabla y gráfico de proporcionalidad](docs/capturas/computador-proporcion.png) |
+
 | Retroalimentación (computador) | Panel docente |
 |---|---|
 | ![Retroalimentación](docs/capturas/computador-retroalimentacion.png) | ![Panel docente](docs/capturas/computador-docente.png) |
@@ -66,7 +70,8 @@ Fundamentación completa, con referencias (colección ReFIP, Castro y Molina, Vl
 | 🏔️ Montaña de las Tablas | 4° básico | La máquina de reglas · Ecuaciones de la cumbre · La balanza inclinada · Cuentos de la cumbre · **Jefe: Yeti de las Tablas** | MA04 OA 13, OA 14 |
 | 🏜️ Desierto de las Desigualdades | 5° básico | Huellas en la arena · Torres de palitos · Espejismos · La caravana · **Jefe: Escorpión Desigual** | MA05 OA 14, OA 15 |
 | 🏙️ Ciudad de las Fórmulas | 6° básico | La fábrica de fórmulas · Letras que generalizan · Balanza de las fórmulas · Problemas con letras · **Jefe: Robot Fórmulus** | MA06 OA 9, OA 10, OA 11 |
-| Islas 7 y 8 | 7° y 8° básico | En construcción (el motor ya está preparado: aritmética exacta con fracciones, currículo mapeado) | Ver [docs/curriculo.md](docs/curriculo.md) |
+| 🌋 Volcán de los Globos | 7° básico | Globos y sacos · Ríos proporcionales · Ecuaciones de lava · Problemas del volcán · **Jefe: Dragón de Ceniza** | MA07 OA 6, 7, 8, 9 |
+| Isla 8 | 8° básico | En construcción (el motor ya está preparado: aritmética exacta con fracciones, currículo mapeado) | Ver [docs/curriculo.md](docs/curriculo.md) |
 
 Cada etapa tiene **5 niveles de dificultad adaptativa** y ejercicios generados al azar: dos estudiantes nunca reciben los mismos números.
 
@@ -74,7 +79,7 @@ Cada etapa tiene **5 niveles de dificultad adaptativa** y ejercicios generados a
 
 - **Puntos acumulados** durante todo el juego y **rangos**: Aprendiz → Explorador/a → Guardián/a → Maestro/a del Equilibrio → Leyenda.
 - **Estrellas (1 a 3)** por etapa: exigen precisión, pocas pistas y llegar a los niveles altos.
-- **Rachas** que multiplican los puntos (×1,5, ×2, ×3), **29 insignias** y **jefes** con barra de vida.
+- **Rachas** que multiplican los puntos (×1,5, ×2, ×3), **32 insignias** y **jefes** con barra de vida.
 - **Monedas** para la tienda de Gatito (sombrero de mago, corona, balanza dorada…). Nunca sirven para comprar respuestas.
 - **Desafiante sin frustrar:** dos aciertos seguidos suben el nivel; dos errores seguidos bajan un nivel y activan un ejercicio con apoyo.
 - **Pesadas limitadas:** en "completar la caja", acertar con **una sola pesada** da el máximo. Probar al azar no conviene.
@@ -136,7 +141,7 @@ npm run test:e2e         # Playwright: juego completo en celular y computador
 python -m pytest herramientas/analisis
 ```
 
-- **225 000 ejercicios generados y verificados** en cada ejecución: solución única, números dentro del ámbito del OA
+- **262 500 ejercicios generados y verificados** en cada ejecución: solución única, números dentro del ámbito del OA
   (0 a 20 en la balanza de 1° y 2°), sin negativos, respuesta que nunca aparece en la vista pública y retroalimentación para cada error.
 - **Pruebas de propiedades** (fast-check) de la aritmética exacta y de la física de la balanza.
 - **Cada trampa de la tabla anterior tiene su prueba.**
@@ -175,7 +180,7 @@ También hay consultas SQL de ejemplo en [apps/servidor/sql/consultas_docente.sq
 - [x] Isla 4: tablas con regla (también inversa), ecuaciones hasta 100 e inecuaciones con balanza inclinada y recta numérica
 - [x] Isla 5: sucesiones con predicción (numéricas y figuras de palitos y baldosas), gráfico de soluciones de ecuaciones e inecuaciones y problemas hasta 1000
 - [x] Isla 6: fórmulas con letras escritas desde tablas, figuras y situaciones; ecuaciones a · x + b = c en la balanza y con procedimiento formal; problemas con letras
-- [ ] Isla 7: sacos, globos (negativos), términos semejantes y proporcionalidad
+- [x] Isla 7: términos semejantes con sacos y globos (negativos), proporcionalidad directa, inversa o ninguna con gráfico, ax = b y x/a = b con sus inecuaciones, y modelación
 - [ ] Isla 8: incógnita a ambos lados y de la balanza a la función afín
 - [ ] Modo Detective: encontrar el error en la resolución de otro personaje
 - [ ] Tutor de pistas con IA

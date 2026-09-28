@@ -128,6 +128,7 @@ async function resolverPorInterfaz(page: Page, almacen: AlmacenMemoria, itemId: 
       await page.getByRole('button', { name: 'Revisar' }).click();
       break;
     }
+    case 'ecuacion_mult':
     case 'grafico_solucion': {
       const { valor, tipo } = r as { valor: number; tipo: string };
       await expect(page.getByRole('button', { name: '1', exact: true })).toBeEnabled();
@@ -161,6 +162,32 @@ async function resolverPorInterfaz(page: Page, almacen: AlmacenMemoria, itemId: 
       }
       const valores = intermedio === undefined ? [x] : [intermedio, x];
       const casillas = page.locator('.casilla:not(.casilla--formula)');
+      for (let k = 0; k < valores.length; k++) {
+        await casillas.nth(k).click();
+        await page.keyboard.type(String(valores[k]));
+      }
+      await page.getByRole('button', { name: 'Revisar' }).click();
+      break;
+    }
+    case 'reducir': {
+      const { coefs, constante } = r as { coefs: number[]; constante?: number };
+      await expect(page.getByRole('button', { name: '1', exact: true })).toBeEnabled();
+      const valores = constante === undefined ? coefs : [...coefs, constante];
+      const signos = page.locator('.reducida .formula__signo');
+      const casillas = page.locator('.reducida .casilla');
+      for (let k = 0; k < valores.length; k++) {
+        if (valores[k]! < 0) await signos.nth(k).click();
+        await casillas.nth(k).click();
+        await page.keyboard.type(String(Math.abs(valores[k]!)));
+      }
+      await page.getByRole('button', { name: 'Revisar' }).click();
+      break;
+    }
+    case 'proporcion': {
+      const { tipo, valores } = r as { tipo: string; valores: number[] };
+      await expect(page.getByRole('button', { name: '1', exact: true })).toBeEnabled();
+      await page.getByRole('radio', { name: tipo === 'directa' ? 'Directa' : tipo === 'inversa' ? 'Inversa' : 'Ninguna' }).click();
+      const casillas = page.locator('.proporcion .casilla');
       for (let k = 0; k < valores.length; k++) {
         await casillas.nth(k).click();
         await page.keyboard.type(String(valores[k]));
@@ -492,6 +519,55 @@ test('isla 6: fórmulas con letras, balanza de ecuaciones y problemas por la int
       if (n === 0) {
         await sinDesbordeHorizontal(page);
         await page.screenshot({ path: capturas(`isla6-${etapa.replace(/\s/g, '-')}`, proyecto) });
+      }
+      await continuar.click();
+      await expect.poll(() => seguimiento.itemId).not.toBe(id);
+    }
+    await page.getByRole('button', { name: 'Salir de la etapa' }).click();
+    await page.getByRole('button', { name: 'Salir', exact: true }).click();
+    await page.getByRole('button', { name: 'Volver' }).click();
+  }
+  expect(errores).toEqual([]);
+});
+
+test('isla 7: términos semejantes, proporciones, ecuaciones de lava y problemas por la interfaz', async ({ page }, info) => {
+  const proyecto = info.project.name;
+  const curso = await srv.servicio.crearCurso({ nombre: `8° ${proyecto}`, nivel: 8 });
+  const seguimiento = seguirItems(page);
+  const errores: string[] = [];
+  page.on('pageerror', (e) => errores.push(e.message));
+  await page.goto(srv.url);
+  await page.getByRole('button', { name: /Entrar con mi curso/ }).click();
+  await page.getByLabel('Código del curso').fill(curso.codigo);
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  await page.getByRole('button', { name: /Soy nueva o nuevo/ }).click();
+  await page.getByLabel('Apodo').fill('Puma Andino 80');
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  for (const f of ['pez', 'pato', 'oso']) await page.getByRole('button', { name: f, exact: true }).click();
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  for (const f of ['pez', 'pato', 'oso']) await page.getByRole('button', { name: f, exact: true }).click();
+  await page.getByRole('button', { name: /Crear mi gatito/ }).click();
+  await expect(page.getByText('El Reino del Equilibrio')).toBeVisible();
+
+  for (const etapa of ['Globos y sacos', 'Ríos proporcionales', 'Ecuaciones de lava', 'Problemas del volcán']) {
+    await page.getByRole('button', { name: /Volcán de los Globos/ }).click();
+    seguimiento.itemId = '';
+    await page.getByRole('button', { name: new RegExp(etapa) }).click();
+    for (let n = 0; n < 3; n++) {
+      await expect.poll(() => seguimiento.itemId).not.toBe('');
+      const id = seguimiento.itemId;
+      if (n === 0) {
+        await page.waitForTimeout(1200);
+        await page.screenshot({ path: capturas(`isla7-antes-${etapa.replace(/\s/g, '-')}`, proyecto) });
+      }
+      await resolverPorInterfaz(page, srv.almacen, id);
+      const continuar = page.getByRole('button', { name: /Continuar →/ });
+      await expect(continuar).toBeVisible();
+      await expect(page.locator('.retro__titulo')).toHaveText(/Perfecto|Muy bien/);
+      if (n === 0) {
+        await sinDesbordeHorizontal(page);
+        await page.screenshot({ path: capturas(`isla7-${etapa.replace(/\s/g, '-')}`, proyecto) });
       }
       await continuar.click();
       await expect.poll(() => seguimiento.itemId).not.toBe(id);

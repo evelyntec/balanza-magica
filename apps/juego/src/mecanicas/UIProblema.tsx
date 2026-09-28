@@ -8,6 +8,7 @@ import { useCasillas } from './useCasillas';
 
 export function UIProblema({ item, bloqueado, cierre, reintentos, alResponder, pie }: PropsMecanica) {
   const p = item.publico as PublicoProblema;
+  const desigualdad = p.opciones.some((o) => /[<>]/.test(o));
   const [elegida, setElegida] = useState<number | null>(null);
   useEffect(() => setElegida(null), [item.id]);
 
@@ -55,9 +56,15 @@ export function UIProblema({ item, bloqueado, cierre, reintentos, alResponder, p
         </div>
       </div>
       <div className="juego__panel">
-        <p style={{ margin: 0, fontWeight: 800 }}>{elegida === null && !sol ? '1. Elige la ecuación que cuenta la historia.' : '2. ¿Cuánto vale la caja?'}</p>
+        <p style={{ margin: 0, fontWeight: 800 }}>
+          {elegida === null && !sol
+            ? `1. Elige la ${desigualdad ? 'ecuación o inecuación' : 'ecuación'} que cuenta la historia.`
+            : desigualdad
+              ? '2. Responde la pregunta con un número.'
+              : '2. ¿Cuánto vale la caja?'}
+        </p>
         <div className="ecuacion">
-          <span>{p.simbolo} =</span>
+          <span>{desigualdad ? 'Respuesta:' : `${p.simbolo} =`}</span>
           <span className={`casilla ${!cierre ? 'casilla--activa' : ''}`} aria-label="Valor de la caja">
             {sol ? sol.valor : casillas.valores[0] || ' '}
           </span>

@@ -48,7 +48,10 @@ export type TipoItem =
   | 'sucesion'
   | 'grafico_solucion'
   | 'expresion'
-  | 'ecuacion_dos_pasos';
+  | 'ecuacion_dos_pasos'
+  | 'reducir'
+  | 'proporcion'
+  | 'ecuacion_mult';
 
 /** Resultado de un ejercicio, del mejor al peor. */
 export type Resultado = 'perfecto' | 'logrado' | 'con_ayuda' | 'fallido';
@@ -124,6 +127,13 @@ export type CodigoDiagnostico =
   | 'formula_evaluacion'
   | 'ecuacion_sin_dividir'
   | 'ecuacion_orden'
+  | 'reducir_mezcla'
+  | 'reducir_signo'
+  | 'reducir_signo_resultado'
+  | 'proporcion_tipo'
+  | 'proporcion_afin'
+  | 'proporcion_aditiva'
+  | 'proporcion_inversa_directa'
   | 'generico';
 
 export interface Evaluacion {

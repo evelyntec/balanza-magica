@@ -21,7 +21,7 @@ import {
   type SecretoVerdaderoFalso,
 } from '../src/mecanicas';
 import type { Objeto, TipoItem } from '../src/tipos';
-import { aplicar, cumple, esMayor, describirSoluciones, termino, textoReglaFuncional, FIGURAS_LINEALES, relacionEfectiva, sucesion, graficoSolucion, expresion, ecuacionDosPasos, valorFormula, textoDosPasos, type PublicoExpresion, type SecretoExpresion, type PublicoDosPasos, type SecretoDosPasos, type PublicoSucesion, type SecretoSucesion, type PublicoGrafico, type SecretoGrafico, resolver, textoEcuacion, type Operacion, type PublicoInecuacion, type PublicoTablaRegla, type SecretoInecuacion, type SecretoTablaRegla, type PublicoEcuacion, type PublicoProblema, type PublicoTabla100, type SecretoProblema, type SecretoTabla100 } from '../src/mecanicas';
+import { aplicar, cumple, esMayor, describirSoluciones, termino, textoReglaFuncional, FIGURAS_LINEALES, relacionEfectiva, sucesion, graficoSolucion, expresion, ecuacionDosPasos, valorFormula, textoDosPasos, reducir, proporcion, ecuacionMult, textoMult, valorProporcion, type PublicoReducir, type SecretoReducir, type PublicoProporcion, type SecretoProporcion, type PublicoMult, type PublicoExpresion, type SecretoExpresion, type PublicoDosPasos, type SecretoDosPasos, type PublicoSucesion, type SecretoSucesion, type PublicoGrafico, type SecretoGrafico, resolver, textoEcuacion, type Operacion, type PublicoInecuacion, type PublicoTablaRegla, type SecretoInecuacion, type SecretoTablaRegla, type PublicoEcuacion, type PublicoProblema, type PublicoTabla100, type SecretoProblema, type SecretoTabla100 } from '../src/mecanicas';
 import { respuestaCorrecta, respuestaIncorrecta } from './ayudas';
 
 const POR_NIVEL = 1500;
@@ -64,7 +64,7 @@ describe.each(ETAPAS.map((e) => [e.id, e] as const))('etapa %s', (_id, etapa) =>
         // Sin números inválidos: enteros, sin negativos (antes de 7° no hay negativos).
         for (const n of [...numeros(item.publico), ...numeros(item.secreto)]) {
           expect(Number.isInteger(n)).toBe(true);
-          expect(n).toBeGreaterThanOrEqual(0);
+          if (etapa.isla < 7) expect(n).toBeGreaterThanOrEqual(0);
         }
 
         // La vista pública no filtra la respuesta.
@@ -210,6 +210,60 @@ function verificarEspecifico(tipo: TipoItem, publico: unknown, secreto: unknown,
     expect(p.c).toBeLessThanOrEqual(300);
     expect(p.representacion).toBe(nivel <= 3 ? 'balanza' : 'formal');
     if (p.representacion === 'balanza') expect(p.a).toBeLessThanOrEqual(6);
+    return;
+  }
+  if (tipo === 'reducir') {
+    const p = publico as PublicoReducir;
+    const s = secreto as SecretoReducir;
+    p.variables.forEach((v, i) => {
+      const ts = p.terminos.filter((t) => t.variable === v);
+      expect(ts.length).toBeGreaterThanOrEqual(2); // siempre hay algo que reunir
+      expect(s.coefs[i]).toBe(ts.reduce((acc, t) => acc + t.coef, 0));
+    });
+    expect(s.constante).toBe(p.terminos.filter((t) => t.variable === '').reduce((acc, t) => acc + t.coef, 0));
+    if (!p.conConstante) expect(p.terminos.some((t) => t.variable === '')).toBe(false);
+    for (const t of p.terminos) expect(t.coef).not.toBe(0);
+    if (nivel === 1) expect(p.terminos.every((t) => t.coef > 0)).toBe(true);
+    else expect(p.terminos.some((t) => t.coef < 0)).toBe(true);
+    // Términos semejantes nunca quedan juntos: hay que buscarlos.
+    p.terminos.forEach((t, i) => i > 0 && expect(t.variable).not.toBe(p.terminos[i - 1]!.variable));
+    return;
+  }
+  if (tipo === 'proporcion') {
+    const p = publico as PublicoProporcion;
+    const s = secreto as SecretoProporcion;
+    p.filas.forEach((f, i) => {
+      expect(valorProporcion(s, f.x)).toBe(s.completas[i]);
+      if (f.y !== null) expect(f.y).toBe(s.completas[i]);
+    });
+    expect(p.filas[0]!.y).not.toBeNull();
+    expect(p.filas.filter((f) => f.y === null).length).toBe(nivel <= 2 ? 1 : 2);
+    expect(new Set(p.filas.map((f) => f.x)).size).toBe(p.filas.length);
+    // La clasificación es la correcta según cocientes y productos de TODA la tabla.
+    const cocientes = new Set(p.filas.map((f, i) => s.completas[i]! / f.x));
+    const productos = new Set(p.filas.map((f, i) => s.completas[i]! * f.x));
+    expect(cocientes.size === 1).toBe(s.tipo === 'directa');
+    expect(productos.size === 1).toBe(s.tipo === 'inversa');
+    // Con los datos visibles se puede decidir el tipo: al menos dos filas completas.
+    expect(p.filas.filter((f) => f.y !== null).length).toBeGreaterThanOrEqual(2);
+    return;
+  }
+  if (tipo === 'ecuacion_mult') {
+    const p = publico as PublicoMult;
+    const s = secreto as SecretoGrafico;
+    expect(p.texto).toBe(textoMult(p.forma, p.a, p.b, p.letra));
+    expect(s.borde).toBeGreaterThan(p.desde);
+    expect(s.borde).toBeLessThan(p.hasta);
+    expect(s.borde).toBeLessThanOrEqual(1000);
+    const cumpleM = (x: number) => {
+      const e = textoMult(p.forma, p.a, p.b, p.letra, x).replace(/·/g, '*');
+      const [izq, rel, der] = e.split(/(=|<|>)/) as [string, string, string];
+      const [l, r] = [eval(izq), eval(der)]; // eslint-disable-line no-eval
+      return rel === '=' ? l === r : rel === '<' ? l < r : l > r;
+    };
+    expect(cumpleM(s.borde)).toBe(s.tipo === 'punto');
+    expect(cumpleM(s.borde - 1)).toBe(s.tipo === 'izquierda');
+    expect(cumpleM(s.borde + 1)).toBe(s.tipo === 'derecha');
     return;
   }
   if (tipo === 'grafico_solucion') {
@@ -371,9 +425,22 @@ function verificarEspecifico(tipo: TipoItem, publico: unknown, secreto: unknown,
       expect(s.x).toBeLessThanOrEqual(isla >= 5 ? 500 : 100);
       // Solo una opción es verdadera con x: las trampas no son ecuaciones equivalentes.
       const verdaderas = p.opciones.filter((o) => {
-        const [izq, der] = o.replace(/□/g, String(s.x)).replace(/−/g, '-').replace(/·/g, '*').split('=') as [string, string];
-        return eval(izq) === eval(der); // eslint-disable-line no-eval
+        const e = o.replace(/□/g, String(s.x)).replace(/−/g, '-').replace(/·/g, '*');
+        const [izq, rel, der] = e.split(/(=|<|>)/) as [string, string, string];
+        const [l, r] = [eval(izq), eval(der)]; // eslint-disable-line no-eval
+        return rel === '=' ? l === r : rel === '<' ? l < r : l > r;
       });
+      // En inecuaciones, la respuesta es el mayor (o menor) natural que cumple.
+      const correcta = p.opciones[s.correcta]!;
+      if (/[<>]/.test(correcta)) {
+        const cumpleCon = (x: number) => {
+          const e = correcta.replace(/□/g, String(x)).replace(/·/g, '*');
+          const [izq, rel, der] = e.split(/(<|>)/) as [string, string, string];
+          return rel === '<' ? eval(izq) < eval(der) : eval(izq) > eval(der); // eslint-disable-line no-eval
+        };
+        expect(cumpleCon(s.x)).toBe(true);
+        expect(cumpleCon(correcta.includes('<') ? s.x + 1 : s.x - 1)).toBe(false);
+      }
       expect(verdaderas).toEqual([p.opciones[s.correcta]]);
       expect(p.texto).not.toMatch(/algunas (lápices|stickers)/);
       break;
@@ -529,5 +596,49 @@ describe('diagnósticos de la isla 6', () => {
     expect(e(21, 21).diagnostico).toBe('ecuacion_sin_dividir');
     expect(ecuacionDosPasos.evaluar({ ...p, c: 27, b: 6 }, { x: 7, ax: 21 }, { intermedio: 21, x: 3 }).diagnostico).toBe('ecuacion_orden'); // 27 ÷ 3 − 6
     expect(e(20, 7).correcto).toBe(false); // el paso intermedio también cuenta
+  });
+});
+
+
+describe('diagnósticos de la isla 7', () => {
+  it('reducir: 3x + 2y − x + 4y', () => {
+    const p: PublicoReducir = {
+      terminos: [
+        { coef: 3, variable: 'x' },
+        { coef: 2, variable: 'y' },
+        { coef: -1, variable: 'x' },
+        { coef: 4, variable: 'y' },
+      ],
+      variables: ['x', 'y'],
+      conConstante: false,
+      pictorico: true,
+    };
+    const s: SecretoReducir = { coefs: [2, 6], constante: 0 };
+    const d = (coefs: number[]) => reducir.evaluar(p, s, { coefs }).diagnostico;
+    expect(reducir.evaluar(p, s, { coefs: [2, 6] }).correcto).toBe(true);
+    expect(d([8, 0])).toBe('reducir_mezcla'); // 8x (junta todo)
+    expect(d([4, 6])).toBe('reducir_signo'); // ignora el menos
+    const p2: PublicoReducir = { ...p, terminos: [{ coef: 2, variable: 'x' }, { coef: 1, variable: 'y' }, { coef: -5, variable: 'x' }, { coef: 1, variable: 'y' }] };
+    expect(reducir.evaluar(p2, { coefs: [-3, 2], constante: 0 }, { coefs: [3, 2] }).diagnostico).toBe('reducir_signo_resultado');
+  });
+
+  it('proporción: aditiva, inversa como directa y afín', () => {
+    const directa: PublicoProporcion = { filas: [{ x: 4, y: 6 }, { x: 6, y: null }, { x: 8, y: 12 }], columnaX: 'x', columnaY: 'y' };
+    const sd: SecretoProporcion = { tipo: 'directa', k: 1.5, c: 0, completas: [6, 9, 12] };
+    expect(proporcion.evaluar(directa, sd, { tipo: 'directa', valores: [9] }).correcto).toBe(true);
+    expect(proporcion.evaluar(directa, sd, { tipo: 'directa', valores: [8] }).diagnostico).toBe('proporcion_aditiva');
+    const inversa: PublicoProporcion = { filas: [{ x: 2, y: 12 }, { x: 4, y: null }, { x: 6, y: 4 }], columnaX: 'x', columnaY: 'y' };
+    const si: SecretoProporcion = { tipo: 'inversa', k: 24, c: 0, completas: [12, 6, 4] };
+    expect(proporcion.evaluar(inversa, si, { tipo: 'directa', valores: [24] }).diagnostico).toBe('proporcion_inversa_directa');
+    const afin: PublicoProporcion = { filas: [{ x: 1, y: 5 }, { x: 2, y: 7 }, { x: 3, y: null }], columnaX: 'x', columnaY: 'y' };
+    const sa: SecretoProporcion = { tipo: 'ninguna', k: 2, c: 3, completas: [5, 7, 9] };
+    expect(proporcion.evaluar(afin, sa, { tipo: 'directa', valores: [9] }).diagnostico).toBe('proporcion_afin');
+  });
+
+  it('ecuaciones de lava: operación inversa', () => {
+    const p: PublicoMult = { forma: 'x/a>b', a: 4, b: 6, letra: 'x', texto: 'x/4 > 6', desde: 0, hasta: 50, marca: 5 };
+    expect(ecuacionMult.evaluar(p, { borde: 24, tipo: 'derecha' }, { valor: 24, tipo: 'derecha' }).correcto).toBe(true);
+    const q: PublicoMult = { forma: 'ax=b', a: 3, b: 21, letra: 'x', texto: '3x = 21', desde: 0, hasta: 50, marca: 5 };
+    expect(ecuacionMult.evaluar(q, { borde: 7, tipo: 'punto' }, { valor: 63, tipo: 'punto' }).diagnostico).toBe('operacion_inversa');
   });
 });

@@ -16,6 +16,9 @@ import { sucesion } from './sucesion';
 import { graficoSolucion } from './graficoSolucion';
 import { expresion } from './expresion';
 import { ecuacionDosPasos } from './ecuacionDosPasos';
+import { reducir } from './reducir';
+import { proporcion } from './proporcion';
+import { ecuacionMult } from './ecuacionMult';
 
 export const MECANICAS: Record<TipoItem, Mecanica> = {
   inclinacion,
@@ -34,6 +37,9 @@ export const MECANICAS: Record<TipoItem, Mecanica> = {
   grafico_solucion: graficoSolucion,
   expresion,
   ecuacion_dos_pasos: ecuacionDosPasos,
+  reducir,
+  proporcion,
+  ecuacion_mult: ecuacionMult,
 };
 
 export function mecanica(tipo: TipoItem): Mecanica {
@@ -75,3 +81,11 @@ export type { PublicoDosPasos, SecretoDosPasos, RespuestaDosPasos, FormaDosPasos
 export { textoDosPasos, restaConstante } from './ecuacionDosPasos';
 export { generarProblemaLetras } from './problemaLetras';
 export type { FiguraLineal, FiguraBaldosas } from './sucesion';
+export { reducir, proporcion, ecuacionMult };
+export type { PublicoReducir, SecretoReducir, RespuestaReducir, TerminoAlgebraico } from './reducir';
+export { textoAlgebraico, textoTermino, textoReducida } from './reducir';
+export type { PublicoProporcion, SecretoProporcion, RespuestaProporcion, TipoProporcion } from './proporcion';
+export { valorProporcion } from './proporcion';
+export type { PublicoMult, FormaMult } from './ecuacionMult';
+export { textoMult, resolverMult } from './ecuacionMult';
+export { generarProblemaVolcan } from './problemaVolcan';

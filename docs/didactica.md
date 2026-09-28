@@ -99,6 +99,12 @@ Se marcan como *relacionales*, tienen su propia insignia y su pista de nivel 1 i
 | `formula_evaluacion` | Fórmula correcta, error al reemplazar | Fábrica de fórmulas, Letras |
 | `ecuacion_sin_dividir` | Deja 3x = 21 y responde 21 | Balanza de las fórmulas |
 | `ecuacion_orden` | Divide antes de quitar la constante (26 ÷ 3 − 5) | Balanza de las fórmulas |
+| `reducir_mezcla` | Junta términos no semejantes (3x + 2y = 5x) | Globos y sacos |
+| `reducir_signo`, `reducir_signo_resultado` | Ignora el menos o equivoca el signo del resultado | Globos y sacos |
+| `proporcion_aditiva` | 4 → 6 entonces 6 → 8: suma en vez de multiplicar | Ríos proporcionales |
+| `proporcion_inversa_directa` | Resuelve una inversa como directa | Ríos proporcionales |
+| `proporcion_afin` | Cree que toda relación creciente es directa (el taxi) | Ríos proporcionales |
+| `proporcion_tipo` | Confunde directa con inversa | Ríos proporcionales |
 
 El panel docente agrupa estos diagnósticos y sugiere una intervención para cada uno.
 
@@ -157,7 +163,20 @@ El panel docente agrupa estos diagnósticos y sugiere una intervención para cad
 - **Problemas con letras:** cada problema ofrece a propósito la ecuación que suma todo lo que aparece y la que pone
   el paréntesis donde no va.
 
-## 11. Desafío, adaptatividad y motivación
+## 11. Términos semejantes y proporcionalidad (7° básico)
+
+- **Sacos y globos:** el modelo de la balanza se extiende a los negativos: un saco pesa y un globo tira hacia arriba,
+  de modo que un saco y un globo de la misma letra se anulan (par cero). Los términos semejantes nunca aparecen
+  juntos, para que haya que buscarlos, y el error "3x + 2y = 5x" se diagnostica (Booth, 1984).
+- **Directa, inversa… o ninguna:** junto a las directas e inversas aparecen relaciones afines (el taxi que cobra al
+  subir), que crecen pero no son proporcionales, contra la "ilusión de linealidad" (Modestou y Gagatsis, 2007). La
+  estrategia aditiva, el error más documentado en razonamiento proporcional (Hart, 1984), tiene su diagnóstico.
+- **El gráfico como argumento:** al terminar se dibuja la recta por el origen, la curva de la inversa o la recta que
+  no pasa por el origen, para "explicar las características de la gráfica" como pide el OA.
+- **Interpretar la solución:** en "¿cuántas entradas como máximo?" la respuesta no es el borde de la inecuación,
+  sino el mayor número natural que cumple.
+
+## 12. Desafío, adaptatividad y motivación
 
 - **Dos aciertos seguidos** suben un nivel; **dos errores seguidos** bajan un nivel y el siguiente ejercicio llega
   **con apoyo** (vale la mitad y no puede ser perfecto).
@@ -179,6 +198,9 @@ El panel docente agrupa estos diagnósticos y sugiere una intervención para cad
 - Bojorque, G. y Gonzales, N. (2021). Patrones repetitivos en educación infantil y primaria. *INNOVA Research Journal*.
 - Cetina-Vázquez, M. y Cabañas-Sánchez, G. (2022). Estrategias de generalización de patrones. *Enseñanza de las Ciencias*, 40(1).
 - Briars, D. y Larkin, J. (1984). An integrated model of skill in solving elementary word problems. *Cognition and Instruction*, 1(3).
+- Booth, L. (1984). *Algebra: Children's Strategies and Errors*. NFER-Nelson.
+- Hart, K. (1984). *Ratio: Children's Strategies and Errors*. NFER-Nelson.
+- Modestou, M. y Gagatsis, A. (2007). Students' improper proportional reasoning: a result of the epistemological obstacle of "linearity". *Educational Psychology*, 27(1).
 - Garrote, M., Hidalgo, M. J. y Blanco, L. J. (2004). Dificultades en el aprendizaje de las desigualdades e inecuaciones. *Suma*, 46.
 - MacGregor, M. y Stacey, K. (1993). Cognitive models underlying students' formulation of simple linear equations. *Journal for Research in Mathematics Education*, 24(3).
 - Stacey, K. (1989). Finding and using patterns in linear generalising problems. *Educational Studies in Mathematics*, 20(2).

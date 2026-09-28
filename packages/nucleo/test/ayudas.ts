@@ -5,6 +5,10 @@
 
 import type { ItemGuardado } from '../src/servicio/modelos';
 import type {
+  SecretoReducir,
+  PublicoReducir,
+  SecretoProporcion,
+  PublicoProporcion,
   SecretoExpresion,
   SecretoDosPasos,
   PublicoDosPasos,
@@ -88,6 +92,20 @@ export function respuestaCorrecta(tipo: TipoItem, publico: unknown, secreto: unk
       const s = secreto as SecretoDosPasos;
       return p.representacion === 'formal' ? { intermedio: s.ax, x: s.x } : { x: s.x };
     }
+    case 'reducir': {
+      const p = publico as PublicoReducir;
+      const s = secreto as SecretoReducir;
+      return p.conConstante ? { coefs: s.coefs, constante: s.constante } : { coefs: s.coefs };
+    }
+    case 'proporcion': {
+      const p = publico as PublicoProporcion;
+      const s = secreto as SecretoProporcion;
+      return { tipo: s.tipo, valores: p.filas.flatMap((f, i) => (f.y === null ? [s.completas[i]] : [])) };
+    }
+    case 'ecuacion_mult': {
+      const s = secreto as SecretoGrafico;
+      return { valor: s.borde, tipo: s.tipo };
+    }
   }
 }
 
@@ -156,6 +174,20 @@ export function respuestaIncorrecta(tipo: TipoItem, publico: unknown, secreto: u
       // Error típico: no repartir (x = a · x).
       const r = buena as { intermedio?: number; x: number };
       return { ...r, x: (secreto as SecretoDosPasos).ax === r.x ? r.x + 1 : (secreto as SecretoDosPasos).ax };
+    }
+    case 'reducir': {
+      // Error típico: ignorar los signos menos.
+      const p = publico as PublicoReducir;
+      const r = buena as { coefs: number[]; constante?: number };
+      return { ...r, coefs: r.coefs.map((c, i) => c + (i === 0 ? 1 : 0)), ...(p.conConstante ? { constante: r.constante } : {}) };
+    }
+    case 'proporcion': {
+      const r = buena as { tipo: string; valores: number[] };
+      return { ...r, tipo: r.tipo === 'directa' ? 'inversa' : 'directa' };
+    }
+    case 'ecuacion_mult': {
+      const s = secreto as SecretoGrafico;
+      return { valor: s.borde, tipo: s.tipo === 'punto' ? 'derecha' : 'punto' };
     }
   }
 }

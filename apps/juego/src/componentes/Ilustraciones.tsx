@@ -281,6 +281,23 @@ export function RetratoJefe({ isla, animo = 'normal' }: { isla: number; animo?: 
       </svg>
     );
   }
+  if (isla === 7) {
+    return (
+      <svg viewBox="0 0 100 100" className="jefe__retrato" role="img" aria-label="Dragón de Ceniza">
+        <circle cx={50} cy={50} r={46} fill="#ffd9c7" stroke={L} strokeWidth={4} />
+        <path d="M22 24 l8 16 M78 24 l-8 16" stroke={L} strokeWidth={5} strokeLinecap="round" />
+        <path d="M18 16 l10 10 l-12 -2 Z M82 16 l-10 10 l12 -2 Z" fill="#f5b82e" {...t} strokeWidth={2} />
+        <path d="M20 58 q0 -30 30 -30 q30 0 30 30 q-4 22 -30 24 q-26 -2 -30 -24 Z" fill="#6b6b6b" {...t} />
+        {ojos}
+        <ellipse cx={50} cy={66} rx={16} ry={10} fill="#8a8a8a" {...t} strokeWidth={3} />
+        <circle cx={44} cy={65} r={2.5} fill={L} />
+        <circle cx={56} cy={65} r={2.5} fill={L} />
+        <ellipse cx={82} cy={30} rx={7} ry={9} fill="#e0457b" fillOpacity={0.5} stroke="#e0457b" strokeWidth={2} />
+        <path d="M82 39 q-2 6 1 10" stroke={L} strokeWidth={1.5} fill="none" />
+        <path d="M40 84 q10 8 20 0" fill="none" stroke="#d6452f" strokeWidth={4} strokeLinecap="round" />
+      </svg>
+    );
+  }
   if (isla === 6) {
     return (
       <svg viewBox="0 0 100 100" className="jefe__retrato" role="img" aria-label="Robot Fórmulus">

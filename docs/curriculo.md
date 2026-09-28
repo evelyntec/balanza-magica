@@ -104,11 +104,28 @@ La fórmula se escribe, no se elige. En la balanza, las pesas muestran la operac
 resultado, para que el cálculo lo haga la o el estudiante. En el procedimiento formal también se evalúa el paso
 intermedio (3x = 21).
 
+### 🌋 Isla 7 · Volcán de los Globos · 7° básico
+
+| Etapa | Mecánica | OA |
+|---|---|---|
+| 7-1 Globos y sacos | Reducir expresiones con x, y, z y constantes (coeficientes enteros). Cada término positivo es un saco y cada negativo un globo que tira hacia arriba: un globo anula un saco de la misma letra | MA07 OA 7 |
+| 7-2 Ríos proporcionales | Clasificar la relación de una tabla (directa, inversa o ninguna), completar valores y ver el gráfico: recta por el origen, curva o recta que no pasa por el origen. Con contextos (precio por kilo, velocidad y tiempo, taxi) | MA07 OA 8 |
+| 7-3 Ecuaciones de lava | ax = b, x/a = b, ax < b, ax > b, x/a < b, x/a > b (también escritas al revés): escribir el borde y dibujar la solución | MA07 OA 9 |
+| 7-4 Problemas del volcán | Traducir al lenguaje algebraico ("el triple de un número, disminuido en 4") y modelar con ecuaciones e inecuaciones; "¿cuántas como máximo?" se responde con el mayor natural que cumple | MA07 OA 6, OA 9 |
+| Jefe: Dragón de Ceniza | Todo lo anterior mezclado | MA07 OA 6 a 9 |
+
+- **MA07 OA 6:** Utilizar el lenguaje algebraico para generalizar relaciones entre números, para establecer y formular reglas y propiedades y construir ecuaciones.
+- **MA07 OA 7:** Reducir expresiones algebraicas, reuniendo términos semejantes para obtener expresiones de la forma ax + by + cz (a, b, c ϵ Z).
+- **MA07 OA 8:** Mostrar que comprenden las proporciones directas e inversas: realizando tablas de valores para relaciones proporcionales; graficando los valores de la tabla; explicando las características de la gráfica; resolviendo problemas de la vida diaria y de otras asignaturas.
+- **MA07 OA 9:** Modelar y resolver problemas diversos de la vida diaria y de otras asignaturas, que involucran ecuaciones e inecuaciones lineales de la forma: ax = b; x/a = b (a, b y c ϵ N; a ≠ 0); ax < b; ax > b; x/a < b; x/a > b (a, b y c ϵ N; a ≠ 0).
+
+Desde esta isla aparecen los números negativos (en los coeficientes de 7-1). La tabla de 7-2 siempre deja al menos
+dos filas completas, para que el tipo de relación se pueda decidir con los datos.
+
 ## Islas en construcción
 
 | Isla | Nivel | OA | Propuesta |
 |---|---|---|---|
-| 7 · Volcán de los Globos | 7° | MA07 OA 6 a OA 9 | Sacos de x, globos negativos, términos semejantes y proporcionalidad |
 | 8 · Castillo del Desequilibrio | 8° | MA08 OA 7 a OA 10 | Incógnita a ambos lados; la balanza genera la tabla y el gráfico de la función afín |
 
 ## Transversalidad

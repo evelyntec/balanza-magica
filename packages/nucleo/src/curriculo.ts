@@ -7,7 +7,7 @@
  */
 
 import type { Azar } from './azar';
-import { MECANICAS, generarSucesion, generarGrafico, generarExpresion, generarProblemaLetras, type ContextoGeneracion, type ItemGenerado } from './mecanicas';
+import { MECANICAS, generarSucesion, generarGrafico, generarExpresion, generarProblemaLetras, generarProblemaVolcan, type ContextoGeneracion, type ItemGenerado } from './mecanicas';
 import type { TipoItem } from './tipos';
 
 export interface ObjetivoAprendizaje {
@@ -175,8 +175,8 @@ export const ISLAS: Isla[] = [
     nivel: '7° básico',
     lema: 'Términos semejantes, proporciones y ecuaciones',
     color: '#d6452f',
-    disponible: false,
-    jefe: { nombre: 'Dragón de Ceniza', descripcion: 'Infla globos que tiran hacia arriba.', vida: 14 },
+    disponible: true,
+    jefe: { nombre: 'Dragón de Ceniza', descripcion: 'Infla globos que tiran hacia arriba y mezcla todo lo que encuentra. ¡Ordena el volcán!', vida: 16 },
     oa: [
       {
         codigo: 'MA07 OA 6',
@@ -657,6 +657,71 @@ ETAPAS.push(
       { tipo: 'expresion', generar: (nivel, azar) => generarExpresion(nivel, azar, azar.probabilidad(0.5)) },
       { tipo: 'ecuacion_dos_pasos', generar: simple('ecuacion_dos_pasos') },
       { tipo: 'problema', generar: (nivel, azar) => generarProblemaLetras(nivel, azar) },
+    ]),
+  }),
+);
+
+// Isla 7 ----------------------------------------------------------------------
+
+ETAPAS.push(
+  etapa({
+    id: '7-1',
+    isla: 7,
+    orden: 1,
+    nombre: 'Globos y sacos',
+    descripcion: 'Reduce expresiones: junta las mismas letras. Cada globo anula un saco.',
+    oa: ['MA07 OA 7'],
+    esJefe: false,
+    mecanicas: ['reducir'],
+    generar: simple('reducir'),
+  }),
+  etapa({
+    id: '7-2',
+    isla: 7,
+    orden: 2,
+    nombre: 'Ríos proporcionales',
+    descripcion: '¿Directa, inversa o ninguna? Completa la tabla y mira su gráfico.',
+    oa: ['MA07 OA 8'],
+    esJefe: false,
+    mecanicas: ['proporcion'],
+    generar: simple('proporcion'),
+  }),
+  etapa({
+    id: '7-3',
+    isla: 7,
+    orden: 3,
+    nombre: 'Ecuaciones de lava',
+    descripcion: '3x = 21, x/4 > 6… Resuelve y dibuja la solución en la recta.',
+    oa: ['MA07 OA 9'],
+    esJefe: false,
+    mecanicas: ['ecuacion_mult'],
+    generar: simple('ecuacion_mult'),
+  }),
+  etapa({
+    id: '7-4',
+    isla: 7,
+    orden: 4,
+    nombre: 'Problemas del volcán',
+    descripcion: 'Traduce al lenguaje algebraico y modela con ecuaciones e inecuaciones.',
+    oa: ['MA07 OA 6', 'MA07 OA 9'],
+    esJefe: false,
+    mecanicas: ['problema'],
+    generar: (nivel, azar) => generarProblemaVolcan(nivel, azar),
+  }),
+  etapa({
+    id: '7-J',
+    isla: 7,
+    orden: 5,
+    nombre: 'El Dragón de Ceniza',
+    descripcion: 'El gran desafío del volcán: términos semejantes, proporciones, ecuaciones y problemas.',
+    oa: ['MA07 OA 6', 'MA07 OA 7', 'MA07 OA 8', 'MA07 OA 9'],
+    esJefe: true,
+    mecanicas: ['reducir', 'proporcion', 'ecuacion_mult', 'problema'],
+    generar: mezcla([
+      { tipo: 'reducir', generar: simple('reducir') },
+      { tipo: 'proporcion', generar: simple('proporcion') },
+      { tipo: 'ecuacion_mult', generar: simple('ecuacion_mult') },
+      { tipo: 'problema', generar: (nivel, azar) => generarProblemaVolcan(nivel, azar) },
     ]),
   }),
 );
