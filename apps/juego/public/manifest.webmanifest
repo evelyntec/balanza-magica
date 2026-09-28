@@ -1,0 +1,12 @@
+{
+  "name": "Balanza Mágica",
+  "short_name": "Balanza",
+  "description": "Juego de álgebra para 1° a 8° básico.",
+  "lang": "es-CL",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#2a1052",
+  "theme_color": "#2a1052",
+  "icons": [{ "src": "/icono.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}

@@ -1,0 +1,27 @@
+{
+  "name": "@balanza/servidor",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Servidor autoritativo de Balanza Mágica (Node.js + MySQL/MariaDB), listo para cPanel.",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/principal.ts",
+    "build": "node construir.mjs",
+    "start": "node dist/app.cjs"
+  },
+  "dependencies": {
+    "@balanza/nucleo": "0.1.0",
+    "cookie-parser": "^1.4.7",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0",
+    "mysql2": "^3.14.0"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.8",
+    "@types/express": "^5.0.1",
+    "@types/supertest": "^6.0.3",
+    "esbuild": "^0.25.0",
+    "supertest": "^7.1.0",
+    "tsx": "^4.19.0"
+  }
+}

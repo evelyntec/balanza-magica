@@ -1,0 +1,50 @@
+name: Pruebas
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  pruebas:
+    runs-on: ubuntu-latest
+    services:
+      mariadb:
+        image: mariadb:10.11
+        env:
+          MARIADB_ROOT_PASSWORD: raiz
+          MARIADB_DATABASE: balanza_test
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Tipos (TypeScript estricto)
+        run: npm run typecheck
+      - name: Pruebas unitarias, masivas, de trampas, API y MySQL
+        run: npm test
+        env:
+          BD_PRUEBA_HOST: 127.0.0.1
+          BD_PRUEBA_NOMBRE: balanza_test
+          BD_PRUEBA_USUARIO: root
+          BD_PRUEBA_CLAVE: raiz
+      - name: Compilar juego, demo y servidor
+        run: npm run build && npm run build:demo
+      - name: Juego completo en navegador (celular y computador)
+        run: npx playwright install --with-deps chromium && npm run test:e2e
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Análisis en Python
+        run: pip install -r herramientas/analisis/requirements.txt && python -m pytest herramientas/analisis
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: capturas
+          path: test-results/

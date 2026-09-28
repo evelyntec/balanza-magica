@@ -1,0 +1,33 @@
+{
+  "name": "balanza-magica",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Juego educativo de álgebra para 1° a 8° básico (currículum chileno). Profesora Evelyn Álvarez.",
+  "author": "Evelyn Alejandra Álvarez Vásquez",
+  "license": "MIT",
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "npm run dev -w @balanza/juego",
+    "dev:servidor": "npm run dev -w @balanza/servidor",
+    "build": "npm run build -w @balanza/juego && npm run build -w @balanza/servidor",
+    "build:demo": "npm run build:demo -w @balanza/juego",
+    "typecheck": "tsc -p packages/nucleo && tsc -p apps/servidor --noEmit && tsc -p apps/juego --noEmit",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "test:todo": "npm run typecheck && npm run test && npm run build && npm run test:e2e"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.0",
+    "@types/node": "^26.6.3",
+    "fast-check": "^4.10.2",
+    "typescript": "^5.9.3",
+    "vitest": "^5.0.2"
+  }
+}
