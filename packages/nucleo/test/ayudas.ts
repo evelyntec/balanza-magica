@@ -5,6 +5,9 @@
 
 import type { ItemGuardado } from '../src/servicio/modelos';
 import type {
+  PublicoGrafico,
+  SecretoGrafico,
+  SecretoSucesion,
   PublicoInecuacion,
   SecretoInecuacion,
   SecretoTablaRegla,
@@ -65,6 +68,14 @@ export function respuestaCorrecta(tipo: TipoItem, publico: unknown, secreto: unk
     }
     case 'inecuacion':
       return (secreto as SecretoInecuacion).soluciones;
+    case 'sucesion': {
+      const s = secreto as SecretoSucesion;
+      return s.reglaCorrecta !== undefined ? { valores: s.respuesta, regla: s.reglaCorrecta } : { valores: s.respuesta };
+    }
+    case 'grafico_solucion': {
+      const s = secreto as SecretoGrafico;
+      return { valor: s.borde, tipo: s.tipo };
+    }
   }
 }
 
@@ -112,6 +123,17 @@ export function respuestaIncorrecta(tipo: TipoItem, publico: unknown, secreto: u
       const s = secreto as SecretoInecuacion;
       // Error típico: marcar solo el borde, como si fuera ecuación.
       return s.borde >= p.desde && s.borde <= p.hasta ? [s.borde] : [p.desde];
+    }
+    case 'sucesion': {
+      // Error típico: contar un salto de más.
+      const r = buena as { valores: number[]; regla?: number };
+      return { ...r, valores: r.valores.map((v) => v + 1) };
+    }
+    case 'grafico_solucion': {
+      // Error típico: dibujar un punto donde hay una inecuación (o un rayo donde hay una ecuación).
+      const s = secreto as SecretoGrafico;
+      void (publico as PublicoGrafico);
+      return { valor: s.borde, tipo: s.tipo === 'punto' ? 'derecha' : 'punto' };
     }
   }
 }

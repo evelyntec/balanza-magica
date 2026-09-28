@@ -30,6 +30,8 @@ import { UITabla100 } from '../mecanicas/UITabla100';
 import { UIProblema } from '../mecanicas/UIProblema';
 import { UITablaRegla } from '../mecanicas/UITablaRegla';
 import { UIInecuacion } from '../mecanicas/UIInecuacion';
+import { UISucesion } from '../mecanicas/UISucesion';
+import { UIGraficoSolucion } from '../mecanicas/UIGraficoSolucion';
 
 const UI: Record<TipoItem, ComponentType<PropsMecanica>> = {
   inclinacion: UIInclinacion,
@@ -44,6 +46,8 @@ const UI: Record<TipoItem, ComponentType<PropsMecanica>> = {
   problema: UIProblema,
   tabla_regla: UITablaRegla,
   inecuacion: UIInecuacion,
+  sucesion: UISucesion,
+  grafico_solucion: UIGraficoSolucion,
 };
 
 const TITULOS: Record<CierreItem['resultado'], { titulo: string; animo: Animo }> = {

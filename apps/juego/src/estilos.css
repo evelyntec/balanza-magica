@@ -1952,3 +1952,181 @@ h3 {
 .recta__punto--error .recta__marca {
   background: var(--rojo-500);
 }
+
+/* Sucesiones (Isla 5) */
+
+.huella {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.huella__pos {
+  font-size: 0.8rem;
+  font-weight: 900;
+  color: var(--oro-300);
+}
+
+.sendero__puntos {
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: 2px;
+}
+
+.pregunta-lejana {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 16px;
+  background: var(--papel);
+  border: var(--borde);
+  border-radius: var(--r-m);
+  box-shadow: 0 4px 0 var(--tinta);
+  font-weight: 800;
+  font-size: clamp(1.05rem, 4.2vw, 1.3rem);
+}
+
+.pregunta-lejana__icono {
+  font-size: 1.6rem;
+}
+
+.figuras {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 8px;
+  width: 100%;
+}
+
+.figuras__una {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 10px 6px;
+  background: var(--papel);
+  border: var(--borde);
+  border-radius: var(--r-m);
+  max-width: 100%;
+}
+
+.figuras__una figcaption {
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.figura-sucesion {
+  display: block;
+  width: auto;
+}
+
+.palito line {
+  stroke: #d9a45b;
+  stroke-width: 4.5;
+  stroke-linecap: round;
+}
+
+.palito circle {
+  fill: var(--rojo-500);
+}
+
+.baldosa {
+  fill: var(--oro-300);
+  stroke: var(--tinta);
+  stroke-width: 1.5;
+}
+
+/* Graficar la solución (Isla 5) */
+
+.recta-grafico__marco {
+  width: min(100%, 680px);
+  padding: 4px 6px;
+  background: var(--papel);
+  border: var(--borde);
+  border-radius: var(--r-m);
+}
+
+.recta-grafico {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.recta-grafico__eje {
+  stroke: var(--tinta);
+  stroke-width: 3;
+}
+
+.recta-grafico__punta {
+  fill: var(--tinta);
+}
+
+.recta-grafico__numero {
+  font-size: 21px;
+  font-weight: 800;
+  fill: var(--tinta);
+  font-variant-numeric: tabular-nums;
+}
+
+.recta-grafico__borde {
+  stroke: var(--oro-300);
+  stroke-width: 3;
+  stroke-dasharray: 5 4;
+}
+
+.recta-grafico__valor {
+  font-size: 22px;
+  font-weight: 900;
+  fill: var(--fucsia-500);
+}
+
+.dibujo .rayo {
+  stroke: var(--fucsia-500);
+  stroke-width: 7;
+  stroke-linecap: round;
+}
+
+.dibujo .rayo__punta,
+.dibujo .punto--lleno {
+  fill: var(--fucsia-500);
+}
+
+.dibujo circle {
+  stroke: var(--fucsia-500);
+  stroke-width: 4;
+}
+
+.dibujo .punto--vacio {
+  fill: var(--blanco);
+}
+
+.dibujo--correcto .rayo {
+  stroke: var(--verde-500);
+}
+
+.dibujo--correcto .rayo__punta,
+.dibujo--correcto .punto--lleno {
+  fill: var(--verde-500);
+}
+
+.dibujo--correcto circle {
+  stroke: var(--verde-500);
+}
+
+.dibujo--correcto .recta-grafico__valor {
+  fill: var(--verde-500);
+}
+
+.opciones--grafico {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.opciones--grafico .opcion {
+  min-height: 74px;
+}

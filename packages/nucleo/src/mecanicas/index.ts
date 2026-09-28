@@ -12,6 +12,8 @@ import { tabla100 } from './tabla100';
 import { problema } from './problema';
 import { tablaRegla } from './tablaRegla';
 import { inecuacion } from './inecuacion';
+import { sucesion } from './sucesion';
+import { graficoSolucion } from './graficoSolucion';
 
 export const MECANICAS: Record<TipoItem, Mecanica> = {
   inclinacion,
@@ -26,6 +28,8 @@ export const MECANICAS: Record<TipoItem, Mecanica> = {
   problema,
   tabla_regla: tablaRegla,
   inecuacion,
+  sucesion,
+  grafico_solucion: graficoSolucion,
 };
 
 export function mecanica(tipo: TipoItem): Mecanica {
@@ -55,3 +59,8 @@ export type { PublicoVerdaderoFalso, SecretoVerdaderoFalso, Afirmacion, FormaVF 
 export { FIGURAS, NOMBRE_FIGURA } from './patronFiguras';
 export { textoRegla } from './patronNumerico';
 export { MAX_CAJA, MAX_PESADAS } from './equilibrar';
+export { sucesion, graficoSolucion };
+export type { PublicoSucesion, SecretoSucesion, RespuestaSucesion, FiguraSucesion, ModoSucesion, PreguntaSucesion, ReglaSucesion } from './sucesion';
+export { generarSucesion, termino, textoReglaFuncional, FIGURAS_LINEALES } from './sucesion';
+export type { PublicoGrafico, SecretoGrafico, RespuestaGrafico, TipoGrafico, Relacion } from './graficoSolucion';
+export { textoGrafico, resolverGrafico, relacionEfectiva, generarGrafico } from './graficoSolucion';

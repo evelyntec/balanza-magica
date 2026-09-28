@@ -26,6 +26,10 @@ Creado por **Evelyn Álvarez Vásquez**, Profesora de Educación General Básica
 |---|---|
 | ![Tabla con regla](docs/capturas/celular-tabla-regla.png) | ![Inecuación en la recta](docs/capturas/celular-inecuacion.png) |
 
+| Torres de palitos (5°) | Espejismos (5°) |
+|---|---|
+| ![Sucesión de figuras](docs/capturas/celular-sucesion-palitos.png) | ![Gráfico de la solución](docs/capturas/celular-grafico-solucion.png) |
+
 | Retroalimentación (computador) | Panel docente |
 |---|---|
 | ![Retroalimentación](docs/capturas/computador-retroalimentacion.png) | ![Panel docente](docs/capturas/computador-docente.png) |
@@ -56,7 +60,8 @@ Fundamentación completa, con referencias (colección ReFIP, Castro y Molina, Vl
 | 🌳 Bosque de los Signos | 2° básico | El signo que falta · El número escondido · Senderos del bosque · ¿Verdadero o falso? · **Jefe: Bruja Ventolera** | MA02 OA 12, OA 13 |
 | 🌊 Río de las Cajas Misteriosas | 3° básico | La caja misteriosa · Pesas del río · La tabla del 100 · Cuentos con cajas · **Jefe: Pulpo Escondecajas** | MA03 OA 12, OA 13 |
 | 🏔️ Montaña de las Tablas | 4° básico | La máquina de reglas · Ecuaciones de la cumbre · La balanza inclinada · Cuentos de la cumbre · **Jefe: Yeti de las Tablas** | MA04 OA 13, OA 14 |
-| Islas 5 a 8 | 5° a 8° básico | En construcción (el motor ya está preparado: aritmética exacta con fracciones, currículo mapeado) | Ver [docs/curriculo.md](docs/curriculo.md) |
+| 🏜️ Desierto de las Desigualdades | 5° básico | Huellas en la arena · Torres de palitos · Espejismos · La caravana · **Jefe: Escorpión Desigual** | MA05 OA 14, OA 15 |
+| Islas 6 a 8 | 6° a 8° básico | En construcción (el motor ya está preparado: aritmética exacta con fracciones, currículo mapeado) | Ver [docs/curriculo.md](docs/curriculo.md) |
 
 Cada etapa tiene **5 niveles de dificultad adaptativa** y ejercicios generados al azar: dos estudiantes nunca reciben los mismos números.
 
@@ -64,7 +69,7 @@ Cada etapa tiene **5 niveles de dificultad adaptativa** y ejercicios generados a
 
 - **Puntos acumulados** durante todo el juego y **rangos**: Aprendiz → Explorador/a → Guardián/a → Maestro/a del Equilibrio → Leyenda.
 - **Estrellas (1 a 3)** por etapa: exigen precisión, pocas pistas y llegar a los niveles altos.
-- **Rachas** que multiplican los puntos (×1,5, ×2, ×3), **23 insignias** y **jefes** con barra de vida.
+- **Rachas** que multiplican los puntos (×1,5, ×2, ×3), **26 insignias** y **jefes** con barra de vida.
 - **Monedas** para la tienda de Gatito (sombrero de mago, corona, balanza dorada…). Nunca sirven para comprar respuestas.
 - **Desafiante sin frustrar:** dos aciertos seguidos suben el nivel; dos errores seguidos bajan un nivel y activan un ejercicio con apoyo.
 - **Pesadas limitadas:** en "completar la caja", acertar con **una sola pesada** da el máximo. Probar al azar no conviene.
@@ -126,7 +131,7 @@ npm run test:e2e         # Playwright: juego completo en celular y computador
 python -m pytest herramientas/analisis
 ```
 
-- **150 000 ejercicios generados y verificados** en cada ejecución: solución única, números dentro del ámbito del OA
+- **187 500 ejercicios generados y verificados** en cada ejecución: solución única, números dentro del ámbito del OA
   (0 a 20 en la balanza de 1° y 2°), sin negativos, respuesta que nunca aparece en la vista pública y retroalimentación para cada error.
 - **Pruebas de propiedades** (fast-check) de la aritmética exacta y de la física de la balanza.
 - **Cada trampa de la tabla anterior tiene su prueba.**
@@ -163,7 +168,7 @@ También hay consultas SQL de ejemplo en [apps/servidor/sql/consultas_docente.sq
 - [x] Motor, servicio antitrampas, servidor, islas 1 y 2 (1° y 2° básico)
 - [x] Isla 3: ecuaciones de un paso hasta 100 (balanza y modelo de barras), tabla del 100 y problemas con ecuaciones
 - [x] Isla 4: tablas con regla (también inversa), ecuaciones hasta 100 e inecuaciones con balanza inclinada y recta numérica
-- [ ] Isla 5: inecuaciones y conjunto solución en la recta numérica, ecuaciones con multiplicación
+- [x] Isla 5: sucesiones con predicción (numéricas y figuras de palitos y baldosas), gráfico de soluciones de ecuaciones e inecuaciones y problemas hasta 1000
 - [ ] Isla 6: patrones de figuras y expresiones con letras
 - [ ] Isla 7: sacos, globos (negativos), términos semejantes y proporcionalidad
 - [ ] Isla 8: incógnita a ambos lados y de la balanza a la función afín

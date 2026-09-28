@@ -110,6 +110,33 @@ async function resolverPorInterfaz(page: Page, almacen: AlmacenMemoria, itemId: 
       await page.getByRole('button', { name: 'Revisar' }).click();
       break;
     }
+    case 'sucesion': {
+      const { valores, regla } = r as { valores: number[]; regla?: number };
+      const pub = item.publico as { modo: string; terminos: { valor: number }[]; opcionesRegla?: string[] };
+      // Las figuras dibujan exactamente la cantidad de palitos o baldosas del término.
+      if (pub.modo === 'figuras') {
+        const dibujos = page.locator('.figura-sucesion');
+        await expect(dibujos).toHaveCount(pub.terminos.length);
+        for (let k = 0; k < pub.terminos.length; k++) await expect(dibujos.nth(k)).toHaveAttribute('data-elementos', String(pub.terminos[k]!.valor));
+      }
+      await expect(page.getByRole('button', { name: '1', exact: true })).toBeEnabled();
+      if (regla !== undefined) await page.getByRole('radio', { name: pub.opcionesRegla![regla]!, exact: true }).click();
+      for (let k = 0; k < valores.length; k++) {
+        await page.locator('.piedra--hueco').nth(k).click();
+        await page.keyboard.type(String(valores[k]));
+      }
+      await page.getByRole('button', { name: 'Revisar' }).click();
+      break;
+    }
+    case 'grafico_solucion': {
+      const { valor, tipo } = r as { valor: number; tipo: string };
+      await expect(page.getByRole('button', { name: '1', exact: true })).toBeEnabled();
+      await page.keyboard.type(String(valor));
+      const nombre = tipo === 'punto' ? 'Solo ese número' : tipo === 'izquierda' ? 'Todos los menores' : 'Todos los mayores';
+      await page.getByRole('radio', { name: nombre }).click();
+      await page.getByRole('button', { name: 'Revisar' }).click();
+      break;
+    }
     default:
       throw new Error(`tipo no cubierto en e2e: ${item.tipo}`);
   }
@@ -336,6 +363,55 @@ test('isla 4: tablas con regla, ecuaciones, inecuaciones y cuentos por la interf
       if (n === 0) {
         await sinDesbordeHorizontal(page);
         await page.screenshot({ path: capturas(`isla4-${etapa.replace(/\s/g, '-')}`, proyecto) });
+      }
+      await continuar.click();
+      await expect.poll(() => seguimiento.itemId).not.toBe(id);
+    }
+    await page.getByRole('button', { name: 'Salir de la etapa' }).click();
+    await page.getByRole('button', { name: 'Salir', exact: true }).click();
+    await page.getByRole('button', { name: 'Volver' }).click();
+  }
+  expect(errores).toEqual([]);
+});
+
+test('isla 5: sucesiones, figuras de palitos, gráficos de soluciones y problemas por la interfaz', async ({ page }, info) => {
+  const proyecto = info.project.name;
+  const curso = await srv.servicio.crearCurso({ nombre: `6° ${proyecto}`, nivel: 6 });
+  const seguimiento = seguirItems(page);
+  const errores: string[] = [];
+  page.on('pageerror', (e) => errores.push(e.message));
+  await page.goto(srv.url);
+  await page.getByRole('button', { name: /Entrar con mi curso/ }).click();
+  await page.getByLabel('Código del curso').fill(curso.codigo);
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  await page.getByRole('button', { name: /Soy nueva o nuevo/ }).click();
+  await page.getByLabel('Apodo').fill('Zorro Culpeo 60');
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  for (const f of ['pez', 'pato', 'oso']) await page.getByRole('button', { name: f, exact: true }).click();
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  for (const f of ['pez', 'pato', 'oso']) await page.getByRole('button', { name: f, exact: true }).click();
+  await page.getByRole('button', { name: /Crear mi gatito/ }).click();
+  await expect(page.getByText('El Reino del Equilibrio')).toBeVisible();
+
+  for (const etapa of ['Huellas en la arena', 'Torres de palitos', 'Espejismos', 'La caravana']) {
+    await page.getByRole('button', { name: /Desierto de las Desigualdades/ }).click();
+    seguimiento.itemId = '';
+    await page.getByRole('button', { name: new RegExp(etapa) }).click();
+    for (let n = 0; n < 3; n++) {
+      await expect.poll(() => seguimiento.itemId).not.toBe('');
+      const id = seguimiento.itemId;
+      if (n === 0) {
+        await page.waitForTimeout(1200);
+        await page.screenshot({ path: capturas(`isla5-antes-${etapa.replace(/\s/g, '-')}`, proyecto) });
+      }
+      await resolverPorInterfaz(page, srv.almacen, id);
+      const continuar = page.getByRole('button', { name: /Continuar →/ });
+      await expect(continuar).toBeVisible();
+      await expect(page.locator('.retro__titulo')).toHaveText(/Perfecto|Muy bien/);
+      if (n === 0) {
+        await sinDesbordeHorizontal(page);
+        await page.screenshot({ path: capturas(`isla5-${etapa.replace(/\s/g, '-')}`, proyecto) });
       }
       await continuar.click();
       await expect.poll(() => seguimiento.itemId).not.toBe(id);

@@ -74,8 +74,11 @@ function construir(tipo: Tipo, tope: number, azar: Azar): Datos {
         forma: 'a+x=b',
         a,
         b,
-        texto: `En el bus del colegio iban ${a} estudiantes. En el paradero subieron algunos más y ahora van ${b}.`,
-        pregunta: '¿Cuántos estudiantes subieron?',
+        texto:
+          b <= 60
+            ? `En el bus del colegio iban ${a} estudiantes. En el paradero subieron algunos más y ahora van ${b}.`
+            : `En el estadio había ${a} personas. Llegaron algunas más y ahora hay ${b}.`,
+        pregunta: b <= 60 ? '¿Cuántos estudiantes subieron?' : '¿Cuántas personas llegaron?',
         trampa: `${a} + ${b} = ${s}`,
         otra: `${s} − ${a} = ${b}`,
       };
@@ -102,7 +105,10 @@ function construir(tipo: Tipo, tope: number, azar: Azar): Datos {
         forma: 'a-x=b',
         a,
         b,
-        texto: `En la fiesta del curso había ${a} globos. Se reventaron algunos y quedaron ${b}.`,
+        texto:
+          a <= 60
+            ? `En la fiesta del curso había ${a} globos. Se reventaron algunos y quedaron ${b}.`
+            : `Para el aniversario del colegio compraron ${a} globos. Se reventaron algunos y quedaron ${b}.`,
         pregunta: '¿Cuántos globos se reventaron?',
         trampa: `${a} + ${b} = ${s}`,
         otra: `${s} − ${a} = ${b}`,
@@ -139,7 +145,9 @@ export const problema: Mecanica<PublicoProblema, SecretoProblema, RespuestaProbl
 
   generar(nivel: number, azar: Azar, ctx?: ContextoGeneracion): ItemGenerado<PublicoProblema, SecretoProblema> {
     const dificultad = (ctx?.isla ?? 3) >= 4 ? Math.min(5, nivel + 2) : nivel;
-    const cfg = TIPO_POR_NIVEL[Math.min(Math.max(dificultad, 1), 5)] as { tipos: Tipo[]; tope: number };
+    const base = TIPO_POR_NIVEL[Math.min(Math.max(dificultad, 1), 5)] as { tipos: Tipo[]; tope: number };
+    // En 5° básico los números llegan hasta 500 (el ámbito numérico ya supera el millón).
+    const cfg = (ctx?.isla ?? 3) >= 5 ? { ...base, tope: 500 } : base;
     const tipo = azar.elegir(cfg.tipos);
     const d = construir(tipo, cfg.tope, azar);
     const correctaTexto = textoEcuacion({ forma: d.forma, a: d.a, b: d.b, simbolo: '□' });

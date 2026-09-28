@@ -21,7 +21,7 @@ import {
   type SecretoVerdaderoFalso,
 } from '../src/mecanicas';
 import type { Objeto, TipoItem } from '../src/tipos';
-import { aplicar, cumple, esMayor, describirSoluciones, resolver, textoEcuacion, type Operacion, type PublicoInecuacion, type PublicoTablaRegla, type SecretoInecuacion, type SecretoTablaRegla, type PublicoEcuacion, type PublicoProblema, type PublicoTabla100, type SecretoProblema, type SecretoTabla100 } from '../src/mecanicas';
+import { aplicar, cumple, esMayor, describirSoluciones, termino, textoReglaFuncional, FIGURAS_LINEALES, relacionEfectiva, sucesion, graficoSolucion, type PublicoSucesion, type SecretoSucesion, type PublicoGrafico, type SecretoGrafico, resolver, textoEcuacion, type Operacion, type PublicoInecuacion, type PublicoTablaRegla, type SecretoInecuacion, type SecretoTablaRegla, type PublicoEcuacion, type PublicoProblema, type PublicoTabla100, type SecretoProblema, type SecretoTabla100 } from '../src/mecanicas';
 import { respuestaCorrecta, respuestaIncorrecta } from './ayudas';
 
 const POR_NIVEL = 1500;
@@ -141,6 +141,66 @@ function verificarEspecifico(tipo: TipoItem, publico: unknown, secreto: unknown,
       }
     }
     if (nivel >= 3) expect(p.filas.map((f, i) => s.completas[i]!.entrada).every((e, i, arr) => i === 0 || e > arr[i - 1]!)).toBe(false);
+    return;
+  }
+  if (tipo === 'sucesion') {
+    const p = publico as PublicoSucesion;
+    const s = secreto as SecretoSucesion;
+    for (const t of p.terminos) expect(termino(s, t.posicion)).toBe(t.valor);
+    for (const t of p.terminos) expect(t.valor).toBeLessThanOrEqual(1000);
+    for (const v of s.respuesta) expect(v).toBeLessThanOrEqual(1000);
+    const pr = p.pregunta;
+    if (pr.tipo === 'termino') expect(s.respuesta).toEqual([termino(s, pr.posicion)]);
+    if (pr.tipo === 'posicion') {
+      expect(termino(s, s.respuesta[0]!)).toBe(pr.valor);
+      expect(s.respuesta[0]).toBeGreaterThan(p.terminos.length); // no se lee en pantalla
+    }
+    if (pr.tipo === 'siguientes') expect(s.respuesta).toEqual([termino(s, p.terminos.length + 1), termino(s, p.terminos.length + 2)]);
+    // Desde el nivel 3 las preguntas lineales son lejanas: contar de a uno no alcanza.
+    if (s.tipoRegla === 'lineal' && pr.tipo === 'termino' && nivel >= 3) expect(pr.posicion).toBeGreaterThanOrEqual(20);
+    if (p.modo === 'figuras') {
+      expect(p.figura).toBeDefined();
+      if (s.tipoRegla === 'lineal') {
+        const f = FIGURAS_LINEALES[p.figura as keyof typeof FIGURAS_LINEALES];
+        expect([s.a, s.d]).toEqual([f.a, f.d]);
+        expect(p.unidad).toBe('palitos');
+      } else expect(p.unidad).toBe('baldosas');
+    } else expect(p.figura).toBeUndefined();
+    if (p.opcionesRegla) {
+      expect(new Set(p.opcionesRegla).size).toBe(3);
+      const sujeto = p.modo === 'figuras' ? 'el número de la figura' : 'la posición';
+      expect(p.opcionesRegla[s.reglaCorrecta!]).toBe(textoReglaFuncional(s.d, s.a - s.d, sujeto));
+      // Cada regla falsa falla en algún término visible.
+      for (const [i, o] of p.opcionesRegla.entries()) {
+        if (i === s.reglaCorrecta) continue;
+        const m = /por (\d+)(?: y (suma|resta) (\d+))?$/.exec(o)!;
+        const f = (n: number) => Number(m[1]) * n + (m[2] ? (m[2] === 'suma' ? 1 : -1) * Number(m[3]) : 0);
+        expect(p.terminos.every((t) => f(t.posicion) === t.valor)).toBe(false);
+      }
+    }
+    return;
+  }
+  if (tipo === 'grafico_solucion') {
+    const p = publico as PublicoGrafico;
+    const s = secreto as SecretoGrafico;
+    expect(p.hasta - p.desde).toBe(10 * p.marca);
+    expect(p.desde % p.marca).toBe(0);
+    expect(s.borde).toBeGreaterThan(p.desde);
+    expect(s.borde).toBeLessThan(p.hasta);
+    expect(Math.max(p.a, p.b, s.borde)).toBeLessThanOrEqual(1000);
+    if (nivel === 1) expect(Math.max(p.b, s.borde)).toBeLessThanOrEqual(100);
+    // Con resta nunca "menor que": dejaría números sin sentido en 5° (x < a).
+    if (p.op === '-') expect(relacionEfectiva(p)).not.toBe('<');
+    // El tipo de solución es correcto: se comprueba reemplazando números.
+    const cumpleG = (x: number) => {
+      const e = p.op === '+' ? x + p.a : x - p.a;
+      const [izq, der] = p.incognitaPrimero ? [e, p.b] : [p.b, e];
+      return p.relacion === '=' ? izq === der : p.relacion === '<' ? izq < der : izq > der;
+    };
+    expect(cumpleG(s.borde)).toBe(s.tipo === 'punto');
+    expect(cumpleG(s.borde - 1)).toBe(s.tipo === 'izquierda');
+    expect(cumpleG(s.borde + 1)).toBe(s.tipo === 'derecha');
+    if (p.contexto) expect(p.simbolo).toBe('□');
     return;
   }
   if (tipo === 'inecuacion') {
@@ -276,7 +336,7 @@ function verificarEspecifico(tipo: TipoItem, publico: unknown, secreto: unknown,
       const s = secreto as SecretoProblema;
       expect(new Set(p.opciones).size).toBe(3);
       expect(s.x).toBeGreaterThanOrEqual(1);
-      expect(s.x).toBeLessThanOrEqual(100);
+      expect(s.x).toBeLessThanOrEqual(isla >= 5 ? 500 : 100);
       // Solo una opción es verdadera con x: las trampas no son ecuaciones equivalentes.
       const verdaderas = p.opciones.filter((o) => {
         const [izq, der] = o.replace(/□/g, String(s.x)).replace(/−/g, '-').split('=') as [string, string];
@@ -358,5 +418,54 @@ describe('equilibrio de resultados y diagnósticos', () => {
       expect(MECANICAS.patron_figuras.evaluar(item.publico, item.secreto, corto).diagnostico).toBe('patron_nucleo_corto');
       expect(MECANICAS.patron_figuras.evaluar(item.publico, item.secreto, largo).diagnostico).toBe('patron_nucleo_largo');
     }
+  });
+});
+
+
+describe('diagnósticos de la isla 5', () => {
+  const pub: PublicoSucesion = {
+    modo: 'figuras',
+    figura: 'cuadrados',
+    terminos: [
+      { posicion: 1, valor: 4 },
+      { posicion: 2, valor: 7 },
+      { posicion: 3, valor: 10 },
+    ],
+    pregunta: { tipo: 'termino', posicion: 20 },
+    unidad: 'palitos',
+  };
+  const sec: SecretoSucesion = { tipoRegla: 'lineal', a: 4, d: 3, e: 0, respuesta: [61] };
+  const diag = (valores: number[]) => sucesion.evaluar(pub, sec, { valores }).diagnostico;
+
+  it('cuadrados de palitos: figura 20', () => {
+    expect(sucesion.evaluar(pub, sec, { valores: [61] }).correcto).toBe(true);
+    expect(diag([80])).toBe('sucesion_proporcional'); // 4 × 20
+    expect(diag([60])).toBe('sucesion_sin_inicio'); // 3 × 20
+    expect(diag([64])).toBe('sucesion_desfase'); // figura 21
+    expect(diag([58])).toBe('sucesion_desfase'); // figura 19
+  });
+
+  it('sucesiones no lineales: sumar siempre lo mismo', () => {
+    const p: PublicoSucesion = {
+      modo: 'numerica',
+      terminos: [1, 2, 4, 8, 16].map((valor, i) => ({ posicion: i + 1, valor })),
+      pregunta: { tipo: 'siguientes', cantidad: 2 },
+      unidad: '',
+    };
+    const s: SecretoSucesion = { tipoRegla: 'doble', a: 1, d: 0, e: 0, respuesta: [32, 64] };
+    expect(sucesion.evaluar(p, s, { valores: [32, 64] }).correcto).toBe(true);
+    expect(sucesion.evaluar(p, s, { valores: [24, 32] }).diagnostico).toBe('sucesion_aditiva');
+  });
+
+  it('graficar: punto, rayo y dirección', () => {
+    const p: PublicoGrafico = { incognitaPrimero: true, op: '+', relacion: '<', a: 300, b: 700, simbolo: '□', desde: 0, hasta: 1000, marca: 100 };
+    const s: SecretoGrafico = { borde: 400, tipo: 'izquierda' };
+    const d = (valor: number, tipo: 'punto' | 'izquierda' | 'derecha') => graficoSolucion.evaluar(p, s, { valor, tipo });
+    expect(d(400, 'izquierda').correcto).toBe(true);
+    expect(d(400, 'punto').diagnostico).toBe('inecuacion_igualdad');
+    expect(d(400, 'derecha').diagnostico).toBe('inecuacion_direccion');
+    expect(d(1000, 'izquierda').diagnostico).toBe('operacion_inversa');
+    const pe: PublicoGrafico = { ...p, relacion: '=' };
+    expect(graficoSolucion.evaluar(pe, { borde: 400, tipo: 'punto' }, { valor: 400, tipo: 'derecha' }).diagnostico).toBe('ecuacion_rayo');
   });
 });

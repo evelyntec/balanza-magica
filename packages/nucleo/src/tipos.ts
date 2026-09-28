@@ -44,7 +44,9 @@ export type TipoItem =
   | 'tabla100'
   | 'problema'
   | 'tabla_regla'
-  | 'inecuacion';
+  | 'inecuacion'
+  | 'sucesion'
+  | 'grafico_solucion';
 
 /** Resultado de un ejercicio, del mejor al peor. */
 export type Resultado = 'perfecto' | 'logrado' | 'con_ayuda' | 'fallido';
@@ -107,6 +109,12 @@ export type CodigoDiagnostico =
   | 'inecuacion_un_valor'
   | 'inecuacion_borde'
   | 'inecuacion_direccion'
+  | 'sucesion_proporcional'
+  | 'sucesion_sin_inicio'
+  | 'sucesion_desfase'
+  | 'sucesion_aditiva'
+  | 'sucesion_regla'
+  | 'ecuacion_rayo'
   | 'generico';
 
 export interface Evaluacion {

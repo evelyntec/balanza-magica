@@ -86,7 +86,13 @@ Se marcan como *relacionales*, tienen su propia insignia y su pista de nivel 1 i
 | `inecuacion_igualdad` | Marca solo el borde: resuelve la inecuación como ecuación | Balanza inclinada |
 | `inecuacion_un_valor` | Marca algunas soluciones, no todas | Balanza inclinada |
 | `inecuacion_borde` | Incluye el borde (lee < como ≤) | Balanza inclinada |
-| `inecuacion_direccion` | Marca el lado contrario de la recta | Balanza inclinada |
+| `inecuacion_direccion` | Marca el lado contrario de la recta | Balanza inclinada, Espejismos |
+| `sucesion_proporcional` | Figura 20 = 4 × 20 (o el doble de la figura 10): supone proporcionalidad | Huellas, Torres de palitos |
+| `sucesion_sin_inicio` | 3 × 20 en vez de 3 × 20 + 1: olvida el término inicial | Huellas, Torres de palitos |
+| `sucesion_desfase` | Cuenta un salto de más o de menos | Huellas, Torres de palitos |
+| `sucesion_aditiva` | Suma siempre lo mismo en sucesiones que se multiplican o cuyas diferencias crecen | Huellas |
+| `sucesion_regla` | Predice bien pero elige una regla que no sirve para todos los términos | Huellas, Torres de palitos |
+| `ecuacion_rayo` | Dibuja muchas soluciones para una ecuación | Espejismos |
 
 El panel docente agrupa estos diagnósticos y sugiere una intervención para cada uno.
 
@@ -117,7 +123,20 @@ El panel docente agrupa estos diagnósticos y sugiere una intervención para cad
   aunque la recta muestre solo una parte.
 - **Formas invertidas** (50 > □ + 12) al final, para que el signo se lea desde cualquier lado, igual que el "=" relacional.
 
-## 9. Desafío, adaptatividad y motivación
+## 9. Sucesiones y conjuntos solución (5° básico)
+
+- **De la regla recursiva a la funcional:** "suma 3" sirve para el término siguiente, pero no para predecir la figura
+  40. Por eso las preguntas son lejanas y, en el nivel 3, se elige la regla funcional entre dos distractores: la que
+  olvida el inicio (3 × n) y la proporcional (4 × n, "4 palitos por cuadrado"), el error más estudiado en
+  generalización de patrones (Stacey, 1989; Radford, 2008).
+- **Pregunta inversa:** ¿qué figura usa 91 palitos? Obliga a deshacer la regla.
+- **No todas las sucesiones son aritméticas:** dobles, triples, diferencias crecientes y figuras de baldosas
+  (n × n, escaleras, rectángulos) evitan que "sumar la diferencia" se vuelva un procedimiento ciego.
+- **¿Un número o muchos?** En Espejismos se mezclan ecuaciones e inecuaciones y se debe decidir cómo es el conjunto
+  solución: punto lleno o círculo vacío con flecha. El borde se escribe (no se arrastra), para que no se pueda
+  adivinar ubicándolo al ojo.
+
+## 10. Desafío, adaptatividad y motivación
 
 - **Dos aciertos seguidos** suben un nivel; **dos errores seguidos** bajan un nivel y el siguiente ejercicio llega
   **con apoyo** (vale la mitad y no puede ser perfecto).
@@ -138,5 +157,8 @@ El panel docente agrupa estos diagnósticos y sugiere una intervención para cad
 - Bojorque, G. y Gonzales, N. (2021). Patrones repetitivos en educación infantil y primaria. *INNOVA Research Journal*.
 - Cetina-Vázquez, M. y Cabañas-Sánchez, G. (2022). Estrategias de generalización de patrones. *Enseñanza de las Ciencias*, 40(1).
 - Briars, D. y Larkin, J. (1984). An integrated model of skill in solving elementary word problems. *Cognition and Instruction*, 1(3).
+- Garrote, M., Hidalgo, M. J. y Blanco, L. J. (2004). Dificultades en el aprendizaje de las desigualdades e inecuaciones. *Suma*, 46.
+- Stacey, K. (1989). Finding and using patterns in linear generalising problems. *Educational Studies in Mathematics*, 20(2).
+- Radford, L. (2008). Iconicity and contraction: a semiotic investigation of forms of algebraic generalizations of patterns in different contexts. *ZDM*, 40(1).
 - Pacheco, A., Ayala-Altamirano, C. y Molina, M. (2024). Inecuaciones en libros de texto de educación primaria. *Uniciencia*, 38(1).
 - Ministerio de Educación de Chile. Bases Curriculares de Matemática 1° a 6° básico (2012) y 7° básico a 2° medio (2015). <https://www.curriculumnacional.cl>

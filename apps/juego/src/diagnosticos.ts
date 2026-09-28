@@ -91,4 +91,28 @@ export const DIAGNOSTICOS_DOCENTE: Record<string, { titulo: string; sugerencia: 
     titulo: 'Marca el lado contrario de la recta',
     sugerencia: 'Leer el signo en voz alta ("es menor que") y relacionarlo con el platillo que sube en la balanza.',
   },
+  sucesion_proporcional: {
+    titulo: 'Supone proporcionalidad (figura 20 = 4 × 20, o el doble de la figura 10)',
+    sugerencia: 'Construir las figuras con palitos y separar lo que se repite de lo que está desde el inicio: 3 × n + 1, no 4 × n.',
+  },
+  sucesion_sin_inicio: {
+    titulo: 'Olvida el término inicial (3 × 20 en vez de 3 × 20 + 1)',
+    sugerencia: 'Comprobar siempre la regla con la figura 1 y la figura 2 antes de predecir.',
+  },
+  sucesion_desfase: {
+    titulo: 'Cuenta un salto de más o de menos',
+    sugerencia: 'Contar los saltos entre la posición 1 y la 5 con los dedos: son 4, no 5.',
+  },
+  sucesion_aditiva: {
+    titulo: 'Supone que todas las sucesiones suman lo mismo',
+    sugerencia: 'Calcular todas las diferencias y buscar si se multiplica o si las diferencias crecen.',
+  },
+  sucesion_regla: {
+    titulo: 'Predice bien pero elige una regla que no sirve para todos los términos',
+    sugerencia: 'Verificar cada regla candidata con al menos dos posiciones.',
+  },
+  ecuacion_rayo: {
+    titulo: 'Dibuja muchas soluciones para una ecuación',
+    sugerencia: 'Contrastar "=" con "<" y ">": la ecuación tiene una sola solución (punto lleno).',
+  },
 };

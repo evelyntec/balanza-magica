@@ -281,6 +281,25 @@ export function RetratoJefe({ isla, animo = 'normal' }: { isla: number; animo?: 
       </svg>
     );
   }
+  if (isla === 5) {
+    return (
+      <svg viewBox="0 0 100 100" className="jefe__retrato" role="img" aria-label="Escorpión Desigual">
+        <circle cx={50} cy={50} r={46} fill="#ffe2a8" stroke={L} strokeWidth={4} />
+        <path d="M8 80 q20 -10 42 -2 q22 8 42 -4 l0 16 l-84 0 Z" fill="#f2c46b" />
+        <path d="M70 58 q18 -6 16 -26 q-2 -16 -16 -14" fill="none" stroke="#c0392b" strokeWidth={8} strokeLinecap="round" />
+        <path d="M66 14 l8 4 l-6 6 Z" fill={L} />
+        {[0, 1, 2].map((k) => (
+          <path key={k} d={`M${34 + k * 10} 66 l-8 12 M${38 + k * 10} 66 l6 12`} stroke={L} strokeWidth={3} strokeLinecap="round" />
+        ))}
+        <ellipse cx={46} cy={54} rx={24} ry={16} fill="#c0392b" {...t} />
+        <path d="M24 46 q-14 -6 -12 -18 q8 2 10 8 M24 46 q-4 -12 4 -18" fill="#c0392b" {...t} strokeWidth={3} />
+        <g transform="translate(0 6)">{ojos}</g>
+        <text x={50} y={96} textAnchor="middle" fontSize={16} fontWeight={900} fill={L}>
+          &lt; &gt;
+        </text>
+      </svg>
+    );
+  }
   if (isla === 4) {
     return (
       <svg viewBox="0 0 100 100" className="jefe__retrato" role="img" aria-label="Yeti de las Tablas">

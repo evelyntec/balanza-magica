@@ -7,7 +7,7 @@
  */
 
 import type { Azar } from './azar';
-import { MECANICAS, type ContextoGeneracion, type ItemGenerado } from './mecanicas';
+import { MECANICAS, generarSucesion, generarGrafico, type ContextoGeneracion, type ItemGenerado } from './mecanicas';
 import type { TipoItem } from './tipos';
 
 export interface ObjetivoAprendizaje {
@@ -136,8 +136,8 @@ export const ISLAS: Isla[] = [
     nivel: '5° básico',
     lema: 'Todas las soluciones, no solo una',
     color: '#d99a1e',
-    disponible: false,
-    jefe: { nombre: 'Escorpión Desigual', descripcion: 'Solo acepta todas las soluciones.', vida: 12 },
+    disponible: true,
+    jefe: { nombre: 'Escorpión Desigual', descripcion: 'Borra las huellas del desierto y confunde un número con muchos. ¡Predice y grafica sin caer en sus trampas!', vida: 14 },
     oa: [
       { codigo: 'MA05 OA 14', texto: 'Descubrir alguna regla que explique una sucesión dada y que permita hacer predicciones.' },
       {
@@ -521,6 +521,77 @@ ETAPAS.push(
       { tipo: 'tabla_regla', generar: simple('tabla_regla') },
       { tipo: 'ecuacion', generar: simple('ecuacion') },
       { tipo: 'inecuacion', generar: simple('inecuacion') },
+      { tipo: 'problema', generar: simple('problema') },
+    ]),
+  }),
+);
+
+// Isla 5 ----------------------------------------------------------------------
+
+/** La caravana: problemas con ecuaciones (hasta 500) y con inecuaciones graficadas (hasta 1000). */
+function caravana(nivel: number, azar: Azar, ctx: ContextoGeneracion): ItemGenerado {
+  if (azar.probabilidad(0.5)) return MECANICAS.problema.generar(nivel, azar, ctx);
+  // Siempre con historia; el tamaño de los números crece con el nivel.
+  return generarGrafico(nivel, azar, true);
+}
+
+ETAPAS.push(
+  etapa({
+    id: '5-1',
+    isla: 5,
+    orden: 1,
+    nombre: 'Huellas en la arena',
+    descripcion: 'Descubre la regla de cada sucesión y predice números lejanos… ¡sin contar de a uno!',
+    oa: ['MA05 OA 14'],
+    esJefe: false,
+    mecanicas: ['sucesion'],
+    generar: (nivel, azar) => generarSucesion(nivel, azar, 'numerica'),
+  }),
+  etapa({
+    id: '5-2',
+    isla: 5,
+    orden: 2,
+    nombre: 'Torres de palitos',
+    descripcion: 'Figuras que crecen: ¿cuántos palitos tendrá la figura 40? ¿Qué figura usa 91?',
+    oa: ['MA05 OA 14'],
+    esJefe: false,
+    mecanicas: ['sucesion'],
+    generar: (nivel, azar) => generarSucesion(nivel, azar, 'figuras'),
+  }),
+  etapa({
+    id: '5-3',
+    isla: 5,
+    orden: 3,
+    nombre: 'Espejismos',
+    descripcion: '¿Un solo número o muchos? Resuelve y dibuja la solución en la recta.',
+    oa: ['MA05 OA 15'],
+    esJefe: false,
+    mecanicas: ['grafico_solucion'],
+    generar: simple('grafico_solucion'),
+  }),
+  etapa({
+    id: '5-4',
+    isla: 5,
+    orden: 4,
+    nombre: 'La caravana',
+    descripcion: 'Problemas del desierto que se resuelven con ecuaciones o con inecuaciones.',
+    oa: ['MA05 OA 15'],
+    esJefe: false,
+    mecanicas: ['problema', 'grafico_solucion'],
+    generar: caravana,
+  }),
+  etapa({
+    id: '5-J',
+    isla: 5,
+    orden: 5,
+    nombre: 'El Escorpión Desigual',
+    descripcion: 'El gran desafío del desierto: sucesiones, figuras, gráficos y problemas.',
+    oa: ['MA05 OA 14', 'MA05 OA 15'],
+    esJefe: true,
+    mecanicas: ['sucesion', 'grafico_solucion', 'problema'],
+    generar: mezcla([
+      { tipo: 'sucesion', generar: (nivel, azar) => generarSucesion(nivel, azar, azar.probabilidad(0.5) ? 'figuras' : 'numerica') },
+      { tipo: 'grafico_solucion', generar: simple('grafico_solucion') },
       { tipo: 'problema', generar: simple('problema') },
     ]),
   }),

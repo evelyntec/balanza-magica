@@ -69,11 +69,27 @@ retroalimentación siempre describe el conjunto completo (por ejemplo "cualquier
 siempre"), no solo lo visible. Cuando todas las soluciones de un "<" caben en la recta, se muestran todas. Todo se
 mantiene entre 0 y 100, sin negativos.
 
+### 🏜️ Isla 5 · Desierto de las Desigualdades · 5° básico
+
+| Etapa | Mecánica | OA |
+|---|---|---|
+| 5-1 Huellas en la arena | Descubrir la regla de una sucesión y predecir términos lejanos (posición 50), encontrar la posición de un número, elegir la regla funcional ("multiplica la posición por 5 y suma 34") y continuar sucesiones no lineales (dobles, triples, diferencias crecientes, cuadrados) | MA05 OA 14 |
+| 5-2 Torres de palitos | Figuras de palitos que crecen (cuadrados, triángulos, casas, pentágonos, rejilla): ¿cuántos palitos tendrá la figura 40? ¿Qué figura usa 91? Y figuras de baldosas no lineales | MA05 OA 14 |
+| 5-3 Espejismos | Ecuaciones e inecuaciones mezcladas hasta 1000: escribir el borde y dibujar la solución (punto lleno, o círculo vacío y flecha) | MA05 OA 15 |
+| 5-4 La caravana | Problemas del desierto con inecuaciones graficadas y problemas con ecuaciones hasta 500 | MA05 OA 15 |
+| Jefe: Escorpión Desigual | Todo lo anterior mezclado | MA05 OA 14 y 15 |
+
+- **MA05 OA 14:** Descubrir alguna regla que explique una sucesión dada y que permita hacer predicciones.
+- **MA05 OA 15:** Resolver problemas, usando ecuaciones e inecuaciones de un paso, que involucren adiciones y sustracciones, en forma pictórica y simbólica.
+
+En las inecuaciones con resta solo aparecen soluciones "mayores que" (□ − 30 > 50): "□ − 30 < 50" incluiría
+números menores que 30, que en 5° no tienen sentido. Las figuras dibujan exactamente los palitos o baldosas del
+término (lo comprueba la prueba en navegador).
+
 ## Islas en construcción
 
 | Isla | Nivel | OA | Propuesta |
 |---|---|---|---|
-| 5 · Desierto de las Desigualdades | 5° | MA05 OA 14, OA 15 | Todas las soluciones de una inecuación marcadas en la recta numérica |
 | 6 · Ciudad de las Fórmulas | 6° | MA06 OA 9, OA 10, OA 11 | La figura n tiene 2n + 1 fichas; ecuaciones con balanza y luego formales |
 | 7 · Volcán de los Globos | 7° | MA07 OA 6 a OA 9 | Sacos de x, globos negativos, términos semejantes y proporcionalidad |
 | 8 · Castillo del Desequilibrio | 8° | MA08 OA 7 a OA 10 | Incógnita a ambos lados; la balanza genera la tabla y el gráfico de la función afín |

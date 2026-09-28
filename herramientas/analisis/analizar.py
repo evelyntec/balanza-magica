@@ -48,6 +48,8 @@ NOMBRES_TIPO = {
     "problema": "Problemas con ecuaciones",
     "tabla_regla": "Tablas con regla",
     "inecuacion": "Inecuaciones",
+    "sucesion": "Sucesiones y predicciones",
+    "grafico_solucion": "Graficar soluciones",
 }
 
 DIAGNOSTICOS = {
@@ -87,6 +89,12 @@ DIAGNOSTICOS = {
     "inecuacion_un_valor": "Encuentra solo algunas soluciones",
     "inecuacion_borde": "Incluye el borde (< como ≤)",
     "inecuacion_direccion": "Marca el lado contrario de la recta",
+    "sucesion_proporcional": "Supone proporcionalidad en la sucesión",
+    "sucesion_sin_inicio": "Olvida el término inicial",
+    "sucesion_desfase": "Cuenta un salto de más o de menos",
+    "sucesion_aditiva": "Supone que siempre se suma lo mismo",
+    "sucesion_regla": "Elige una regla que no sirve para todos",
+    "ecuacion_rayo": "Dibuja muchas soluciones para una ecuación",
 }
 
 
