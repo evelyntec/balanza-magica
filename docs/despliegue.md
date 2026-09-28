@@ -27,7 +27,8 @@ Mientras no configures los secretos, ambos flujos terminan sin hacer nada y sin 
 1. cPanel → **Acceso SSH** (*SSH Access*) → **Administrar claves SSH** → **Generar una nueva clave**.
    - Nombre: `github-balanza`
    - Tipo: **RSA**, tamaño **4096**
-   - **Sin frase de contraseña** (GitHub no puede escribirla). Por eso la clave se usa solo para desplegar.
+   - Contraseña: puedes dejarla en blanco. Si cPanel exige una, escríbela y guárdala también en GitHub como
+     secreto `SSH_FRASE` (el despliegue la usa sin mostrarla).
 2. En la lista de claves públicas, junto a `github-balanza`, presiona **Administrar** → **Autorizar**.
 3. En la lista de claves privadas, presiona **Ver/Descargar** y copia todo el texto
    (desde `-----BEGIN` hasta `-----END ... KEY-----`). Ese texto es el secreto `SSH_CLAVE_PRIVADA`.
@@ -63,6 +64,7 @@ GitHub → repositorio **balanza-magica** → **Settings** → **Secrets and var
 | `SSH_USUARIO` | `tuusuario` | Opción A |
 | `SSH_PUERTO` | `22` | Opción A (opcional si es 22) |
 | `SSH_CLAVE_PRIVADA` | `-----BEGIN RSA PRIVATE KEY----- …` | Opción A |
+| `SSH_FRASE` | la contraseña de la clave | Opción A, solo si cPanel exigió una |
 | `RUTA_APP` | `/home/tuusuario/balanza-app` | Opción A |
 | `FTP_HOST`, `FTP_USUARIO`, `FTP_CLAVE`, `FTP_RUTA` | ver arriba | Solo si usas la opción B |
 

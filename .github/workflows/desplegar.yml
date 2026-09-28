@@ -68,6 +68,7 @@ jobs:
           SSH_USUARIO: ${{ secrets.SSH_USUARIO }}
           SSH_PUERTO: ${{ secrets.SSH_PUERTO }}
           SSH_CLAVE_PRIVADA: ${{ secrets.SSH_CLAVE_PRIVADA }}
+          SSH_FRASE: ${{ secrets.SSH_FRASE }}
           SSH_HOSTS_CONOCIDOS: ${{ secrets.SSH_HOSTS_CONOCIDOS }}
           RUTA_APP: ${{ secrets.RUTA_APP }}
         run: |
@@ -77,6 +78,10 @@ jobs:
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
           printf '%s\n' "$SSH_CLAVE_PRIVADA" > ~/.ssh/id_despliegue
           chmod 600 ~/.ssh/id_despliegue
+          # Si cPanel exigió una contraseña para la clave, se quita solo en esta máquina temporal.
+          if [ -n "${SSH_FRASE:-}" ]; then
+            ssh-keygen -p -q -P "$SSH_FRASE" -N "" -f ~/.ssh/id_despliegue
+          fi
           if [ -n "${SSH_HOSTS_CONOCIDOS:-}" ]; then
             printf '%s\n' "$SSH_HOSTS_CONOCIDOS" > ~/.ssh/known_hosts
           else
