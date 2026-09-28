@@ -81,6 +81,12 @@ Se marcan como *relacionales*, tienen su propia insignia y su pista de nivel 1 i
 | `tabla_fila_columna` | Confunde filas y columnas de la tabla del 100 | Tabla del 100 |
 | `modelo_palabra_clave` | "Tiene 12 más que…" → suma (palabras clave) | Cuentos con cajas |
 | `modelo_errado` | Elige una ecuación que no representa la historia | Cuentos con cajas |
+| `regla_recursiva` | Describe la regla mirando solo la columna de salida ("va de 4 en 4") | Máquina de reglas |
+| `regla_operacion` | Elige +9 cuando la regla es ×4 (sirve solo en la primera fila) | Máquina de reglas |
+| `inecuacion_igualdad` | Marca solo el borde: resuelve la inecuación como ecuación | Balanza inclinada |
+| `inecuacion_un_valor` | Marca algunas soluciones, no todas | Balanza inclinada |
+| `inecuacion_borde` | Incluye el borde (lee < como ≤) | Balanza inclinada |
+| `inecuacion_direccion` | Marca el lado contrario de la recta | Balanza inclinada |
 
 El panel docente agrupa estos diagnósticos y sugiere una intervención para cada uno.
 
@@ -96,7 +102,22 @@ El panel docente agrupa estos diagnósticos y sugiere una intervención para cad
 - **Tabla del 100:** su estructura (+1 a la derecha, +10 hacia abajo) se usa para completar trozos sin mirar la tabla,
   y las diagonales de 9 y 11 obligan a coordinar fila y columna.
 
-## 8. Desafío, adaptatividad y motivación
+## 8. Tablas con regla e inecuaciones (4° básico)
+
+- **Regla funcional, no recursiva:** desde el nivel 3 las entradas de la tabla están desordenadas, de modo que mirar
+  solo la columna de salida ("va de 4 en 4") no sirve; hay que relacionar cada entrada con su salida. Entre las reglas
+  ofrecidas siempre están la recursiva y una aditiva que funciona solo en la primera fila, porque son los errores más
+  frecuentes al pasar de patrones a funciones.
+- **Máquina inversa:** en el último nivel se conoce la salida y se busca la entrada, aplicando la relación inversa
+  entre adición y sustracción (y entre multiplicación y división) que pide el OA.
+- **La balanza inclinada:** la misma balanza de 1° a 3°, ahora desequilibrada, da sentido a < y >. Primero se busca
+  el **borde** (el número que la equilibraría) y luego hacia qué lado están las soluciones.
+- **Conjunto solución:** se marcan en la recta **todos** los números que cumplen, porque el error más persistente es
+  creer que una inecuación tiene una sola respuesta. La retroalimentación describe siempre el conjunto completo,
+  aunque la recta muestre solo una parte.
+- **Formas invertidas** (50 > □ + 12) al final, para que el signo se lea desde cualquier lado, igual que el "=" relacional.
+
+## 9. Desafío, adaptatividad y motivación
 
 - **Dos aciertos seguidos** suben un nivel; **dos errores seguidos** bajan un nivel y el siguiente ejercicio llega
   **con apoyo** (vale la mitad y no puede ser perfecto).

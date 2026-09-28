@@ -10,7 +10,7 @@
  */
 
 import type { Azar } from '../azar';
-import { esEnteroEn, type ItemGenerado, type Mecanica } from './mecanica';
+import { esEnteroEn, type ContextoGeneracion, type ItemGenerado, type Mecanica } from './mecanica';
 
 export type FormaEcuacion = 'x+a=b' | 'a+x=b' | 'b=x+a' | 'x-a=b' | 'a-x=b' | 'b=a-x';
 
@@ -135,8 +135,10 @@ export const ecuacion: Mecanica<PublicoEcuacion, SecretoEcuacion, number> = {
   modo: 'escrita',
   maxIntentos: 2,
 
-  generar(nivel: number, azar: Azar): ItemGenerado<PublicoEcuacion, SecretoEcuacion> {
-    const { forma, a, b, representacion } = generarNumeros(nivel, azar);
+  generar(nivel: number, azar: Azar, ctx?: ContextoGeneracion): ItemGenerado<PublicoEcuacion, SecretoEcuacion> {
+    // En 4° básico se parte desde las formas más exigentes de 3°.
+    const dificultad = (ctx?.isla ?? 3) >= 4 ? Math.min(5, nivel + 2) : nivel;
+    const { forma, a, b, representacion } = generarNumeros(dificultad, azar);
     const simbolo = azar.elegir(SIMBOLOS);
     const publico: PublicoEcuacion = { forma, a, b, simbolo, representacion };
     const x = resolver(forma, a, b);

@@ -5,6 +5,10 @@
 
 import type { ItemGuardado } from '../src/servicio/modelos';
 import type {
+  PublicoInecuacion,
+  SecretoInecuacion,
+  SecretoTablaRegla,
+  PublicoTablaRegla,
   PublicoTabla100,
   SecretoEcuacion,
   SecretoProblema,
@@ -50,6 +54,17 @@ export function respuestaCorrecta(tipo: TipoItem, publico: unknown, secreto: unk
       const s = secreto as SecretoProblema;
       return { ecuacion: s.correcta, valor: s.x };
     }
+    case 'tabla_regla': {
+      const p = publico as PublicoTablaRegla;
+      const s = secreto as SecretoTablaRegla;
+      const valores = p.filas.flatMap((f, i) => {
+        const c = s.completas[i]!;
+        return [...(f.entrada === null ? [c.entrada] : []), ...(f.salida === null ? [c.salida] : [])];
+      });
+      return p.modo === 'regla' ? { valores, regla: s.regla } : { valores };
+    }
+    case 'inecuacion':
+      return (secreto as SecretoInecuacion).soluciones;
   }
 }
 
@@ -87,6 +102,16 @@ export function respuestaIncorrecta(tipo: TipoItem, publico: unknown, secreto: u
     case 'problema': {
       const r = buena as { ecuacion: number; valor: number };
       return { ecuacion: r.ecuacion, valor: r.valor + 5 };
+    }
+    case 'tabla_regla': {
+      const r = buena as { valores: number[]; regla?: string };
+      return { ...r, valores: r.valores.map((v) => v + 1) };
+    }
+    case 'inecuacion': {
+      const p = publico as PublicoInecuacion;
+      const s = secreto as SecretoInecuacion;
+      // Error típico: marcar solo el borde, como si fuera ecuación.
+      return s.borde >= p.desde && s.borde <= p.hasta ? [s.borde] : [p.desde];
     }
   }
 }

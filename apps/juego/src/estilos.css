@@ -1774,3 +1774,181 @@ h3 {
 .opciones--lista {
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 }
+
+/* Máquina de reglas (Isla 4) */
+
+.maquina {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  background: var(--violeta-500, #7b3fbf);
+  color: var(--blanco);
+  border: var(--borde);
+  border-radius: var(--r-m);
+  box-shadow: 0 4px 0 var(--tinta);
+  font-family: var(--fuente-titulo);
+  font-weight: 800;
+  font-size: clamp(1.2rem, 5vw, 1.6rem);
+}
+
+.maquina__engranaje {
+  display: inline-block;
+  animation: girar 6s linear infinite;
+}
+
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .maquina__engranaje {
+    animation: none;
+  }
+}
+
+.tabla-regla {
+  border-collapse: separate;
+  border-spacing: 0 6px;
+  background: var(--papel);
+  border: var(--borde);
+  border-radius: var(--r-m);
+  padding: 6px 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.tabla-regla th {
+  font-family: var(--fuente-titulo);
+  font-size: 1.05rem;
+  padding: 2px 10px;
+}
+
+.tabla-regla td {
+  text-align: center;
+  padding: 0 6px;
+}
+
+.tabla-regla .casilla {
+  min-width: 64px;
+  height: 52px;
+  font-size: 1.5rem;
+}
+
+.tabla-regla__numero {
+  display: inline-grid;
+  place-items: center;
+  min-width: 64px;
+  height: 52px;
+  font-size: 1.6rem;
+  font-weight: 800;
+  background: var(--blanco);
+  border: 2px solid var(--violeta-100);
+  border-radius: var(--r-s);
+}
+
+.tabla-regla__flecha {
+  width: 34px;
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: var(--fucsia-500);
+}
+
+/* Recta numérica de soluciones (Isla 4) */
+
+.recta {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(13, minmax(0, 1fr));
+  width: min(100%, 680px);
+  padding: 10px 6px 6px;
+  background: var(--papel);
+  border: var(--borde);
+  border-radius: var(--r-m);
+}
+
+.recta::before {
+  content: '';
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  top: 30px;
+  height: 4px;
+  background: var(--tinta);
+  border-radius: 2px;
+}
+
+/* Puntas de flecha: la recta sigue hacia ambos lados. */
+.recta::after {
+  content: '';
+  position: absolute;
+  right: 2px;
+  top: 25px;
+  border: 7px solid transparent;
+  border-left: 10px solid var(--tinta);
+  border-right: 0;
+}
+
+.recta__punto:first-child::before {
+  content: '';
+  position: absolute;
+  left: -4px;
+  top: 17px;
+  border: 7px solid transparent;
+  border-right: 10px solid var(--tinta);
+  border-left: 0;
+}
+
+.recta__punto {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-height: 60px;
+  padding: 8px 0 0;
+  border: 0;
+  background: none;
+  color: var(--tinta);
+  cursor: pointer;
+}
+
+.recta__punto:disabled {
+  cursor: default;
+}
+
+.recta__marca {
+  width: clamp(18px, 4.5vw, 26px);
+  height: clamp(18px, 4.5vw, 26px);
+  border-radius: 50%;
+  border: 3px solid var(--tinta);
+  background: var(--blanco);
+  transition: transform 0.15s;
+}
+
+.recta__numero {
+  font-weight: 800;
+  font-size: clamp(0.72rem, 2.8vw, 1rem);
+  font-variant-numeric: tabular-nums;
+}
+
+.recta__punto--marcado .recta__marca {
+  background: var(--fucsia-500);
+  transform: scale(1.15);
+}
+
+.recta__punto--borde .recta__marca {
+  background: var(--blanco);
+  border-style: dashed;
+  border-color: var(--rojo-500);
+  box-shadow: 0 0 0 3px var(--oro-300);
+}
+
+.recta__punto--solucion .recta__marca {
+  background: var(--verde-500);
+}
+
+.recta__punto--error .recta__marca {
+  background: var(--rojo-500);
+}

@@ -70,4 +70,25 @@ export const DIAGNOSTICOS_DOCENTE: Record<string, { titulo: string; sugerencia: 
     sugerencia: 'Leer la historia completa, identificar lo desconocido y representarlo con barras antes de elegir la operación.',
   },
   modelo_errado: { titulo: 'Elige una ecuación que no representa la historia', sugerencia: 'Dramatizar la historia en orden y poner la caja donde está lo que no se sabe.' },
+  regla_recursiva: {
+    titulo: 'Busca la regla solo hacia abajo en la columna de salida (recursiva)',
+    sugerencia: 'Desordenar las entradas y preguntar: ¿qué le hace la máquina a CADA número que entra? (MA04 OA 13).',
+  },
+  regla_operacion: {
+    titulo: 'Confunde la operación de la regla (+ con ×)',
+    sugerencia: 'Comprobar la regla en al menos dos filas: 3 + 9 = 12 sirve en una fila, pero 3 × 4 = 12 sirve en todas.',
+  },
+  inecuacion_igualdad: {
+    titulo: 'Resuelve la inecuación como una ecuación (marca solo el borde)',
+    sugerencia: 'Mostrar con la balanza inclinada que hay muchos valores posibles; probar números a ambos lados del borde.',
+  },
+  inecuacion_un_valor: { titulo: 'Encuentra solo algunas soluciones de la inecuación', sugerencia: 'Pedir que prueben TODOS los números de la recta, uno por uno.' },
+  inecuacion_borde: {
+    titulo: 'Incluye el borde (confunde < con ≤)',
+    sugerencia: 'Reemplazar el borde y comparar: si los lados quedan iguales, no es "menor que".',
+  },
+  inecuacion_direccion: {
+    titulo: 'Marca el lado contrario de la recta',
+    sugerencia: 'Leer el signo en voz alta ("es menor que") y relacionarlo con el platillo que sube en la balanza.',
+  },
 };

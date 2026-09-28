@@ -164,7 +164,8 @@ describe('desbloqueo', () => {
     expect(mapa[0]!.etapas.every((e) => e.accesible)).toBe(true);
     expect(mapa[1]!.etapas.every((e) => e.accesible)).toBe(true);
     expect(mapa[2]!.accesible).toBe(true); // isla 3 (Río) disponible
-    expect(mapa[3]!.accesible).toBe(false); // isla 4 aún no está construida
+    expect(mapa[3]!.accesible).toBe(true); // isla 4 (Montaña) disponible
+    expect(mapa[4]!.accesible).toBe(false); // isla 5 aún no está construida
   });
 
   it('nivel inicial: repaso parte en 3 y repetir parte cerca del máximo logrado', () => {

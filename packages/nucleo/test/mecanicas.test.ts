@@ -21,7 +21,7 @@ import {
   type SecretoVerdaderoFalso,
 } from '../src/mecanicas';
 import type { Objeto, TipoItem } from '../src/tipos';
-import { resolver, textoEcuacion, type PublicoEcuacion, type PublicoProblema, type PublicoTabla100, type SecretoProblema, type SecretoTabla100 } from '../src/mecanicas';
+import { aplicar, cumple, esMayor, describirSoluciones, resolver, textoEcuacion, type Operacion, type PublicoInecuacion, type PublicoTablaRegla, type SecretoInecuacion, type SecretoTablaRegla, type PublicoEcuacion, type PublicoProblema, type PublicoTabla100, type SecretoProblema, type SecretoTabla100 } from '../src/mecanicas';
 import { respuestaCorrecta, respuestaIncorrecta } from './ayudas';
 
 const POR_NIVEL = 1500;
@@ -121,6 +121,49 @@ describe.each(ETAPAS.map((e) => [e.id, e] as const))('etapa %s', (_id, etapa) =>
 function verificarEspecifico(tipo: TipoItem, publico: unknown, secreto: unknown, isla: number, nivel: number): void {
   // OA MA01-12 y MA02-13: del 0 al 20. OA MA03-13: del 0 al 100.
   const limiteBalanza = isla <= 2 ? 20 : 100;
+  if (tipo === 'tabla_regla') {
+    const p = publico as PublicoTablaRegla;
+    const s = secreto as SecretoTablaRegla;
+    for (const f of s.completas) {
+      expect(aplicar(s.op, s.k, f.entrada)).toBe(f.salida);
+      expect(f.salida).toBeGreaterThanOrEqual(0);
+      expect(f.salida).toBeLessThanOrEqual(100);
+    }
+    // Las filas completas visibles distinguen la regla correcta de todas las alternativas.
+    if (p.modo === 'regla') {
+      expect(new Set(p.opcionesRegla).size).toBe(4);
+      expect(p.opcionesRegla).toContain(s.regla);
+      const visibles = p.filas.filter((f) => f.entrada !== null && f.salida !== null) as { entrada: number; salida: number }[];
+      for (const o of p.opcionesRegla ?? []) {
+        if (o === s.regla) continue;
+        const [op, k] = o.split(' ') as [Operacion, string];
+        expect(visibles.every((f) => aplicar(op, Number(k), f.entrada) === f.salida)).toBe(false);
+      }
+    }
+    if (nivel >= 3) expect(p.filas.map((f, i) => s.completas[i]!.entrada).every((e, i, arr) => i === 0 || e > arr[i - 1]!)).toBe(false);
+    return;
+  }
+  if (tipo === 'inecuacion') {
+    const p = publico as PublicoInecuacion;
+    const s = secreto as SecretoInecuacion;
+    expect(p.hasta - p.desde).toBe(12);
+    expect(p.desde).toBeGreaterThanOrEqual(0);
+    expect(p.hasta).toBeLessThanOrEqual(100);
+    expect(s.soluciones.length).toBeGreaterThanOrEqual(3);
+    expect(s.soluciones.length).toBeLessThanOrEqual(10);
+    for (let x = p.desde; x <= p.hasta; x++) expect(cumple(p.forma, p.a, p.b, x)).toBe(s.soluciones.includes(x));
+    expect(s.soluciones).not.toContain(s.borde);
+    if (p.forma.startsWith('x-')) expect(p.desde).toBeGreaterThanOrEqual(p.a);
+    if (p.contexto) expect(p.simbolo).toBe('□');
+    // Si todas las soluciones de un "<" caben en la recta, se ven todas.
+    const minimo = p.forma.startsWith('x-') ? p.a : 0;
+    if (!esMayor(p.forma) && s.borde - minimo <= 10) expect(p.desde).toBe(minimo);
+    // El mensaje nunca dice que la solución es solo lo que se ve en la recta.
+    const d = describirSoluciones(p, s.borde);
+    expect(d).toContain(esMayor(p.forma) ? `mayor que ${s.borde}` : `hasta ${s.borde - 1}`);
+    if (!esMayor(p.forma) && p.desde > minimo) expect(d).toContain('solo se ven algunos');
+    return;
+  }
   switch (tipo) {
     case 'inclinacion': {
       const p = publico as PublicoInclinacion;
@@ -204,7 +247,7 @@ function verificarEspecifico(tipo: TipoItem, publico: unknown, secreto: unknown,
       expect(x).toBeGreaterThanOrEqual(1);
       for (const n of [p.a, p.b, x]) expect(n).toBeLessThanOrEqual(100);
       expect(textoEcuacion(p)).toContain(p.simbolo);
-      if (nivel <= 2) expect(p.forma.includes('-')).toBe(false);
+      if (isla === 3 && nivel <= 2) expect(p.forma.includes('-')).toBe(false);
       break;
     }
     case 'tabla100': {

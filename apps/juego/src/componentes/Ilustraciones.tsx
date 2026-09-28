@@ -281,6 +281,21 @@ export function RetratoJefe({ isla, animo = 'normal' }: { isla: number; animo?: 
       </svg>
     );
   }
+  if (isla === 4) {
+    return (
+      <svg viewBox="0 0 100 100" className="jefe__retrato" role="img" aria-label="Yeti de las Tablas">
+        <circle cx={50} cy={50} r={46} fill="#cfe8ff" stroke={L} strokeWidth={4} />
+        <path d="M8 74 l18 -26 l12 14 l14 -22 l18 24 l10 -10 l12 20" fill="#fff" stroke={L} strokeWidth={3} strokeLinejoin="round" />
+        <path d="M22 86 q-6 -34 8 -50 q-4 -14 10 -18 q10 -8 20 0 q14 4 10 18 q14 16 8 50 Z" fill="#f4f7fb" {...t} />
+        <path d="M34 34 q16 -8 32 0 q4 18 -16 24 q-20 -6 -16 -24 Z" fill="#9fb8d6" {...t} strokeWidth={3} />
+        {ojos}
+        <path d="M44 56 q6 4 12 0" fill="none" {...t} strokeWidth={3} />
+        <path d="M46 55 v4 M54 55 v4" stroke="#fff" strokeWidth={2.5} />
+        <rect x={60} y={64} width={24} height={20} rx={3} fill="#fff3cf" {...t} strokeWidth={3} />
+        <path d="M60 71 h24 M60 77 h24 M72 64 v20" stroke={L} strokeWidth={2} />
+      </svg>
+    );
+  }
   return (
     <svg viewBox="0 0 100 100" className="jefe__retrato" role="img" aria-label="Bruja Ventolera">
       <circle cx={50} cy={50} r={46} fill="#dcf5e8" stroke={L} strokeWidth={4} />

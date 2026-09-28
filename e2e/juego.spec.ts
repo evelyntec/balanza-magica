@@ -91,6 +91,25 @@ async function resolverPorInterfaz(page: Page, almacen: AlmacenMemoria, itemId: 
       await page.getByRole('button', { name: 'Revisar' }).click();
       break;
     }
+    case 'tabla_regla': {
+      const { valores, regla } = r as { valores: number[]; regla?: string };
+      await expect(page.getByRole('button', { name: '1', exact: true })).toBeEnabled();
+      if (regla) await page.getByRole('radio', { name: regla, exact: true }).click();
+      const casillas = page.locator('.tabla-regla .casilla');
+      for (let k = 0; k < valores.length; k++) {
+        await casillas.nth(k).click();
+        await page.keyboard.type(String(valores[k]));
+      }
+      await page.getByRole('button', { name: 'Revisar' }).click();
+      break;
+    }
+    case 'inecuacion': {
+      const recta = page.getByRole('group', { name: /Recta numérica/ });
+      await expect(recta.getByRole('button').first()).toBeEnabled();
+      for (const v of r as number[]) await recta.getByRole('button', { name: String(v), exact: true }).click();
+      await page.getByRole('button', { name: 'Revisar' }).click();
+      break;
+    }
     default:
       throw new Error(`tipo no cubierto en e2e: ${item.tipo}`);
   }
@@ -268,6 +287,55 @@ test('isla 3: ecuaciones, pesas hasta 100, tabla del 100 y cuentos por la interf
       if (n === 0) {
         await sinDesbordeHorizontal(page);
         await page.screenshot({ path: capturas(`isla3-${etapa.replace(/\s/g, '-')}`, proyecto) });
+      }
+      await continuar.click();
+      await expect.poll(() => seguimiento.itemId).not.toBe(id);
+    }
+    await page.getByRole('button', { name: 'Salir de la etapa' }).click();
+    await page.getByRole('button', { name: 'Salir', exact: true }).click();
+    await page.getByRole('button', { name: 'Volver' }).click();
+  }
+  expect(errores).toEqual([]);
+});
+
+test('isla 4: tablas con regla, ecuaciones, inecuaciones y cuentos por la interfaz', async ({ page }, info) => {
+  const proyecto = info.project.name;
+  const curso = await srv.servicio.crearCurso({ nombre: `5° ${proyecto}`, nivel: 5 });
+  const seguimiento = seguirItems(page);
+  const errores: string[] = [];
+  page.on('pageerror', (e) => errores.push(e.message));
+  await page.goto(srv.url);
+  await page.getByRole('button', { name: /Entrar con mi curso/ }).click();
+  await page.getByLabel('Código del curso').fill(curso.codigo);
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  await page.getByRole('button', { name: /Soy nueva o nuevo/ }).click();
+  await page.getByLabel('Apodo').fill('Cóndor Andino 50');
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  for (const f of ['pez', 'pato', 'oso']) await page.getByRole('button', { name: f, exact: true }).click();
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  for (const f of ['pez', 'pato', 'oso']) await page.getByRole('button', { name: f, exact: true }).click();
+  await page.getByRole('button', { name: /Crear mi gatito/ }).click();
+  await expect(page.getByText('El Reino del Equilibrio')).toBeVisible();
+
+  for (const etapa of ['La máquina de reglas', 'Ecuaciones de la cumbre', 'La balanza inclinada', 'Cuentos de la cumbre']) {
+    await page.getByRole('button', { name: /Montaña de las Tablas/ }).click();
+    seguimiento.itemId = '';
+    await page.getByRole('button', { name: new RegExp(etapa) }).click();
+    for (let n = 0; n < 3; n++) {
+      await expect.poll(() => seguimiento.itemId).not.toBe('');
+      const id = seguimiento.itemId;
+      if (n === 0) {
+        await page.waitForTimeout(1200);
+        await page.screenshot({ path: capturas(`isla4-antes-${etapa.replace(/\s/g, '-')}`, proyecto) });
+      }
+      await resolverPorInterfaz(page, srv.almacen, id);
+      const continuar = page.getByRole('button', { name: /Continuar →/ });
+      await expect(continuar).toBeVisible();
+      await expect(page.locator('.retro__titulo')).toHaveText(/Perfecto|Muy bien/);
+      if (n === 0) {
+        await sinDesbordeHorizontal(page);
+        await page.screenshot({ path: capturas(`isla4-${etapa.replace(/\s/g, '-')}`, proyecto) });
       }
       await continuar.click();
       await expect.poll(() => seguimiento.itemId).not.toBe(id);

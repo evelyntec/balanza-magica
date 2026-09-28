@@ -116,8 +116,8 @@ export const ISLAS: Isla[] = [
     nivel: '4° básico',
     lema: 'Reglas en tablas, ecuaciones e inecuaciones',
     color: '#3aa37a',
-    disponible: false,
-    jefe: { nombre: 'Yeti de las Tablas', descripcion: 'Congela las reglas de las tablas.', vida: 12 },
+    disponible: true,
+    jefe: { nombre: 'Yeti de las Tablas', descripcion: 'Congeló las reglas de todas las máquinas de la montaña. ¡Descongélalas!', vida: 12 },
     oa: [
       {
         codigo: 'MA04 OA 13',
@@ -449,6 +449,78 @@ ETAPAS.push(
       { tipo: 'ecuacion', generar: simple('ecuacion') },
       { tipo: 'equilibrar', generar: simple('equilibrar') },
       { tipo: 'tabla100', generar: simple('tabla100') },
+      { tipo: 'problema', generar: simple('problema') },
+    ]),
+  }),
+);
+
+// Isla 4 ----------------------------------------------------------------------
+
+/** Cuentos de la cumbre: problemas con ecuaciones y con inecuaciones. */
+function cuentosCumbre(nivel: number, azar: Azar, ctx: ContextoGeneracion): ItemGenerado {
+  if (azar.probabilidad(0.5)) return MECANICAS.problema.generar(nivel, azar, ctx);
+  // Las historias con inecuaciones son las del nivel 4 de la mecánica; el nivel del ejercicio es el de la etapa.
+  return { ...MECANICAS.inecuacion.generar(4, azar, ctx), nivel };
+}
+
+ETAPAS.push(
+  etapa({
+    id: '4-1',
+    isla: 4,
+    orden: 1,
+    nombre: 'La máquina de reglas',
+    descripcion: 'Descubre qué le hace la máquina a cada número. ¡Cuidado con las tablas desordenadas!',
+    oa: ['MA04 OA 13'],
+    esJefe: false,
+    mecanicas: ['tabla_regla'],
+    generar: simple('tabla_regla'),
+  }),
+  etapa({
+    id: '4-2',
+    isla: 4,
+    orden: 2,
+    nombre: 'Ecuaciones de la cumbre',
+    descripcion: 'Ecuaciones de un paso con suma y resta hasta 100. Resuelve y comprueba.',
+    oa: ['MA04 OA 14'],
+    esJefe: false,
+    mecanicas: ['ecuacion'],
+    generar: simple('ecuacion'),
+  }),
+  etapa({
+    id: '4-3',
+    isla: 4,
+    orden: 3,
+    nombre: 'La balanza inclinada',
+    descripcion: 'Inecuaciones: marca en la recta TODOS los números que sirven.',
+    oa: ['MA04 OA 14'],
+    esJefe: false,
+    mecanicas: ['inecuacion'],
+    generar: simple('inecuacion'),
+  }),
+  etapa({
+    id: '4-4',
+    isla: 4,
+    orden: 4,
+    nombre: 'Cuentos de la cumbre',
+    descripcion: 'Historias que se resuelven con ecuaciones o con inecuaciones.',
+    oa: ['MA04 OA 14'],
+    esJefe: false,
+    mecanicas: ['problema', 'inecuacion'],
+    generar: cuentosCumbre,
+  }),
+  etapa({
+    id: '4-J',
+    isla: 4,
+    orden: 5,
+    nombre: 'El Yeti de las Tablas',
+    descripcion: 'El gran desafío de la montaña: reglas, ecuaciones, inecuaciones y cuentos.',
+    oa: ['MA04 OA 13', 'MA04 OA 14'],
+    esJefe: true,
+    mecanicas: ['tabla_regla', 'ecuacion', 'inecuacion', 'problema'],
+    generar: mezcla([
+      { tipo: 'tabla_regla', generar: simple('tabla_regla') },
+      { tipo: 'ecuacion', generar: simple('ecuacion') },
+      { tipo: 'inecuacion', generar: simple('inecuacion') },
       { tipo: 'problema', generar: simple('problema') },
     ]),
   }),

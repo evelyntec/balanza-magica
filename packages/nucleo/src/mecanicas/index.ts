@@ -10,6 +10,8 @@ import { verdaderoFalso } from './verdaderoFalso';
 import { ecuacion } from './ecuacion';
 import { tabla100 } from './tabla100';
 import { problema } from './problema';
+import { tablaRegla } from './tablaRegla';
+import { inecuacion } from './inecuacion';
 
 export const MECANICAS: Record<TipoItem, Mecanica> = {
   inclinacion,
@@ -22,6 +24,8 @@ export const MECANICAS: Record<TipoItem, Mecanica> = {
   ecuacion,
   tabla100,
   problema,
+  tabla_regla: tablaRegla,
+  inecuacion,
 };
 
 export function mecanica(tipo: TipoItem): Mecanica {
@@ -36,6 +40,11 @@ export type { PublicoEcuacion, SecretoEcuacion, FormaEcuacion } from './ecuacion
 export { textoEcuacion, resolver, esSuma, SIMBOLOS, NOMBRE_SIMBOLO } from './ecuacion';
 export type { PublicoTabla100, SecretoTabla100 } from './tabla100';
 export type { PublicoProblema, SecretoProblema, RespuestaProblema } from './problema';
+export { tablaRegla, inecuacion };
+export type { PublicoTablaRegla, SecretoTablaRegla, RespuestaTablaRegla, FilaTabla, Operacion } from './tablaRegla';
+export { aplicar, textoReglaTabla } from './tablaRegla';
+export type { PublicoInecuacion, SecretoInecuacion, FormaInecuacion } from './inecuacion';
+export { textoInecuacion, cumple, esMayor, describirSoluciones } from './inecuacion';
 export type { PublicoInclinacion, SecretoInclinacion } from './inclinacion';
 export type { PublicoEquilibrar, SecretoEquilibrar } from './equilibrar';
 export type { PublicoRegistrar, SecretoRegistrar, RespuestaRegistrar } from './registrar';

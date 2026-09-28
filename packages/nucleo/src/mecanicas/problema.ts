@@ -9,7 +9,7 @@
  */
 
 import type { Azar } from '../azar';
-import { esEnteroEn, type ItemGenerado, type Mecanica } from './mecanica';
+import { esEnteroEn, type ContextoGeneracion, type ItemGenerado, type Mecanica } from './mecanica';
 import { resolver, textoEcuacion, type FormaEcuacion } from './ecuacion';
 
 type Tipo = 'inicio_suma' | 'cambio_suma' | 'inicio_resta' | 'cambio_resta' | 'comparacion';
@@ -137,8 +137,9 @@ export const problema: Mecanica<PublicoProblema, SecretoProblema, RespuestaProbl
   modo: 'escrita',
   maxIntentos: 2,
 
-  generar(nivel: number, azar: Azar): ItemGenerado<PublicoProblema, SecretoProblema> {
-    const cfg = TIPO_POR_NIVEL[Math.min(Math.max(nivel, 1), 5)] as { tipos: Tipo[]; tope: number };
+  generar(nivel: number, azar: Azar, ctx?: ContextoGeneracion): ItemGenerado<PublicoProblema, SecretoProblema> {
+    const dificultad = (ctx?.isla ?? 3) >= 4 ? Math.min(5, nivel + 2) : nivel;
+    const cfg = TIPO_POR_NIVEL[Math.min(Math.max(dificultad, 1), 5)] as { tipos: Tipo[]; tope: number };
     const tipo = azar.elegir(cfg.tipos);
     const d = construir(tipo, cfg.tope, azar);
     const correctaTexto = textoEcuacion({ forma: d.forma, a: d.a, b: d.b, simbolo: '□' });

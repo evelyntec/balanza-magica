@@ -42,7 +42,9 @@ export type TipoItem =
   | 'verdadero_falso'
   | 'ecuacion'
   | 'tabla100'
-  | 'problema';
+  | 'problema'
+  | 'tabla_regla'
+  | 'inecuacion';
 
 /** Resultado de un ejercicio, del mejor al peor. */
 export type Resultado = 'perfecto' | 'logrado' | 'con_ayuda' | 'fallido';
@@ -99,6 +101,12 @@ export type CodigoDiagnostico =
   | 'tabla_fila_columna'
   | 'modelo_palabra_clave'
   | 'modelo_errado'
+  | 'regla_recursiva'
+  | 'regla_operacion'
+  | 'inecuacion_igualdad'
+  | 'inecuacion_un_valor'
+  | 'inecuacion_borde'
+  | 'inecuacion_direccion'
   | 'generico';
 
 export interface Evaluacion {

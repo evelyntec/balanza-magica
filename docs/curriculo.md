@@ -51,11 +51,28 @@ de 2° y todo lo de 3° llegan hasta 100; no aparecen números negativos.
 La incógnita se representa con símbolos geométricos (□ △ ○ ☆ ◇), como pide el OA. Todas las cantidades están entre 0 y 100
 y cada respuesta muestra su comprobación (reemplazar el símbolo y verificar la igualdad).
 
+### 🏔️ Isla 4 · Montaña de las Tablas · 4° básico
+
+| Etapa | Mecánica | OA |
+|---|---|---|
+| 4-1 La máquina de reglas | Tablas de entrada y salida con una operación (+, −, ×, ÷): completar salidas, elegir la regla entre distractores (la regla "de la columna" y la aditiva que sirve solo en la primera fila), entradas desordenadas y, al final, encontrar la entrada con la operación inversa | MA04 OA 13 |
+| 4-2 Ecuaciones de la cumbre | Ecuaciones de un paso hasta 100 partiendo desde las formas más exigentes de 3° (con canje, □ − 18 = 40, 45 − □ = 18, 60 = □ + 25) | MA04 OA 14 |
+| 4-3 La balanza inclinada | Inecuaciones de un paso (□ + 7 < 20, □ − 24 < 56, 50 > □ + 12): la balanza inclinada y la recta numérica donde se marcan **todas** las soluciones | MA04 OA 14 |
+| 4-4 Cuentos de la cumbre | Historias que se modelan con una ecuación o una inecuación ("tendrá menos de 40 láminas") | MA04 OA 14 |
+| Jefe: Yeti de las Tablas | Todo lo anterior mezclado | MA04 OA 13 y 14 |
+
+- **MA04 OA 13:** Identificar y describir patrones numéricos en tablas que involucren una operación, de manera manual y/o usando software educativo.
+- **MA04 OA 14:** Resolver ecuaciones e inecuaciones de un paso que involucren adiciones y sustracciones, comprobando los resultados en forma pictórica y simbólica del 0 al 100 y aplicando las relaciones inversas entre la adición y la sustracción.
+
+Una inecuación tiene un **conjunto** de soluciones: la respuesta se marca en una recta de 13 números y la
+retroalimentación siempre describe el conjunto completo (por ejemplo "cualquier número mayor que 25… y siguen para
+siempre"), no solo lo visible. Cuando todas las soluciones de un "<" caben en la recta, se muestran todas. Todo se
+mantiene entre 0 y 100, sin negativos.
+
 ## Islas en construcción
 
 | Isla | Nivel | OA | Propuesta |
 |---|---|---|---|
-| 4 · Montaña de las Tablas | 4° | MA04 OA 13, OA 14 | Reglas en tablas; ecuaciones e inecuaciones de un paso comprobadas en la balanza |
 | 5 · Desierto de las Desigualdades | 5° | MA05 OA 14, OA 15 | Todas las soluciones de una inecuación marcadas en la recta numérica |
 | 6 · Ciudad de las Fórmulas | 6° | MA06 OA 9, OA 10, OA 11 | La figura n tiene 2n + 1 fichas; ecuaciones con balanza y luego formales |
 | 7 · Volcán de los Globos | 7° | MA07 OA 6 a OA 9 | Sacos de x, globos negativos, términos semejantes y proporcionalidad |

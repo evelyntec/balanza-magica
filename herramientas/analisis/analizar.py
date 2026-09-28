@@ -46,6 +46,8 @@ NOMBRES_TIPO = {
     "ecuacion": "Ecuaciones de un paso",
     "tabla100": "Tabla del 100",
     "problema": "Problemas con ecuaciones",
+    "tabla_regla": "Tablas con regla",
+    "inecuacion": "Inecuaciones",
 }
 
 DIAGNOSTICOS = {
@@ -79,6 +81,12 @@ DIAGNOSTICOS = {
     "tabla_fila_columna": "Confunde filas y columnas en la tabla del 100",
     "modelo_palabra_clave": "Resuelve por palabras clave («más» → sumar)",
     "modelo_errado": "Elige una ecuación que no representa la historia",
+    "regla_recursiva": "Busca la regla solo en la columna de salida",
+    "regla_operacion": "Confunde la operación de la regla (+ con ×)",
+    "inecuacion_igualdad": "Resuelve la inecuación como ecuación",
+    "inecuacion_un_valor": "Encuentra solo algunas soluciones",
+    "inecuacion_borde": "Incluye el borde (< como ≤)",
+    "inecuacion_direccion": "Marca el lado contrario de la recta",
 }
 
 

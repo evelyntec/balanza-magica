@@ -276,6 +276,8 @@ export interface Estadisticas {
   compras: number;
   /** Problemas con historia resueltos seguidos (insignia "Nadie me engaña"). */
   cuentosSeguidos?: number;
+  /** Inecuaciones resueltas seguidas (insignia "Muchas soluciones"). */
+  inecuacionesSeguidas?: number;
 }
 
 export const estadisticasIniciales = (): Estadisticas => ({
@@ -308,6 +310,7 @@ export function actualizarEstadisticas(
   if ((item.tipo === 'patron_figuras' || item.tipo === 'patron_numerico') && item.resultado === 'perfecto') n.patronesPerfectos += 1;
   if (item.relacional) n.relacionalesSeguidos = esExito(item.resultado) ? n.relacionalesSeguidos + 1 : 0;
   if (item.tipo === 'problema') n.cuentosSeguidos = esExito(item.resultado) ? (n.cuentosSeguidos ?? 0) + 1 : 0;
+  if (item.tipo === 'inecuacion') n.inecuacionesSeguidas = esExito(item.resultado) ? (n.inecuacionesSeguidas ?? 0) + 1 : 0;
   if (!n.dias.includes(dia)) n.dias = [...n.dias, dia].slice(-60);
   return n;
 }
@@ -336,6 +339,9 @@ export const INSIGNIAS: Insignia[] = [
   { id: 'vence_1-J', nombre: 'Adiós, Cuervo', descripcion: 'Venciste al Cuervo Revoltoso.', icono: '🐦‍⬛', monedas: 50 },
   { id: 'vence_2-J', nombre: 'Viento en calma', descripcion: 'Venciste a la Bruja Ventolera.', icono: '🧹', monedas: 50 },
   { id: 'vence_3-J', nombre: 'Cajas liberadas', descripcion: 'Venciste al Pulpo Escondecajas.', icono: '🐙', monedas: 50 },
+  { id: 'isla_4_dorada', nombre: 'Montaña dorada', descripcion: '3 estrellas en todas las etapas de la Montaña.', icono: '🏔️', monedas: 100 },
+  { id: 'vence_4-J', nombre: 'Deshielo', descripcion: 'Venciste al Yeti de las Tablas.', icono: '❄️', monedas: 50 },
+  { id: 'muchas_soluciones', nombre: 'Muchas soluciones', descripcion: '5 inecuaciones seguidas con todas sus soluciones marcadas.', icono: '📏', monedas: 40 },
   { id: 'no_me_engana', nombre: 'Nadie me engaña', descripcion: '5 cuentos seguidos sin caer en la trampa de las palabras clave.', icono: '🕵️', monedas: 40 },
   { id: 'constancia_3', nombre: 'Constancia', descripcion: 'Jugaste en 3 días distintos.', icono: '📅', monedas: 20 },
   { id: 'constancia_7', nombre: 'Hábito de campeón', descripcion: 'Jugaste en 7 días distintos.', icono: '🏅', monedas: 50 },
@@ -359,6 +365,9 @@ export function insigniasGanadas(s: Estadisticas, progreso: Progreso, yaTiene: r
     isla_3_dorada: etapasDeIsla(3).every((e) => (progreso[e.id]?.estrellas ?? 0) >= 3),
     'vence_3-J': progreso['3-J']?.superada === true,
     no_me_engana: (s.cuentosSeguidos ?? 0) >= 5,
+    isla_4_dorada: etapasDeIsla(4).every((e) => (progreso[e.id]?.estrellas ?? 0) >= 3),
+    'vence_4-J': progreso['4-J']?.superada === true,
+    muchas_soluciones: (s.inecuacionesSeguidas ?? 0) >= 5,
     'vence_1-J': progreso['1-J']?.superada === true,
     'vence_2-J': progreso['2-J']?.superada === true,
     constancia_3: s.dias.length >= 3,

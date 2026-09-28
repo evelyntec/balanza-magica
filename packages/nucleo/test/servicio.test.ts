@@ -197,7 +197,8 @@ describe('antitrampas', () => {
     expect((await espera(t.servicio.iniciarEtapa(t.ctx, '1-2'))).codigo).toBe('ETAPA_BLOQUEADA');
     expect((await espera(t.servicio.iniciarEtapa(t.ctx, '2-1'))).codigo).toBe('ETAPA_BLOQUEADA');
     expect((await espera(t.servicio.iniciarEtapa(t.ctx, '3-1'))).codigo).toBe('ETAPA_BLOQUEADA');
-    expect((await espera(t.servicio.iniciarEtapa(t.ctx, '4-1'))).codigo).toBe('NO_ENCONTRADO');
+    expect((await espera(t.servicio.iniciarEtapa(t.ctx, '4-1'))).codigo).toBe('ETAPA_BLOQUEADA');
+    expect((await espera(t.servicio.iniciarEtapa(t.ctx, '5-1'))).codigo).toBe('NO_ENCONTRADO');
     expect((await espera(t.servicio.iniciarEtapa(t.ctx, { id: '1-1' }))).codigo).toBe('NO_ENCONTRADO');
   });
 
@@ -308,7 +309,18 @@ describe('recorrido completo', () => {
     }
     const perfil = await t.servicio.perfil(t.ctx.jugadorId);
     expect(perfil.insignias).toEqual(expect.arrayContaining(['vence_3-J', 'isla_3_dorada', 'no_me_engana']));
-    expect(perfil.islas[3]!.accesible).toBe(false); // la isla 4 aún no existe
+    expect(perfil.islas[3]!.accesible).toBe(true); // vencer al Pulpo abre la Montaña
+  });
+
+  it('4° básico: jugar perfecto la isla 4 da 3 estrellas y vence al Yeti', async () => {
+    const t = await preparar({ nivel: 4 });
+    for (const id of ['4-1', '4-2', '4-3', '4-4', '4-J']) {
+      const fin = await completarEtapa(t, id);
+      expect(fin.estrellas).toBe(3);
+    }
+    const perfil = await t.servicio.perfil(t.ctx.jugadorId);
+    expect(perfil.insignias).toEqual(expect.arrayContaining(['vence_4-J', 'isla_4_dorada', 'muchas_soluciones']));
+    expect(perfil.islas[4]!.accesible).toBe(false); // la isla 5 aún no existe
   });
 
   it('adivinar al azar rinde mucho menos que pensar', async () => {
