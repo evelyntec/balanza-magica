@@ -16,10 +16,10 @@ export type Representacion = 'concreta' | 'pictorica' | 'simbolica';
 export type Objeto =
   /** Cubos unitarios (material concreto). Cada cubo pesa 1. */
   | { tipo: 'cubos'; cantidad: number; color?: number }
-  /** Pesa con su número escrito (pictórico/simbólico). */
-  | { tipo: 'pesa'; valor: number }
-  /** Caja misteriosa que la o el estudiante debe completar. */
-  | { tipo: 'caja' };
+  /** Pesa con su número escrito (pictórico/simbólico). La etiqueta reemplaza el número (p. ej. "57 − 23"). */
+  | { tipo: 'pesa'; valor: number; etiqueta?: string }
+  /** Caja misteriosa que la o el estudiante debe completar (con un símbolo geométrico opcional). */
+  | { tipo: 'caja'; simbolo?: string };
 
 /** Término de una expresión aritmética: +valor o −valor. */
 export interface Termino {
@@ -39,7 +39,10 @@ export type TipoItem =
   | 'patron_figuras'
   | 'patron_numerico'
   | 'signo'
-  | 'verdadero_falso';
+  | 'verdadero_falso'
+  | 'ecuacion'
+  | 'tabla100'
+  | 'problema';
 
 /** Resultado de un ejercicio, del mejor al peor. */
 export type Resultado = 'perfecto' | 'logrado' | 'con_ayuda' | 'fallido';
@@ -50,6 +53,7 @@ export type AyudaVisual =
   | 'convertirACubos'
   | 'resaltarNucleo'
   | 'mostrarSaltos'
+  | 'modeloBarra'
   | 'ejemplo';
 
 export interface Pista {
@@ -90,6 +94,11 @@ export type CodigoDiagnostico =
   | 'vf_encadenada'
   | 'vf_casi'
   | 'vf_resta'
+  | 'operacion_inversa'
+  | 'error_decena'
+  | 'tabla_fila_columna'
+  | 'modelo_palabra_clave'
+  | 'modelo_errado'
   | 'generico';
 
 export interface Evaluacion {

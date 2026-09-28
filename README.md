@@ -18,6 +18,10 @@ Creado por **Evelyn Álvarez Vásquez**, Profesora de Educación General Básica
 |---|---|---|
 | ![Mapa](docs/capturas/celular-mapa.png) | ![Equilibrar](docs/capturas/celular-equilibrar.png) | ![Verdadero o falso](docs/capturas/celular-verdadero-falso.png) |
 
+| La caja misteriosa (3°) | Tabla del 100 | Cuentos con cajas |
+|---|---|---|
+| ![Ecuación](docs/capturas/celular-ecuacion.png) | ![Tabla del 100](docs/capturas/celular-tabla100.png) | ![Cuentos](docs/capturas/celular-cuentos.png) |
+
 | Retroalimentación (computador) | Panel docente |
 |---|---|
 | ![Retroalimentación](docs/capturas/computador-retroalimentacion.png) | ![Panel docente](docs/capturas/computador-docente.png) |
@@ -46,7 +50,8 @@ Fundamentación completa, con referencias (colección ReFIP, Castro y Molina, Vl
 |---|---|---|---|
 | 🍎 Pradera de las Frutas | 1° básico | ¿Hacia dónde baja? · ¡A equilibrar! · Collares y caminos · El cuaderno de Gatito · **Jefe: Cuervo Revoltoso** | MA01 OA 11, OA 12 |
 | 🌳 Bosque de los Signos | 2° básico | El signo que falta · El número escondido · Senderos del bosque · ¿Verdadero o falso? · **Jefe: Bruja Ventolera** | MA02 OA 12, OA 13 |
-| Islas 3 a 8 | 3° a 8° básico | En construcción (el motor ya está preparado: aritmética exacta con fracciones, currículo mapeado) | Ver [docs/curriculo.md](docs/curriculo.md) |
+| 🌊 Río de las Cajas Misteriosas | 3° básico | La caja misteriosa · Pesas del río · La tabla del 100 · Cuentos con cajas · **Jefe: Pulpo Escondecajas** | MA03 OA 12, OA 13 |
+| Islas 4 a 8 | 4° a 8° básico | En construcción (el motor ya está preparado: aritmética exacta con fracciones, currículo mapeado) | Ver [docs/curriculo.md](docs/curriculo.md) |
 
 Cada etapa tiene **5 niveles de dificultad adaptativa** y ejercicios generados al azar: dos estudiantes nunca reciben los mismos números.
 
@@ -54,7 +59,7 @@ Cada etapa tiene **5 niveles de dificultad adaptativa** y ejercicios generados a
 
 - **Puntos acumulados** durante todo el juego y **rangos**: Aprendiz → Explorador/a → Guardián/a → Maestro/a del Equilibrio → Leyenda.
 - **Estrellas (1 a 3)** por etapa: exigen precisión, pocas pistas y llegar a los niveles altos.
-- **Rachas** que multiplican los puntos (×1,5, ×2, ×3), **17 insignias** y **jefes** con barra de vida.
+- **Rachas** que multiplican los puntos (×1,5, ×2, ×3), **20 insignias** y **jefes** con barra de vida.
 - **Monedas** para la tienda de Gatito (sombrero de mago, corona, balanza dorada…). Nunca sirven para comprar respuestas.
 - **Desafiante sin frustrar:** dos aciertos seguidos suben el nivel; dos errores seguidos bajan un nivel y activan un ejercicio con apoyo.
 - **Pesadas limitadas:** en "completar la caja", acertar con **una sola pesada** da el máximo. Probar al azar no conviene.
@@ -116,7 +121,7 @@ npm run test:e2e         # Playwright: juego completo en celular y computador
 python -m pytest herramientas/analisis
 ```
 
-- **75 000 ejercicios generados y verificados** en cada ejecución: solución única, números dentro del ámbito del OA
+- **112 500 ejercicios generados y verificados** en cada ejecución: solución única, números dentro del ámbito del OA
   (0 a 20 en la balanza de 1° y 2°), sin negativos, respuesta que nunca aparece en la vista pública y retroalimentación para cada error.
 - **Pruebas de propiedades** (fast-check) de la aritmética exacta y de la física de la balanza.
 - **Cada trampa de la tabla anterior tiene su prueba.**
@@ -151,7 +156,7 @@ También hay consultas SQL de ejemplo en [apps/servidor/sql/consultas_docente.sq
 ## Hoja de ruta
 
 - [x] Motor, servicio antitrampas, servidor, islas 1 y 2 (1° y 2° básico)
-- [ ] Isla 3: cajas misteriosas y ecuaciones de un paso hasta 100
+- [x] Isla 3: ecuaciones de un paso hasta 100 (balanza y modelo de barras), tabla del 100 y problemas con ecuaciones
 - [ ] Islas 4 y 5: tablas, inecuaciones y conjunto solución en la recta numérica
 - [ ] Isla 6: patrones de figuras y expresiones con letras
 - [ ] Isla 7: sacos, globos (negativos), términos semejantes y proporcionalidad

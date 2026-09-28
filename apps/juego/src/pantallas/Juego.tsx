@@ -25,6 +25,9 @@ import { UIPatronFiguras } from '../mecanicas/UIPatronFiguras';
 import { UIPatronNumerico } from '../mecanicas/UIPatronNumerico';
 import { UISigno } from '../mecanicas/UISigno';
 import { UIVerdaderoFalso } from '../mecanicas/UIVerdaderoFalso';
+import { UIEcuacion } from '../mecanicas/UIEcuacion';
+import { UITabla100 } from '../mecanicas/UITabla100';
+import { UIProblema } from '../mecanicas/UIProblema';
 
 const UI: Record<TipoItem, ComponentType<PropsMecanica>> = {
   inclinacion: UIInclinacion,
@@ -34,6 +37,9 @@ const UI: Record<TipoItem, ComponentType<PropsMecanica>> = {
   patron_numerico: UIPatronNumerico,
   signo: UISigno,
   verdadero_falso: UIVerdaderoFalso,
+  ecuacion: UIEcuacion,
+  tabla100: UITabla100,
+  problema: UIProblema,
 };
 
 const TITULOS: Record<CierreItem['resultado'], { titulo: string; animo: Animo }> = {

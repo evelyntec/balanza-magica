@@ -115,8 +115,9 @@ function torres(cantidad: number, colorIndice: number, agrupar: boolean, clave: 
   };
 }
 
-function pesa(valor: number, clave: string): Pieza {
-  const digitos = String(valor).length;
+function pesa(valor: number, clave: string, etiqueta?: string): Pieza {
+  const texto = etiqueta ?? String(valor);
+  const digitos = texto.length;
   const ancho = 44 + digitos * 13;
   const alto = 62;
   return {
@@ -132,14 +133,14 @@ function pesa(valor: number, clave: string): Pieza {
           strokeWidth={2.5}
         />
         <text x={x0 + ancho / 2} y={-12} textAnchor="middle" fontSize={30} fontWeight={900} fill="#fff" fontFamily="'Baloo 2', Nunito, sans-serif">
-          {valor}
+          {texto}
         </text>
       </g>
     ),
   };
 }
 
-function caja(contenido: number | undefined, resaltar: boolean, clave: string): Pieza {
+function caja(contenido: number | undefined, resaltar: boolean, clave: string, simbolo = '?'): Pieza {
   const ancho = 80;
   const alto = 80;
   const lleno = contenido !== undefined;
@@ -161,7 +162,18 @@ function caja(contenido: number | undefined, resaltar: boolean, clave: string): 
         />
         {lleno ? (
           <>
-            {Array.from({ length: contenido }, (_, i) => {
+            {contenido > 20 ? (
+              // Más de 20: barras de diez y unidades sueltas (como el material multibase).
+              <>
+                {Array.from({ length: Math.floor(contenido / 10) }, (_, i) => (
+                  <rect key={`d${i}`} x={x0 + 5 + i * 7.6} y={-alto + 8} width={6.4} height={52} rx={2} fill={i % 2 === 0 ? '#7b3fbf' : '#4b1d8f'} stroke="#22103d" strokeWidth={1} />
+                ))}
+                {Array.from({ length: contenido % 10 }, (_, i) => (
+                  <rect key={`u${i}`} x={x0 + 5 + i * 7.6} y={-15} width={6.4} height={6.4} rx={1.5} fill="#e0457b" stroke="#22103d" strokeWidth={1} />
+                ))}
+              </>
+            ) : null}
+            {Array.from({ length: contenido > 20 ? 0 : contenido }, (_, i) => {
               const fila = Math.floor(i / 5);
               const col = i % 5;
               return (
@@ -179,7 +191,7 @@ function caja(contenido: number | undefined, resaltar: boolean, clave: string): 
               );
             })}
             <g transform={`translate(${x0 + ancho / 2} ${-alto - 14})`}>
-              <rect x={-22} y={-14} width={44} height={28} rx={14} fill="#22103d" />
+              <rect x={-26} y={-14} width={52} height={28} rx={14} fill="#22103d" />
               <text y={7} textAnchor="middle" fontSize={21} fontWeight={900} fill="#ffd873">
                 {contenido}
               </text>
@@ -189,7 +201,7 @@ function caja(contenido: number | undefined, resaltar: boolean, clave: string): 
           <>
             <path d={`M${x0 + ancho / 2 - 6} ${-alto} v${alto}`} stroke="#e0457b" strokeWidth={8} />
             <text x={x0 + ancho / 2} y={-alto / 2 + 14} textAnchor="middle" fontSize={50} fontWeight={900} fill="#22103d" fontFamily="'Baloo 2', Nunito, sans-serif">
-              ?
+              {simbolo}
             </text>
           </>
         )}
@@ -202,8 +214,8 @@ function piezasDe(objetos: Objeto[], opciones: { contenidoCaja: number | undefin
   return objetos.map((o, i) => {
     const clave = `${opciones.lado}-${i}`;
     if (o.tipo === 'cubos') return torres(o.cantidad, o.color ?? i, opciones.agrupar, clave);
-    if (o.tipo === 'pesa') return opciones.pesasComoCubos ? torres(o.valor, i + 2, true, clave) : pesa(o.valor, clave);
-    return caja(opciones.contenidoCaja, opciones.resaltarCaja, clave);
+    if (o.tipo === 'pesa') return opciones.pesasComoCubos && o.valor <= 20 ? torres(o.valor, i + 2, true, clave) : pesa(o.valor, clave, o.etiqueta);
+    return caja(opciones.contenidoCaja, opciones.resaltarCaja, clave, o.simbolo);
   });
 }
 

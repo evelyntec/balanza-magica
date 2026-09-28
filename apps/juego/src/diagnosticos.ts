@@ -56,4 +56,18 @@ export const DIAGNOSTICOS_DOCENTE: Record<string, { titulo: string; sugerencia: 
   },
   vf_casi: { titulo: 'No verifica con precisión ambos lados', sugerencia: 'Calcular y escribir el valor de cada lado.' },
   vf_resta: { titulo: 'Errores en igualdades con resta', sugerencia: 'Revisar la relación inversa entre adición y sustracción.' },
+  operacion_inversa: {
+    titulo: 'Usa la operación directa en vez de la inversa (□ + 23 = 57 → 80)',
+    sugerencia: 'Modelar con la balanza "quitar de ambos lados" y con el modelo de barras parte-parte-todo; exigir comprobar reemplazando.',
+  },
+  error_decena: { titulo: 'Error de una decena (canje)', sugerencia: 'Revisar la resta con canje usando bloques multibase.' },
+  tabla_fila_columna: {
+    titulo: 'Confunde filas y columnas de la tabla del 100',
+    sugerencia: 'Explicitar la estructura: a la derecha +1, hacia abajo +10; recorrer la tabla con el dedo.',
+  },
+  modelo_palabra_clave: {
+    titulo: 'Resuelve por palabras clave ("más" → sumar)',
+    sugerencia: 'Leer la historia completa, identificar lo desconocido y representarlo con barras antes de elegir la operación.',
+  },
+  modelo_errado: { titulo: 'Elige una ecuación que no representa la historia', sugerencia: 'Dramatizar la historia en orden y poner la caja donde está lo que no se sabe.' },
 };

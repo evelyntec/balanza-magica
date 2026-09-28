@@ -24,6 +24,8 @@ export function UIEquilibrar({ item, bloqueado, cierre, pistas, ultimaPesada, es
   const angulo = cierre ? 0 : mostrandoPesada ? anguloDeMagnitud(ultimaPesada.resultado.inclinacion, ultimaPesada.resultado.magnitud) : 0;
   const trabada = !cierre && !mostrandoPesada;
 
+  // Hasta 20 se agrupa de a 5 (torres); hasta 100, de a 10 (decenas).
+  const salto = p.maxCaja > 20 ? 10 : 5;
   const usadas = item.pesadas.length;
   const restantes = p.maxPesadas - usadas;
 
@@ -67,21 +69,21 @@ export function UIEquilibrar({ item, bloqueado, cierre, pistas, ultimaPesada, es
           </button>
           <div className="control-caja__valor" aria-live="polite">
             {contenido}
-            <span className="control-caja__etiqueta">cubos en la caja</span>
+            <span className="control-caja__etiqueta">{p.maxCaja > 20 ? 'pesa la caja' : 'cubos en la caja'}</span>
           </div>
           <button type="button" className="boton boton--crema boton--icono" onClick={() => cambiar(1)} disabled={bloqueado || !!cierre || valor === p.maxCaja} aria-label="Agregar un cubo">
             +
           </button>
         </div>
         <div className="fila" style={{ justifyContent: 'center' }}>
-          <button type="button" className="boton boton--chico boton--crema" onClick={() => cambiar(-5)} disabled={bloqueado || !!cierre || valor === 0}>
-            −5
+          <button type="button" className="boton boton--chico boton--crema" onClick={() => cambiar(-salto)} disabled={bloqueado || !!cierre || valor === 0}>
+            −{salto}
           </button>
           <button type="button" className="boton boton--chico boton--crema" onClick={() => setValor(0)} disabled={bloqueado || !!cierre || valor === 0}>
             Vaciar
           </button>
-          <button type="button" className="boton boton--chico boton--crema" onClick={() => cambiar(5)} disabled={bloqueado || !!cierre || valor === p.maxCaja}>
-            +5
+          <button type="button" className="boton boton--chico boton--crema" onClick={() => cambiar(salto)} disabled={bloqueado || !!cierre || valor === p.maxCaja}>
+            +{salto}
           </button>
         </div>
         <button

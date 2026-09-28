@@ -33,13 +33,28 @@ La misma información está en el código (`packages/nucleo/src/curriculo.ts`) y
 - **MA02 OA 13:** Demostrar, explicar y registrar la igualdad y la desigualdad en forma concreta y pictórica del 0 al 20, usando el símbolo igual (=) y los símbolos no igual (>, <).
 
 **Ámbito numérico verificado por las pruebas:** toda balanza de las islas 1 y 2 pesa como máximo 20; los senderos
-de 2° llegan hasta 100; no aparecen números negativos.
+de 2° y todo lo de 3° llegan hasta 100; no aparecen números negativos.
+
+### 🌊 Isla 3 · Río de las Cajas Misteriosas · 3° básico
+
+| Etapa | Mecánica | OA |
+|---|---|---|
+| 3-1 La caja misteriosa | Ecuaciones de un paso (□ + 23 = 57, 45 − △ = 18…) con balanza "quitar de ambos lados", modelo de barras y solo símbolos | MA03 OA 13 |
+| 3-2 Pesas del río | Completar la caja hasta 100: decenas, compensación (38 + 25 = 40 + □) y canjes | MA03 OA 13 |
+| 3-3 La tabla del 100 | Continuar patrones (columnas, diagonales de 9 y 11, saltos de 2 a 5) y completar trozos de la tabla | MA03 OA 12 |
+| 3-4 Cuentos con cajas | Elegir la ecuación que modela la historia (inicio y cambio desconocido, comparación) y resolverla | MA03 OA 13 |
+| Jefe: Pulpo Escondecajas | Todo lo anterior mezclado | MA03 OA 12 y 13 |
+
+- **MA03 OA 12:** Generar, describir y registrar patrones numéricos, usando una variedad de estrategias en tablas del 100, de manera manual y/o con software educativo.
+- **MA03 OA 13:** Resolver ecuaciones de un paso que involucren adiciones y sustracciones y un símbolo geométrico que represente un número desconocido, en forma pictórica y simbólica del 0 al 100.
+
+La incógnita se representa con símbolos geométricos (□ △ ○ ☆ ◇), como pide el OA. Todas las cantidades están entre 0 y 100
+y cada respuesta muestra su comprobación (reemplazar el símbolo y verificar la igualdad).
 
 ## Islas en construcción
 
 | Isla | Nivel | OA | Propuesta |
 |---|---|---|---|
-| 3 · Río de las Cajas Misteriosas | 3° | MA03 OA 12, OA 13 | Ecuaciones de un paso con símbolo geométrico hasta 100; patrones en la tabla del 100 |
 | 4 · Montaña de las Tablas | 4° | MA04 OA 13, OA 14 | Reglas en tablas; ecuaciones e inecuaciones de un paso comprobadas en la balanza |
 | 5 · Desierto de las Desigualdades | 5° | MA05 OA 14, OA 15 | Todas las soluciones de una inecuación marcadas en la recta numérica |
 | 6 · Ciudad de las Fórmulas | 6° | MA06 OA 9, OA 10, OA 11 | La figura n tiene 2n + 1 fichas; ecuaciones con balanza y luego formales |

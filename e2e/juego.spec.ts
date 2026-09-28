@@ -52,14 +52,43 @@ async function resolverPorInterfaz(page: Page, almacen: AlmacenMemoria, itemId: 
     }
     case 'equilibrar': {
       const objetivo = r as number;
-      for (let i = 0; i < Math.floor(objetivo / 5); i++) await page.getByRole('button', { name: '+5' }).click();
-      for (let i = 0; i < objetivo % 5; i++) await page.getByRole('button', { name: 'Agregar un cubo' }).click();
+      const salto = (item.publico as { maxCaja: number }).maxCaja > 20 ? 10 : 5;
+      for (let i = 0; i < Math.floor(objetivo / salto); i++) await page.getByRole('button', { name: `+${salto}` }).click();
+      for (let i = 0; i < objetivo % salto; i++) await page.getByRole('button', { name: 'Agregar un cubo' }).click();
       await page.getByRole('button', { name: /¡Pesar!/ }).click();
       break;
     }
     case 'signo': {
       const nombre = r === '<' ? 'es menor que' : r === '>' ? 'es mayor que' : 'es igual a';
       await page.getByRole('button', { name: nombre }).click();
+      break;
+    }
+    case 'ecuacion': {
+      await expect(page.getByRole('button', { name: '1', exact: true })).toBeEnabled();
+      await page.keyboard.type(String(r));
+      await page.getByRole('button', { name: 'Revisar' }).click();
+      break;
+    }
+    case 'tabla100': {
+      const valores = r as number[];
+      if ((item.publico as { modo: string }).modo === 'continuar') {
+        for (const v of valores) await page.getByRole('gridcell', { name: String(v), exact: true }).click();
+      } else {
+        await expect(page.getByRole('button', { name: '1', exact: true })).toBeEnabled();
+        for (let k = 0; k < valores.length; k++) {
+          await page.getByRole('button', { name: new RegExp(`^Casilla por completar ${k + 1}`) }).click();
+          await page.keyboard.type(String(valores[k]));
+        }
+      }
+      await page.getByRole('button', { name: 'Revisar' }).click();
+      break;
+    }
+    case 'problema': {
+      const { ecuacion, valor } = r as { ecuacion: number; valor: number };
+      await page.getByRole('radiogroup', { name: /ecuación cuenta la historia/ }).getByRole('radio').nth(ecuacion).click();
+      await expect(page.getByRole('button', { name: '1', exact: true })).toBeEnabled();
+      await page.keyboard.type(String(valor));
+      await page.getByRole('button', { name: 'Revisar' }).click();
       break;
     }
     default:
@@ -203,4 +232,49 @@ test('trampas desde el navegador', async ({ page }, info) => {
   await page.screenshot({ path: capturas('otra-pestana', info.project.name) });
   await page.getByRole('button', { name: 'Jugar aquí' }).click();
   await expect(page.getByText('El Reino del Equilibrio')).toBeVisible();
+});
+
+test('isla 3: ecuaciones, pesas hasta 100, tabla del 100 y cuentos por la interfaz', async ({ page }, info) => {
+  const proyecto = info.project.name;
+  const curso = await srv.servicio.crearCurso({ nombre: `4° ${proyecto}`, nivel: 4 });
+  const seguimiento = seguirItems(page);
+  const errores: string[] = [];
+  page.on('pageerror', (e) => errores.push(e.message));
+  await page.goto(srv.url);
+  await page.getByRole('button', { name: /Entrar con mi curso/ }).click();
+  await page.getByLabel('Código del curso').fill(curso.codigo);
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  await page.getByRole('button', { name: /Soy nueva o nuevo/ }).click();
+  await page.getByLabel('Apodo').fill('Huemul Sabio 40');
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  for (const f of ['pez', 'pato', 'oso']) await page.getByRole('button', { name: f, exact: true }).click();
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  for (const f of ['pez', 'pato', 'oso']) await page.getByRole('button', { name: f, exact: true }).click();
+  await page.getByRole('button', { name: /Crear mi gatito/ }).click();
+  await expect(page.getByText('El Reino del Equilibrio')).toBeVisible();
+
+  for (const etapa of ['La caja misteriosa', 'Pesas del río', 'La tabla del 100', 'Cuentos con cajas']) {
+    await page.getByRole('button', { name: /Río de las Cajas Misteriosas/ }).click();
+    seguimiento.itemId = '';
+    await page.getByRole('button', { name: new RegExp(etapa) }).click();
+    for (let n = 0; n < 3; n++) {
+      await expect.poll(() => seguimiento.itemId).not.toBe('');
+      const id = seguimiento.itemId;
+      await resolverPorInterfaz(page, srv.almacen, id);
+      const continuar = page.getByRole('button', { name: /Continuar →/ });
+      await expect(continuar).toBeVisible();
+      await expect(page.locator('.retro__titulo')).toHaveText(/Perfecto|Muy bien/);
+      if (n === 0) {
+        await sinDesbordeHorizontal(page);
+        await page.screenshot({ path: capturas(`isla3-${etapa.replace(/\s/g, '-')}`, proyecto) });
+      }
+      await continuar.click();
+      await expect.poll(() => seguimiento.itemId).not.toBe(id);
+    }
+    await page.getByRole('button', { name: 'Salir de la etapa' }).click();
+    await page.getByRole('button', { name: 'Salir', exact: true }).click();
+    await page.getByRole('button', { name: 'Volver' }).click();
+  }
+  expect(errores).toEqual([]);
 });

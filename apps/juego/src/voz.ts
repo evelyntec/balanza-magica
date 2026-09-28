@@ -36,7 +36,11 @@ export function ajustarVelocidad(v: number): void {
 /** Convierte símbolos a palabras para que la voz los lea bien. */
 export function textoParaVoz(texto: string): string {
   return texto
-    .replace(/□/g, ' caja ')
+    .replace(/□/g, ' cuadrado ')
+    .replace(/△/g, ' triángulo ')
+    .replace(/○/g, ' círculo ')
+    .replace(/☆/g, ' estrella ')
+    .replace(/◇/g, ' rombo ')
     .replace(/−/g, ' menos ')
     .replace(/\+/g, ' más ')
     .replace(/</g, ' es menor que ')

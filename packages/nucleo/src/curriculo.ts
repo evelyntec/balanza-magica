@@ -96,8 +96,8 @@ export const ISLAS: Isla[] = [
     nivel: '3° básico',
     lema: 'La primera incógnita',
     color: '#2f8fce',
-    disponible: false,
-    jefe: { nombre: 'Pulpo Escondecajas', descripcion: 'Esconde números en cajas.', vida: 12 },
+    disponible: true,
+    jefe: { nombre: 'Pulpo Escondecajas', descripcion: 'Con sus ocho brazos escondió números en cajas por todo el río. ¡Descúbrelos!', vida: 12 },
     oa: [
       {
         codigo: 'MA03 OA 12',
@@ -388,6 +388,71 @@ export const ETAPAS: Etapa[] = [
     ]),
   }),
 ];
+
+// Isla 3 ----------------------------------------------------------------------
+
+ETAPAS.push(
+  etapa({
+    id: '3-1',
+    isla: 3,
+    orden: 1,
+    nombre: 'La caja misteriosa',
+    descripcion: 'Descubre el número escondido con la operación inversa. ¡Y compruébalo!',
+    oa: ['MA03 OA 13'],
+    esJefe: false,
+    mecanicas: ['ecuacion'],
+    generar: simple('ecuacion'),
+  }),
+  etapa({
+    id: '3-2',
+    isla: 3,
+    orden: 2,
+    nombre: 'Pesas del río',
+    descripcion: 'Equilibra balanzas hasta 100 con decenas, canjes y compensación.',
+    oa: ['MA03 OA 13'],
+    esJefe: false,
+    mecanicas: ['equilibrar'],
+    generar: simple('equilibrar'),
+  }),
+  etapa({
+    id: '3-3',
+    isla: 3,
+    orden: 3,
+    nombre: 'La tabla del 100',
+    descripcion: 'Descubre patrones en la tabla: columnas, diagonales y trozos escondidos.',
+    oa: ['MA03 OA 12'],
+    esJefe: false,
+    mecanicas: ['tabla100'],
+    generar: simple('tabla100'),
+  }),
+  etapa({
+    id: '3-4',
+    isla: 3,
+    orden: 4,
+    nombre: 'Cuentos con cajas',
+    descripcion: 'Elige la ecuación que cuenta la historia y resuélvela. ¡No te dejes engañar por las palabras!',
+    oa: ['MA03 OA 13'],
+    esJefe: false,
+    mecanicas: ['problema'],
+    generar: simple('problema'),
+  }),
+  etapa({
+    id: '3-J',
+    isla: 3,
+    orden: 5,
+    nombre: 'El Pulpo Escondecajas',
+    descripcion: 'El gran desafío del río: ecuaciones, pesas, tabla del 100 y cuentos.',
+    oa: ['MA03 OA 12', 'MA03 OA 13'],
+    esJefe: true,
+    mecanicas: ['ecuacion', 'equilibrar', 'tabla100', 'problema'],
+    generar: mezcla([
+      { tipo: 'ecuacion', generar: simple('ecuacion') },
+      { tipo: 'equilibrar', generar: simple('equilibrar') },
+      { tipo: 'tabla100', generar: simple('tabla100') },
+      { tipo: 'problema', generar: simple('problema') },
+    ]),
+  }),
+);
 
 export function buscarEtapa(id: string): Etapa | undefined {
   return ETAPAS.find((e) => e.id === id);

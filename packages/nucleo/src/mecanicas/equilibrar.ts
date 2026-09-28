@@ -120,13 +120,57 @@ function planIsla2(nivel: number, azar: Azar): Plan {
   }
 }
 
+/** Isla 3 (3° básico): hasta 100, con canjes y compensación. */
+function planIsla3(nivel: number, azar: Azar): Plan {
+  const decenas = (min: number, max: number) => azar.entero(min, max) * 10;
+  switch (nivel) {
+    case 1: {
+      // a = □ + c con decenas exactas.
+      const a = decenas(4, 10);
+      const c = decenas(1, a / 10 - 1);
+      return { conCaja: [c], otro: [a], como: 'pesa', posicion: 'azar' };
+    }
+    case 2: {
+      const total = azar.entero(40, 99);
+      const [a, b] = descomponer(total, 2, azar, 10) as [number, number];
+      const c = azar.entero(10, total - 10);
+      return { conCaja: [c], otro: [a, b], como: 'pesa', posicion: 'azar' };
+    }
+    case 3: {
+      // Compensación: 38 + 25 = 40 + □
+      const a = azar.entero(21, 69);
+      const b = azar.entero(12, 99 - a);
+      const redondo = Math.ceil(a / 10) * 10;
+      const c = redondo === a ? a + 10 : redondo;
+      if (c >= a + b) return planIsla3(2, azar);
+      return { conCaja: [c], otro: [a, b], como: 'pesa', posicion: 'final' };
+    }
+    case 4: {
+      const total = azar.entero(50, 99);
+      const [b, c] = descomponer(total, 2, azar, 12) as [number, number];
+      let a = azar.entero(11, total - 11);
+      // Con canje: las unidades de a mayores que las del total.
+      for (let i = 0; i < 20 && a % 10 <= total % 10; i++) a = azar.entero(11, total - 11);
+      return { conCaja: [a], otro: [b, c], como: 'pesa', posicion: 'inicio' };
+    }
+    default: {
+      const total = azar.entero(60, 99);
+      const [c, d] = descomponer(total, 2, azar, 10) as [number, number];
+      const valor = azar.entero(8, total - 25);
+      const [a, b] = descomponer(total - valor, 2, azar, 8) as [number, number];
+      return { conCaja: [a, b], otro: [c, d], como: 'pesa', posicion: 'azar' };
+    }
+  }
+}
+
 export const equilibrar: Mecanica<PublicoEquilibrar, SecretoEquilibrar, never> = {
   tipo: 'equilibrar',
   modo: 'pesada',
   maxIntentos: MAX_PESADAS,
 
   generar(nivel: number, azar: Azar, ctx: ContextoGeneracion): ItemGenerado<PublicoEquilibrar, SecretoEquilibrar> {
-    const plan = ctx.isla <= 1 ? planIsla1(nivel, azar) : planIsla2(nivel, azar);
+    const plan = ctx.isla <= 1 ? planIsla1(nivel, azar) : ctx.isla === 2 ? planIsla2(nivel, azar) : planIsla3(nivel, azar);
+    const maxCaja = ctx.isla >= 3 ? 100 : MAX_CAJA;
     const ladoCaja: Lado = plan.lado ?? azar.elegir(['izquierda', 'derecha'] as const);
     const conCaja = objetosDesde(plan.conCaja, plan.como);
     const otro = objetosDesde(plan.otro, plan.como);
@@ -140,12 +184,12 @@ export const equilibrar: Mecanica<PublicoEquilibrar, SecretoEquilibrar, never> =
     return {
       tipo: 'equilibrar',
       nivel,
-      consigna: '¿Cuántos cubos van en la caja para que la balanza quede en equilibrio?',
+      consigna: ctx.isla >= 3 ? '¿Cuánto debe pesar la caja para que la balanza quede en equilibrio?' : '¿Cuántos cubos van en la caja para que la balanza quede en equilibrio?',
       voz:
         `En el platillo izquierdo hay ${vozPlatillo(izquierda)}. En el platillo derecho hay ${vozPlatillo(derecha)}. ` +
         `La caja misteriosa está en el platillo ${ladoTexto}. ¿Cuántos cubos debes poner en la caja para que haya equilibrio? ` +
         'Piensa bien antes de pesar: si aciertas a la primera, ganas más.',
-      publico: { izquierda, derecha, ladoCaja, maxCaja: MAX_CAJA, maxPesadas: MAX_PESADAS, representacion },
+      publico: { izquierda, derecha, ladoCaja, maxCaja, maxPesadas: MAX_PESADAS, representacion },
       secreto: { valorCaja },
       relacional: ctx.isla >= 2 && nivel === 2,
     };

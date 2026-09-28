@@ -264,6 +264,23 @@ export function RetratoJefe({ isla, animo = 'normal' }: { isla: number; animo?: 
       </svg>
     );
   }
+  if (isla === 3) {
+    return (
+      <svg viewBox="0 0 100 100" className="jefe__retrato" role="img" aria-label="Pulpo Escondecajas">
+        <circle cx={50} cy={50} r={46} fill="#b8e4ff" stroke={L} strokeWidth={4} />
+        {[18, 30, 42, 58, 70, 82].map((x, i) => (
+          <path key={x} d={`M${x} 62 q${i % 2 ? 6 : -6} 14 ${i % 2 ? -2 : 2} 26`} fill="none" stroke="#e0457b" strokeWidth={7} strokeLinecap="round" />
+        ))}
+        <ellipse cx={50} cy={46} rx={30} ry={26} fill="#e0457b" {...t} />
+        {ojos}
+        <path d="M44 60 q6 4 12 0" fill="none" {...t} strokeWidth={3} />
+        <rect x={62} y={14} width={18} height={18} rx={3} fill="#f5b82e" {...t} strokeWidth={3} />
+        <text x={71} y={28} textAnchor="middle" fontSize={13} fontWeight={900} fill={L}>
+          ?
+        </text>
+      </svg>
+    );
+  }
   return (
     <svg viewBox="0 0 100 100" className="jefe__retrato" role="img" aria-label="Bruja Ventolera">
       <circle cx={50} cy={50} r={46} fill="#dcf5e8" stroke={L} strokeWidth={4} />

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { ETAPAS, type Curso } from '@balanza/nucleo';
+import { ETAPAS, ISLAS, type Curso } from '@balanza/nucleo';
 import { useEstado } from '../estado';
 import type { ResumenCurso } from '../api/backend';
 import { Modal } from '../componentes/Comunes';
@@ -8,7 +8,7 @@ import { Estrellas } from '../componentes/Ilustraciones';
 import { DIAGNOSTICOS_DOCENTE } from '../diagnosticos';
 import { SelectorClave } from './Inicio';
 
-const ETAPAS_DISPONIBLES = ETAPAS.filter((e) => e.isla <= 2);
+const ETAPAS_DISPONIBLES = ETAPAS.filter((e) => ISLAS.find((i) => i.numero === e.isla)?.disponible);
 
 export function Docente() {
   const { backend, ir, manejarError } = useEstado();

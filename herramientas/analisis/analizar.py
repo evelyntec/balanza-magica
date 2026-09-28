@@ -43,6 +43,9 @@ NOMBRES_TIPO = {
     "patron_numerico": "Patrones numéricos",
     "signo": "Signos <, =, >",
     "verdadero_falso": "Verdadero o falso",
+    "ecuacion": "Ecuaciones de un paso",
+    "tabla100": "Tabla del 100",
+    "problema": "Problemas con ecuaciones",
 }
 
 DIAGNOSTICOS = {
@@ -71,6 +74,11 @@ DIAGNOSTICOS = {
     "vf_encadenada": "Acepta cálculos encadenados (8 + 4 = 12 + 5)",
     "vf_casi": "No verifica ambos lados con precisión",
     "vf_resta": "Errores en igualdades con resta",
+    "operacion_inversa": "Usa la operación directa en vez de la inversa",
+    "error_decena": "Error de una decena (canje)",
+    "tabla_fila_columna": "Confunde filas y columnas en la tabla del 100",
+    "modelo_palabra_clave": "Resuelve por palabras clave («más» → sumar)",
+    "modelo_errado": "Elige una ecuación que no representa la historia",
 }
 
 

@@ -196,7 +196,8 @@ describe('antitrampas', () => {
   it('etapas bloqueadas o inexistentes no se pueden iniciar', async () => {
     expect((await espera(t.servicio.iniciarEtapa(t.ctx, '1-2'))).codigo).toBe('ETAPA_BLOQUEADA');
     expect((await espera(t.servicio.iniciarEtapa(t.ctx, '2-1'))).codigo).toBe('ETAPA_BLOQUEADA');
-    expect((await espera(t.servicio.iniciarEtapa(t.ctx, '3-1'))).codigo).toBe('NO_ENCONTRADO');
+    expect((await espera(t.servicio.iniciarEtapa(t.ctx, '3-1'))).codigo).toBe('ETAPA_BLOQUEADA');
+    expect((await espera(t.servicio.iniciarEtapa(t.ctx, '4-1'))).codigo).toBe('NO_ENCONTRADO');
     expect((await espera(t.servicio.iniciarEtapa(t.ctx, { id: '1-1' }))).codigo).toBe('NO_ENCONTRADO');
   });
 
@@ -297,6 +298,17 @@ describe('recorrido completo', () => {
     const deItems = eventos.reduce((s, e) => s + e.puntos, 0);
     const bonos = 5 * 3 * 50 + 300; // 3 estrellas nuevas en 5 etapas + primer jefe
     expect(perfil.puntos).toBe(deItems + bonos);
+  });
+
+  it('3° básico: jugar perfecto la isla 3 da 3 estrellas y vence al Pulpo', async () => {
+    const t = await preparar({ nivel: 3 });
+    for (const id of ['3-1', '3-2', '3-3', '3-4', '3-J']) {
+      const fin = await completarEtapa(t, id);
+      expect(fin.estrellas).toBe(3);
+    }
+    const perfil = await t.servicio.perfil(t.ctx.jugadorId);
+    expect(perfil.insignias).toEqual(expect.arrayContaining(['vence_3-J', 'isla_3_dorada', 'no_me_engana']));
+    expect(perfil.islas[3]!.accesible).toBe(false); // la isla 4 aún no existe
   });
 
   it('adivinar al azar rinde mucho menos que pensar', async () => {

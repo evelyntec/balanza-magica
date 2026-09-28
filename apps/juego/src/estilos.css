@@ -1678,3 +1678,99 @@ h3 {
   height: 50px;
   flex: none;
 }
+
+/* Tabla del 100 */
+
+.tabla100 {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 3px;
+  width: min(100%, 520px);
+  padding: 6px;
+  background: var(--papel);
+  border: var(--borde);
+  border-radius: var(--r-m);
+}
+
+.tabla100__celda {
+  aspect-ratio: 1;
+  border: 1.5px solid var(--violeta-100);
+  border-radius: 6px;
+  background: var(--blanco);
+  font-weight: 800;
+  font-size: clamp(0.7rem, 2.6vw, 1rem);
+  font-variant-numeric: tabular-nums;
+  padding: 0;
+  color: var(--tinta);
+}
+
+.tabla100__celda--pintada {
+  background: var(--fucsia-500);
+  color: var(--blanco);
+  border-color: var(--tinta);
+  opacity: 1;
+}
+
+.tabla100__celda:disabled {
+  cursor: default;
+  color: inherit;
+}
+
+.tabla100__celda--pintada:disabled {
+  color: var(--blanco);
+}
+
+.tabla100__celda--elegida {
+  background: var(--oro-300);
+  border: 2.5px solid var(--tinta);
+}
+
+.tabla100__celda--correcta {
+  background: var(--verde-500);
+  color: var(--blanco);
+  border-color: var(--tinta);
+}
+
+.tabla100__celda--incorrecta {
+  background: var(--rojo-500);
+  color: var(--blanco);
+}
+
+.trozo {
+  display: grid;
+  grid-template-columns: repeat(3, clamp(70px, 22vw, 110px));
+  gap: 6px;
+}
+
+.trozo__celda {
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border: var(--borde);
+  border-radius: var(--r-s);
+  background: var(--papel);
+  font-family: var(--fuente-titulo);
+  font-size: clamp(1.6rem, 6vw, 2.4rem);
+  font-weight: 800;
+  box-shadow: 0 4px 0 var(--tinta);
+}
+
+.trozo__celda--hueco {
+  background: var(--oro-100);
+  border-style: dashed;
+  border-color: var(--fucsia-500);
+  cursor: pointer;
+}
+
+.trozo__vacio {
+  aspect-ratio: 1;
+}
+
+.modelo-barra {
+  width: min(100%, 520px);
+  height: auto;
+}
+
+.opciones--lista {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}

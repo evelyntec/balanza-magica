@@ -21,6 +21,7 @@ import {
   type SecretoVerdaderoFalso,
 } from '../src/mecanicas';
 import type { Objeto, TipoItem } from '../src/tipos';
+import { resolver, textoEcuacion, type PublicoEcuacion, type PublicoProblema, type PublicoTabla100, type SecretoProblema, type SecretoTabla100 } from '../src/mecanicas';
 import { respuestaCorrecta, respuestaIncorrecta } from './ayudas';
 
 const POR_NIVEL = 1500;
@@ -118,7 +119,8 @@ describe.each(ETAPAS.map((e) => [e.id, e] as const))('etapa %s', (_id, etapa) =>
 });
 
 function verificarEspecifico(tipo: TipoItem, publico: unknown, secreto: unknown, isla: number, nivel: number): void {
-  const limiteBalanza = 20; // OA MA01-12 y MA02-13: del 0 al 20.
+  // OA MA01-12 y MA02-13: del 0 al 20. OA MA03-13: del 0 al 100.
+  const limiteBalanza = isla <= 2 ? 20 : 100;
   switch (tipo) {
     case 'inclinacion': {
       const p = publico as PublicoInclinacion;
@@ -194,6 +196,51 @@ function verificarEspecifico(tipo: TipoItem, publico: unknown, secreto: unknown,
       }
       if (nivel < 5) for (const t of [...p.izquierda, ...p.derecha]) expect(t.signo).toBe(1);
       if (p.representacion !== 'simbolica') expect(p.objetosIzquierda).toBeDefined();
+      break;
+    }
+    case 'ecuacion': {
+      const p = publico as PublicoEcuacion;
+      const x = resolver(p.forma, p.a, p.b);
+      expect(x).toBeGreaterThanOrEqual(1);
+      for (const n of [p.a, p.b, x]) expect(n).toBeLessThanOrEqual(100);
+      expect(textoEcuacion(p)).toContain(p.simbolo);
+      if (nivel <= 2) expect(p.forma.includes('-')).toBe(false);
+      break;
+    }
+    case 'tabla100': {
+      const p = publico as PublicoTabla100;
+      const s = secreto as SecretoTabla100;
+      for (const v of s.respuesta) {
+        expect(v).toBeGreaterThanOrEqual(1);
+        expect(v).toBeLessThanOrEqual(100);
+      }
+      if (p.modo === 'continuar') {
+        const serie = [...(p.pintadas ?? []), ...s.respuesta];
+        for (let i = 1; i < serie.length; i++) expect(serie[i]! - serie[i - 1]!).toBe(s.paso);
+        if (s.paso === 11 || s.paso === 9) {
+          // Diagonal real: cada paso baja exactamente una fila.
+          for (let i = 1; i < serie.length; i++) expect(Math.floor((serie[i]! - 1) / 10)).toBe(Math.floor((serie[i - 1]! - 1) / 10) + 1);
+        }
+      } else {
+        const visibles = (p.trozo ?? []).flat().filter((v) => typeof v === 'number');
+        expect(visibles.length).toBeGreaterThanOrEqual(1);
+        expect(s.respuesta.length).toBeGreaterThanOrEqual(2);
+      }
+      break;
+    }
+    case 'problema': {
+      const p = publico as PublicoProblema;
+      const s = secreto as SecretoProblema;
+      expect(new Set(p.opciones).size).toBe(3);
+      expect(s.x).toBeGreaterThanOrEqual(1);
+      expect(s.x).toBeLessThanOrEqual(100);
+      // Solo una opción es verdadera con x: las trampas no son ecuaciones equivalentes.
+      const verdaderas = p.opciones.filter((o) => {
+        const [izq, der] = o.replace(/□/g, String(s.x)).replace(/−/g, '-').split('=') as [string, string];
+        return eval(izq) === eval(der); // eslint-disable-line no-eval
+      });
+      expect(verdaderas).toEqual([p.opciones[s.correcta]]);
+      expect(p.texto).not.toMatch(/algunas (lápices|stickers)/);
       break;
     }
     case 'verdadero_falso': {

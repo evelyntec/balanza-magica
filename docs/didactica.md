@@ -76,9 +76,27 @@ Se marcan como *relacionales*, tienen su propia insignia y su pista de nivel 1 i
 | `patron_paso_errado`, `patron_direccion`, `patron_regla` | Salto, dirección o regla incorrectos | Caminos y senderos |
 | `conteo`, `lados_invertidos` | Errores de conteo o de registro | Cuaderno de Gatito |
 
+| `operacion_inversa` | □ + 23 = 57 → 80 (usa la operación directa) | Ecuaciones, cuentos |
+| `error_decena` | Se equivoca en una decena (canje) | Ecuaciones |
+| `tabla_fila_columna` | Confunde filas y columnas de la tabla del 100 | Tabla del 100 |
+| `modelo_palabra_clave` | "Tiene 12 más que…" → suma (palabras clave) | Cuentos con cajas |
+| `modelo_errado` | Elige una ecuación que no representa la historia | Cuentos con cajas |
+
 El panel docente agrupa estos diagnósticos y sugiere una intervención para cada uno.
 
-## 7. Desafío, adaptatividad y motivación
+## 7. Ecuaciones de un paso (3° básico)
+
+- **Tres representaciones** que progresan: la balanza con la acción "quitar lo mismo de ambos lados" (que muestra
+  `57 − 23` sin calcularlo por la o el estudiante), el **modelo de barras** parte-parte-todo de los textos Sumo Primero y,
+  al final, solo símbolos.
+- **Operación inversa y comprobación:** el diagnóstico detecta a quien suma cuando debía restar, y toda respuesta se
+  comprueba reemplazando el símbolo en la ecuación.
+- **Problemas de inicio desconocido y de comparación inconsistente** ("tiene 12 más que…"), los más difíciles para
+  esta edad (Briars y Larkin, 1984). Cada historia ofrece a propósito la ecuación que produce la lectura por palabras clave.
+- **Tabla del 100:** su estructura (+1 a la derecha, +10 hacia abajo) se usa para completar trozos sin mirar la tabla,
+  y las diagonales de 9 y 11 obligan a coordinar fila y columna.
+
+## 8. Desafío, adaptatividad y motivación
 
 - **Dos aciertos seguidos** suben un nivel; **dos errores seguidos** bajan un nivel y el siguiente ejercicio llega
   **con apoyo** (vale la mitad y no puede ser perfecto).
@@ -98,5 +116,6 @@ El panel docente agrupa estos diagnósticos y sugiere una intervención para cad
 - Rojano, T. (2010). Modelación concreta en álgebra: balanza virtual, ecuaciones y sistemas matemáticos de signos. *Números*, 75.
 - Bojorque, G. y Gonzales, N. (2021). Patrones repetitivos en educación infantil y primaria. *INNOVA Research Journal*.
 - Cetina-Vázquez, M. y Cabañas-Sánchez, G. (2022). Estrategias de generalización de patrones. *Enseñanza de las Ciencias*, 40(1).
+- Briars, D. y Larkin, J. (1984). An integrated model of skill in solving elementary word problems. *Cognition and Instruction*, 1(3).
 - Pacheco, A., Ayala-Altamirano, C. y Molina, M. (2024). Inecuaciones en libros de texto de educación primaria. *Uniciencia*, 38(1).
 - Ministerio de Educación de Chile. Bases Curriculares de Matemática 1° a 6° básico (2012) y 7° básico a 2° medio (2015). <https://www.curriculumnacional.cl>

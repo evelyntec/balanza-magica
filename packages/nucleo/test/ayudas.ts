@@ -5,6 +5,10 @@
 
 import type { ItemGuardado } from '../src/servicio/modelos';
 import type {
+  PublicoTabla100,
+  SecretoEcuacion,
+  SecretoProblema,
+  SecretoTabla100,
   PublicoPatronNumerico,
   SecretoEquilibrar,
   SecretoInclinacion,
@@ -38,6 +42,14 @@ export function respuestaCorrecta(tipo: TipoItem, publico: unknown, secreto: unk
       return (secreto as SecretoSigno).correcto;
     case 'verdadero_falso':
       return (secreto as SecretoVerdaderoFalso).valores;
+    case 'ecuacion':
+      return (secreto as SecretoEcuacion).x;
+    case 'tabla100':
+      return (secreto as SecretoTabla100).respuesta;
+    case 'problema': {
+      const s = secreto as SecretoProblema;
+      return { ecuacion: s.correcta, valor: s.x };
+    }
   }
 }
 
@@ -63,6 +75,19 @@ export function respuestaIncorrecta(tipo: TipoItem, publico: unknown, secreto: u
       return buena === '<' ? '>' : '<';
     case 'verdadero_falso':
       return (buena as boolean[]).map((v) => !v);
+    case 'ecuacion':
+      return (buena as number) + 7;
+    case 'tabla100': {
+      const p = publico as PublicoTabla100;
+      const r = buena as number[];
+      // En "continuar": casillas distintas y dentro de la tabla; en "trozo": valores corridos.
+      if (p.modo === 'continuar') return r.map((v) => (v <= 97 ? v + 3 : v - 3)).map((v, i, arr) => (arr.indexOf(v) !== i ? v - 1 : v));
+      return r.map((v) => v + 2);
+    }
+    case 'problema': {
+      const r = buena as { ecuacion: number; valor: number };
+      return { ecuacion: r.ecuacion, valor: r.valor + 5 };
+    }
   }
 }
 
