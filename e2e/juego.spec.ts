@@ -137,6 +137,37 @@ async function resolverPorInterfaz(page: Page, almacen: AlmacenMemoria, itemId: 
       await page.getByRole('button', { name: 'Revisar' }).click();
       break;
     }
+    case 'expresion': {
+      const { a, b, signo, resultado } = r as { a: number; b: number; signo: string; resultado?: number };
+      await expect(page.getByRole('button', { name: '1', exact: true })).toBeEnabled();
+      if (signo === '-') await page.getByRole('button', { name: /^Signo:/ }).click();
+      const valores = resultado === undefined ? [a, b] : [a, b, resultado];
+      const casillas = page.locator('.formula .casilla');
+      for (let k = 0; k < valores.length; k++) {
+        await casillas.nth(k).click();
+        await page.keyboard.type(String(valores[k]));
+      }
+      await page.getByRole('button', { name: 'Revisar' }).click();
+      break;
+    }
+    case 'ecuacion_dos_pasos': {
+      const { intermedio, x } = r as { intermedio?: number; x: number };
+      await expect(page.getByRole('button', { name: '1', exact: true })).toBeEnabled();
+      const pub = item.publico as { b: number };
+      if (intermedio === undefined) {
+        // Como lo haría una estudiante: quitar y repartir en la balanza antes de responder.
+        if (pub.b > 0) await page.getByRole('button', { name: /Quitar .* de cada lado/ }).click();
+        await page.getByRole('button', { name: /Repartir en/ }).click();
+      }
+      const valores = intermedio === undefined ? [x] : [intermedio, x];
+      const casillas = page.locator('.casilla:not(.casilla--formula)');
+      for (let k = 0; k < valores.length; k++) {
+        await casillas.nth(k).click();
+        await page.keyboard.type(String(valores[k]));
+      }
+      await page.getByRole('button', { name: 'Revisar' }).click();
+      break;
+    }
     default:
       throw new Error(`tipo no cubierto en e2e: ${item.tipo}`);
   }
@@ -412,6 +443,55 @@ test('isla 5: sucesiones, figuras de palitos, gráficos de soluciones y problema
       if (n === 0) {
         await sinDesbordeHorizontal(page);
         await page.screenshot({ path: capturas(`isla5-${etapa.replace(/\s/g, '-')}`, proyecto) });
+      }
+      await continuar.click();
+      await expect.poll(() => seguimiento.itemId).not.toBe(id);
+    }
+    await page.getByRole('button', { name: 'Salir de la etapa' }).click();
+    await page.getByRole('button', { name: 'Salir', exact: true }).click();
+    await page.getByRole('button', { name: 'Volver' }).click();
+  }
+  expect(errores).toEqual([]);
+});
+
+test('isla 6: fórmulas con letras, balanza de ecuaciones y problemas por la interfaz', async ({ page }, info) => {
+  const proyecto = info.project.name;
+  const curso = await srv.servicio.crearCurso({ nombre: `7° ${proyecto}`, nivel: 7 });
+  const seguimiento = seguirItems(page);
+  const errores: string[] = [];
+  page.on('pageerror', (e) => errores.push(e.message));
+  await page.goto(srv.url);
+  await page.getByRole('button', { name: /Entrar con mi curso/ }).click();
+  await page.getByLabel('Código del curso').fill(curso.codigo);
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  await page.getByRole('button', { name: /Soy nueva o nuevo/ }).click();
+  await page.getByLabel('Apodo').fill('Pudú Veloz 70');
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  for (const f of ['pez', 'pato', 'oso']) await page.getByRole('button', { name: f, exact: true }).click();
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  for (const f of ['pez', 'pato', 'oso']) await page.getByRole('button', { name: f, exact: true }).click();
+  await page.getByRole('button', { name: /Crear mi gatito/ }).click();
+  await expect(page.getByText('El Reino del Equilibrio')).toBeVisible();
+
+  for (const etapa of ['La fábrica de fórmulas', 'Letras que generalizan', 'Balanza de las fórmulas', 'Problemas con letras']) {
+    await page.getByRole('button', { name: /Ciudad de las Fórmulas/ }).click();
+    seguimiento.itemId = '';
+    await page.getByRole('button', { name: new RegExp(etapa) }).click();
+    for (let n = 0; n < 3; n++) {
+      await expect.poll(() => seguimiento.itemId).not.toBe('');
+      const id = seguimiento.itemId;
+      if (n === 0) {
+        await page.waitForTimeout(1200);
+        await page.screenshot({ path: capturas(`isla6-antes-${etapa.replace(/\s/g, '-')}`, proyecto) });
+      }
+      await resolverPorInterfaz(page, srv.almacen, id);
+      const continuar = page.getByRole('button', { name: /Continuar →/ });
+      await expect(continuar).toBeVisible();
+      await expect(page.locator('.retro__titulo')).toHaveText(/Perfecto|Muy bien/);
+      if (n === 0) {
+        await sinDesbordeHorizontal(page);
+        await page.screenshot({ path: capturas(`isla6-${etapa.replace(/\s/g, '-')}`, proyecto) });
       }
       await continuar.click();
       await expect.poll(() => seguimiento.itemId).not.toBe(id);

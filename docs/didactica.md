@@ -93,6 +93,12 @@ Se marcan como *relacionales*, tienen su propia insignia y su pista de nivel 1 i
 | `sucesion_aditiva` | Suma siempre lo mismo en sucesiones que se multiplican o cuyas diferencias crecen | Huellas |
 | `sucesion_regla` | Predice bien pero elige una regla que no sirve para todos los términos | Huellas, Torres de palitos |
 | `ecuacion_rayo` | Dibuja muchas soluciones para una ecuación | Espejismos |
+| `formula_recursiva` | Escribe "n + 3" cuando la tabla aumenta de 3 en 3 | Fábrica de fórmulas, Letras |
+| `formula_proporcional` | Escribe 4 · n para 3 · n + 1 | Fábrica de fórmulas, Letras |
+| `formula_sin_constante`, `formula_constante` | Olvida o equivoca la constante | Fábrica de fórmulas, Letras |
+| `formula_evaluacion` | Fórmula correcta, error al reemplazar | Fábrica de fórmulas, Letras |
+| `ecuacion_sin_dividir` | Deja 3x = 21 y responde 21 | Balanza de las fórmulas |
+| `ecuacion_orden` | Divide antes de quitar la constante (26 ÷ 3 − 5) | Balanza de las fórmulas |
 
 El panel docente agrupa estos diagnósticos y sugiere una intervención para cada uno.
 
@@ -136,7 +142,22 @@ El panel docente agrupa estos diagnósticos y sugiere una intervención para cad
   solución: punto lleno o círculo vacío con flecha. El borde se escribe (no se arrastra), para que no se pueda
   adivinar ubicándolo al ojo.
 
-## 10. Desafío, adaptatividad y motivación
+## 10. Letras y ecuaciones de dos pasos (6° básico)
+
+- **La letra como número generalizado:** la fórmula se construye escribiendo el coeficiente, el signo y la
+  constante. Los diagnósticos distinguen la lectura recursiva escrita con letras ("n + 3"), la proporcional
+  (4 · n) y la constante olvidada, errores descritos por MacGregor y Stacey (1993) y Stacey (1989).
+- **Tablas desordenadas y otras letras (x, p, t, m):** evitan leer solo la columna de salida y que la letra se
+  asocie siempre a la n.
+- **La pista de nivel 2 agrega una columna "3 · n"** junto a los valores: la constante aparece como la diferencia
+  entre ambas columnas.
+- **De la balanza al procedimiento formal:** la acción "quitar lo mismo de ambos lados" y "repartir en grupos
+  iguales" (correspondencia 1 a 1) da sentido a los pasos formales, que luego se escriben uno por uno (Vlassis,
+  2002). El orden importa: dividir antes de quitar la constante se diagnostica.
+- **Problemas con letras:** cada problema ofrece a propósito la ecuación que suma todo lo que aparece y la que pone
+  el paréntesis donde no va.
+
+## 11. Desafío, adaptatividad y motivación
 
 - **Dos aciertos seguidos** suben un nivel; **dos errores seguidos** bajan un nivel y el siguiente ejercicio llega
   **con apoyo** (vale la mitad y no puede ser perfecto).
@@ -152,12 +173,14 @@ El panel docente agrupa estos diagnósticos y sugiere una intervención para cad
 - Castro, E. y Molina, M. (2007). Desarrollo de pensamiento relacional mediante trabajo con igualdades numéricas en aritmética básica. *Educación Matemática*, 19(2).
 - Falkner, K., Levi, L. y Carpenter, T. (1999). Children's understanding of equality: A foundation for algebra. *Teaching Children Mathematics*, 6(4).
 - Kieran, C. (1981). Concepts associated with the equality symbol. *Educational Studies in Mathematics*, 12.
+- Kieran, C. (1992). The learning and teaching of school algebra. En D. Grouws (Ed.), *Handbook of Research on Mathematics Teaching and Learning*. Macmillan.
 - Vlassis, J. (2002). The balance model: hindrance or support for the solving of linear equations with one unknown. *Educational Studies in Mathematics*, 49.
 - Rojano, T. (2010). Modelación concreta en álgebra: balanza virtual, ecuaciones y sistemas matemáticos de signos. *Números*, 75.
 - Bojorque, G. y Gonzales, N. (2021). Patrones repetitivos en educación infantil y primaria. *INNOVA Research Journal*.
 - Cetina-Vázquez, M. y Cabañas-Sánchez, G. (2022). Estrategias de generalización de patrones. *Enseñanza de las Ciencias*, 40(1).
 - Briars, D. y Larkin, J. (1984). An integrated model of skill in solving elementary word problems. *Cognition and Instruction*, 1(3).
 - Garrote, M., Hidalgo, M. J. y Blanco, L. J. (2004). Dificultades en el aprendizaje de las desigualdades e inecuaciones. *Suma*, 46.
+- MacGregor, M. y Stacey, K. (1993). Cognitive models underlying students' formulation of simple linear equations. *Journal for Research in Mathematics Education*, 24(3).
 - Stacey, K. (1989). Finding and using patterns in linear generalising problems. *Educational Studies in Mathematics*, 20(2).
 - Radford, L. (2008). Iconicity and contraction: a semiotic investigation of forms of algebraic generalizations of patterns in different contexts. *ZDM*, 40(1).
 - Pacheco, A., Ayala-Altamirano, C. y Molina, M. (2024). Inecuaciones en libros de texto de educación primaria. *Uniciencia*, 38(1).

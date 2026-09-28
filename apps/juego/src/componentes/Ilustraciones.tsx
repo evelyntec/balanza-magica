@@ -281,6 +281,24 @@ export function RetratoJefe({ isla, animo = 'normal' }: { isla: number; animo?: 
       </svg>
     );
   }
+  if (isla === 6) {
+    return (
+      <svg viewBox="0 0 100 100" className="jefe__retrato" role="img" aria-label="Robot Fórmulus">
+        <circle cx={50} cy={50} r={46} fill="#ffd1e3" stroke={L} strokeWidth={4} />
+        <path d="M50 10 v10" stroke={L} strokeWidth={4} strokeLinecap="round" />
+        <circle cx={50} cy={9} r={5} fill="#f5b82e" stroke={L} strokeWidth={3} />
+        <rect x={22} y={20} width={56} height={44} rx={10} fill="#9fb8d6" {...t} />
+        <rect x={14} y={34} width={8} height={16} rx={3} fill="#c2185b" {...t} strokeWidth={3} />
+        <rect x={78} y={34} width={8} height={16} rx={3} fill="#c2185b" {...t} strokeWidth={3} />
+        {ojos}
+        <rect x={36} y={54} width={28} height={6} rx={3} fill={L} />
+        <rect x={28} y={66} width={44} height={26} rx={6} fill="#c2185b" {...t} />
+        <text x={50} y={85} textAnchor="middle" fontSize={15} fontWeight={900} fill="#fff">
+          3n+1
+        </text>
+      </svg>
+    );
+  }
   if (isla === 5) {
     return (
       <svg viewBox="0 0 100 100" className="jefe__retrato" role="img" aria-label="Escorpión Desigual">

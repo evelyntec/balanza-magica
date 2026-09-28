@@ -7,7 +7,7 @@
  */
 
 import type { Azar } from './azar';
-import { MECANICAS, generarSucesion, generarGrafico, type ContextoGeneracion, type ItemGenerado } from './mecanicas';
+import { MECANICAS, generarSucesion, generarGrafico, generarExpresion, generarProblemaLetras, type ContextoGeneracion, type ItemGenerado } from './mecanicas';
 import type { TipoItem } from './tipos';
 
 export interface ObjetivoAprendizaje {
@@ -152,8 +152,8 @@ export const ISLAS: Isla[] = [
     nivel: '6° básico',
     lema: 'Del patrón a la expresión con letras',
     color: '#c2185b',
-    disponible: false,
-    jefe: { nombre: 'Robot Fórmulus', descripcion: 'Solo habla en lenguaje algebraico.', vida: 14 },
+    disponible: true,
+    jefe: { nombre: 'Robot Fórmulus', descripcion: 'Solo habla en lenguaje algebraico y esconde sus números en ecuaciones. ¡Descífralo!', vida: 14 },
     oa: [
       {
         codigo: 'MA06 OA 9',
@@ -593,6 +593,70 @@ ETAPAS.push(
       { tipo: 'sucesion', generar: (nivel, azar) => generarSucesion(nivel, azar, azar.probabilidad(0.5) ? 'figuras' : 'numerica') },
       { tipo: 'grafico_solucion', generar: simple('grafico_solucion') },
       { tipo: 'problema', generar: simple('problema') },
+    ]),
+  }),
+);
+
+// Isla 6 ----------------------------------------------------------------------
+
+ETAPAS.push(
+  etapa({
+    id: '6-1',
+    isla: 6,
+    orden: 1,
+    nombre: 'La fábrica de fórmulas',
+    descripcion: 'Mira la tabla y escribe la fórmula con letras. ¡Algunas tablas vienen desordenadas!',
+    oa: ['MA06 OA 9', 'MA06 OA 10'],
+    esJefe: false,
+    mecanicas: ['expresion'],
+    generar: (nivel, azar) => generarExpresion(nivel, azar, false),
+  }),
+  etapa({
+    id: '6-2',
+    isla: 6,
+    orden: 2,
+    nombre: 'Letras que generalizan',
+    descripcion: 'Taxis, trenes, mesas y figuras: escribe la fórmula y úsala para predecir.',
+    oa: ['MA06 OA 9', 'MA06 OA 10'],
+    esJefe: false,
+    mecanicas: ['expresion'],
+    generar: (nivel, azar) => generarExpresion(nivel, azar, true),
+  }),
+  etapa({
+    id: '6-3',
+    isla: 6,
+    orden: 3,
+    nombre: 'Balanza de las fórmulas',
+    descripcion: 'Ecuaciones como 3x + 5 = 26: primero en la balanza, después paso a paso.',
+    oa: ['MA06 OA 11'],
+    esJefe: false,
+    mecanicas: ['ecuacion_dos_pasos'],
+    generar: simple('ecuacion_dos_pasos'),
+  }),
+  etapa({
+    id: '6-4',
+    isla: 6,
+    orden: 4,
+    nombre: 'Problemas con letras',
+    descripcion: 'Elige la ecuación que cuenta la historia y resuélvela.',
+    oa: ['MA06 OA 10', 'MA06 OA 11'],
+    esJefe: false,
+    mecanicas: ['problema'],
+    generar: (nivel, azar) => generarProblemaLetras(nivel, azar),
+  }),
+  etapa({
+    id: '6-J',
+    isla: 6,
+    orden: 5,
+    nombre: 'El Robot Fórmulus',
+    descripcion: 'El gran desafío de la ciudad: fórmulas, ecuaciones y problemas.',
+    oa: ['MA06 OA 9', 'MA06 OA 10', 'MA06 OA 11'],
+    esJefe: true,
+    mecanicas: ['expresion', 'ecuacion_dos_pasos', 'problema'],
+    generar: mezcla([
+      { tipo: 'expresion', generar: (nivel, azar) => generarExpresion(nivel, azar, azar.probabilidad(0.5)) },
+      { tipo: 'ecuacion_dos_pasos', generar: simple('ecuacion_dos_pasos') },
+      { tipo: 'problema', generar: (nivel, azar) => generarProblemaLetras(nivel, azar) },
     ]),
   }),
 );

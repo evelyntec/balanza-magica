@@ -115,4 +115,23 @@ export const DIAGNOSTICOS_DOCENTE: Record<string, { titulo: string; sugerencia: 
     titulo: 'Dibuja muchas soluciones para una ecuación',
     sugerencia: 'Contrastar "=" con "<" y ">": la ecuación tiene una sola solución (punto lleno).',
   },
+  formula_recursiva: {
+    titulo: 'Escribe la regla recursiva como fórmula ("n + 3" en vez de "3 · n + 1")',
+    sugerencia: 'Distinguir "aumenta 3 cada vez" (3 · n) de "súmale 3 a n"; comprobar la fórmula con dos filas.',
+  },
+  formula_proporcional: {
+    titulo: 'Escribe una fórmula proporcional (4 · n para 3 · n + 1)',
+    sugerencia: 'Separar en la figura lo que se repite (3 por cada una) de lo que está desde el inicio (1).',
+  },
+  formula_sin_constante: { titulo: 'Olvida la constante de la fórmula', sugerencia: 'Comparar la columna "3 · n" con la columna de valores: ¿cuánto falta?' },
+  formula_constante: { titulo: 'Coeficiente correcto, constante equivocada', sugerencia: 'Calcular la constante con la fila n = 1 y comprobar con otra fila.' },
+  formula_evaluacion: { titulo: 'Fórmula correcta pero error al evaluarla', sugerencia: 'Reemplazar la letra y respetar la prioridad: primero multiplicar.' },
+  ecuacion_sin_dividir: {
+    titulo: 'Deja la ecuación en 3x = 21 (no reparte)',
+    sugerencia: 'En la balanza, repartir las cajas en grupos iguales; 3x significa 3 veces x.',
+  },
+  ecuacion_orden: {
+    titulo: 'Divide antes de quitar la constante (26 ÷ 3 − 5)',
+    sugerencia: 'Con la balanza: el 5 no está multiplicado por 3; primero se quita de ambos lados.',
+  },
 };

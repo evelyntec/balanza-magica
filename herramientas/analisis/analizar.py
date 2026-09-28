@@ -50,6 +50,8 @@ NOMBRES_TIPO = {
     "inecuacion": "Inecuaciones",
     "sucesion": "Sucesiones y predicciones",
     "grafico_solucion": "Graficar soluciones",
+    "expresion": "Fórmulas con letras",
+    "ecuacion_dos_pasos": "Ecuaciones de dos pasos",
 }
 
 DIAGNOSTICOS = {
@@ -95,6 +97,13 @@ DIAGNOSTICOS = {
     "sucesion_aditiva": "Supone que siempre se suma lo mismo",
     "sucesion_regla": "Elige una regla que no sirve para todos",
     "ecuacion_rayo": "Dibuja muchas soluciones para una ecuación",
+    "formula_recursiva": "Escribe la regla recursiva como fórmula (n + 3)",
+    "formula_proporcional": "Escribe una fórmula proporcional (4 · n)",
+    "formula_sin_constante": "Olvida la constante de la fórmula",
+    "formula_constante": "Constante equivocada en la fórmula",
+    "formula_evaluacion": "Error al evaluar la fórmula",
+    "ecuacion_sin_dividir": "No reparte: deja 3x = 21",
+    "ecuacion_orden": "Divide antes de quitar la constante",
 }
 
 

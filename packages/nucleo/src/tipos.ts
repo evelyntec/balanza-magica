@@ -46,7 +46,9 @@ export type TipoItem =
   | 'tabla_regla'
   | 'inecuacion'
   | 'sucesion'
-  | 'grafico_solucion';
+  | 'grafico_solucion'
+  | 'expresion'
+  | 'ecuacion_dos_pasos';
 
 /** Resultado de un ejercicio, del mejor al peor. */
 export type Resultado = 'perfecto' | 'logrado' | 'con_ayuda' | 'fallido';
@@ -115,6 +117,13 @@ export type CodigoDiagnostico =
   | 'sucesion_aditiva'
   | 'sucesion_regla'
   | 'ecuacion_rayo'
+  | 'formula_recursiva'
+  | 'formula_proporcional'
+  | 'formula_sin_constante'
+  | 'formula_constante'
+  | 'formula_evaluacion'
+  | 'ecuacion_sin_dividir'
+  | 'ecuacion_orden'
   | 'generico';
 
 export interface Evaluacion {

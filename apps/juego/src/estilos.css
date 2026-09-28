@@ -2130,3 +2130,69 @@ h3 {
 .opciones--grafico .opcion {
   min-height: 74px;
 }
+
+/* Fórmulas y ecuaciones de dos pasos (Isla 6) */
+
+.formula {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: var(--fuente-titulo);
+  font-weight: 800;
+  font-size: clamp(1.4rem, 5.5vw, 1.9rem);
+}
+
+.formula__nombre {
+  font-size: clamp(1rem, 4vw, 1.3rem);
+}
+
+.formula__signo {
+  min-width: 44px;
+  padding: 4px 10px;
+  font-size: 1.6rem;
+  flex: none;
+}
+
+.casilla--formula {
+  min-width: 56px;
+  flex: none;
+}
+
+.tabla-regla__numero--ayuda {
+  background: var(--oro-100);
+  border-style: dashed;
+  color: var(--violeta-500);
+}
+
+.pasos-formales {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 22px;
+  background: var(--papel);
+  border: var(--borde);
+  border-radius: var(--r-m);
+  box-shadow: 0 4px 0 var(--tinta);
+  font-family: var(--fuente-titulo);
+  font-weight: 800;
+  font-size: clamp(1.6rem, 6vw, 2.2rem);
+}
+
+.pasos-formales__linea {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pasos-formales__linea + .pasos-formales__linea {
+  border-top: 2px dashed var(--violeta-100);
+  padding-top: 10px;
+}
+
+.pasos-formales__ayuda {
+  font-size: 1.1rem;
+  color: var(--violeta-500);
+}

@@ -14,6 +14,8 @@ import { tablaRegla } from './tablaRegla';
 import { inecuacion } from './inecuacion';
 import { sucesion } from './sucesion';
 import { graficoSolucion } from './graficoSolucion';
+import { expresion } from './expresion';
+import { ecuacionDosPasos } from './ecuacionDosPasos';
 
 export const MECANICAS: Record<TipoItem, Mecanica> = {
   inclinacion,
@@ -30,6 +32,8 @@ export const MECANICAS: Record<TipoItem, Mecanica> = {
   inecuacion,
   sucesion,
   grafico_solucion: graficoSolucion,
+  expresion,
+  ecuacion_dos_pasos: ecuacionDosPasos,
 };
 
 export function mecanica(tipo: TipoItem): Mecanica {
@@ -64,3 +68,10 @@ export type { PublicoSucesion, SecretoSucesion, RespuestaSucesion, FiguraSucesio
 export { generarSucesion, termino, textoReglaFuncional, FIGURAS_LINEALES } from './sucesion';
 export type { PublicoGrafico, SecretoGrafico, RespuestaGrafico, TipoGrafico, Relacion } from './graficoSolucion';
 export { textoGrafico, resolverGrafico, relacionEfectiva, generarGrafico } from './graficoSolucion';
+export { expresion, ecuacionDosPasos };
+export type { PublicoExpresion, SecretoExpresion, RespuestaExpresion, ModoExpresion, SituacionExpresion, SignoFormula } from './expresion';
+export { generarExpresion, textoFormula, valorFormula, LETRAS } from './expresion';
+export type { PublicoDosPasos, SecretoDosPasos, RespuestaDosPasos, FormaDosPasos } from './ecuacionDosPasos';
+export { textoDosPasos, restaConstante } from './ecuacionDosPasos';
+export { generarProblemaLetras } from './problemaLetras';
+export type { FiguraLineal, FiguraBaldosas } from './sucesion';

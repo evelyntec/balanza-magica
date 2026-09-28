@@ -199,7 +199,8 @@ describe('antitrampas', () => {
     expect((await espera(t.servicio.iniciarEtapa(t.ctx, '3-1'))).codigo).toBe('ETAPA_BLOQUEADA');
     expect((await espera(t.servicio.iniciarEtapa(t.ctx, '4-1'))).codigo).toBe('ETAPA_BLOQUEADA');
     expect((await espera(t.servicio.iniciarEtapa(t.ctx, '5-1'))).codigo).toBe('ETAPA_BLOQUEADA');
-    expect((await espera(t.servicio.iniciarEtapa(t.ctx, '6-1'))).codigo).toBe('NO_ENCONTRADO');
+    expect((await espera(t.servicio.iniciarEtapa(t.ctx, '6-1'))).codigo).toBe('ETAPA_BLOQUEADA');
+    expect((await espera(t.servicio.iniciarEtapa(t.ctx, '7-1'))).codigo).toBe('NO_ENCONTRADO');
     expect((await espera(t.servicio.iniciarEtapa(t.ctx, { id: '1-1' }))).codigo).toBe('NO_ENCONTRADO');
   });
 
@@ -332,7 +333,18 @@ describe('recorrido completo', () => {
     }
     const perfil = await t.servicio.perfil(t.ctx.jugadorId);
     expect(perfil.insignias).toEqual(expect.arrayContaining(['vence_5-J', 'isla_5_dorada', 'profeta']));
-    expect(perfil.islas[5]!.accesible).toBe(false); // la isla 6 aún no existe
+    expect(perfil.islas[5]!.accesible).toBe(true); // vencer al Escorpión abre la Ciudad
+  });
+
+  it('6° básico: jugar perfecto la isla 6 da 3 estrellas y vence al Robot', async () => {
+    const t = await preparar({ nivel: 6 });
+    for (const id of ['6-1', '6-2', '6-3', '6-4', '6-J']) {
+      const fin = await completarEtapa(t, id);
+      expect(fin.estrellas).toBe(3);
+    }
+    const perfil = await t.servicio.perfil(t.ctx.jugadorId);
+    expect(perfil.insignias).toEqual(expect.arrayContaining(['vence_6-J', 'isla_6_dorada', 'lenguaje_algebraico']));
+    expect(perfil.islas[6]!.accesible).toBe(false); // la isla 7 aún no existe
   });
 
   it('adivinar al azar rinde mucho menos que pensar', async () => {

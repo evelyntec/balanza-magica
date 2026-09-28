@@ -5,6 +5,9 @@
 
 import type { ItemGuardado } from '../src/servicio/modelos';
 import type {
+  SecretoExpresion,
+  SecretoDosPasos,
+  PublicoDosPasos,
   PublicoGrafico,
   SecretoGrafico,
   SecretoSucesion,
@@ -76,6 +79,15 @@ export function respuestaCorrecta(tipo: TipoItem, publico: unknown, secreto: unk
       const s = secreto as SecretoGrafico;
       return { valor: s.borde, tipo: s.tipo };
     }
+    case 'expresion': {
+      const s = secreto as SecretoExpresion;
+      return { a: s.a, b: s.b, signo: s.signo, ...(s.resultado !== undefined ? { resultado: s.resultado } : {}) };
+    }
+    case 'ecuacion_dos_pasos': {
+      const p = publico as PublicoDosPasos;
+      const s = secreto as SecretoDosPasos;
+      return p.representacion === 'formal' ? { intermedio: s.ax, x: s.x } : { x: s.x };
+    }
   }
 }
 
@@ -134,6 +146,16 @@ export function respuestaIncorrecta(tipo: TipoItem, publico: unknown, secreto: u
       const s = secreto as SecretoGrafico;
       void (publico as PublicoGrafico);
       return { valor: s.borde, tipo: s.tipo === 'punto' ? 'derecha' : 'punto' };
+    }
+    case 'expresion': {
+      // Error típico: olvidar la constante (o agregar una que no está).
+      const r = buena as { a: number; b: number; signo: string; resultado?: number };
+      return { ...r, b: r.b === 0 ? 1 : 0 };
+    }
+    case 'ecuacion_dos_pasos': {
+      // Error típico: no repartir (x = a · x).
+      const r = buena as { intermedio?: number; x: number };
+      return { ...r, x: (secreto as SecretoDosPasos).ax === r.x ? r.x + 1 : (secreto as SecretoDosPasos).ax };
     }
   }
 }

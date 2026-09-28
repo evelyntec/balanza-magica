@@ -86,11 +86,28 @@ En las inecuaciones con resta solo aparecen soluciones "mayores que" (□ − 30
 números menores que 30, que en 5° no tienen sentido. Las figuras dibujan exactamente los palitos o baldosas del
 término (lo comprueba la prueba en navegador).
 
+### 🏙️ Isla 6 · Ciudad de las Fórmulas · 6° básico
+
+| Etapa | Mecánica | OA |
+|---|---|---|
+| 6-1 La fábrica de fórmulas | Escribir la fórmula (coeficiente, signo y constante) a partir de una tabla, ordenada o desordenada, con distintas letras; al final, evaluarla en n = 100 | MA06 OA 9, OA 10 |
+| 6-2 Letras que generalizan | Lo mismo desde figuras de palitos y situaciones (mesas, trenes, taxis, ahorro, cajas de huevos) y usar la fórmula para predecir | MA06 OA 9, OA 10 |
+| 6-3 Balanza de las fórmulas | Ecuaciones a · x + b = c: en la balanza (quitar de ambos lados y repartir en grupos iguales) y luego con procedimiento formal escrito paso a paso | MA06 OA 11 |
+| 6-4 Problemas con letras | Elegir la ecuación a · x ± b = c que cuenta la historia (compras, ruedas, edades, números pensados) y resolverla | MA06 OA 10, OA 11 |
+| Jefe: Robot Fórmulus | Todo lo anterior mezclado | MA06 OA 9, 10 y 11 |
+
+- **MA06 OA 9:** Demostrar que comprenden la relación entre los valores de una tabla y aplicarla en la resolución de problemas sencillos: identificando patrones entre los valores de la tabla; formulando una regla con lenguaje matemático.
+- **MA06 OA 10:** Representar generalizaciones de relaciones entre números naturales, usando expresiones con letras y ecuaciones.
+- **MA06 OA 11:** Resolver ecuaciones de primer grado con una incógnita, utilizando estrategias como: usando una balanza; usar la descomposición y la correspondencia 1 a 1 entre los términos en cada lado de la ecuación y aplicando procedimientos formales de resolución.
+
+La fórmula se escribe, no se elige. En la balanza, las pesas muestran la operación ("(56 − 30) ÷ 2") y no el
+resultado, para que el cálculo lo haga la o el estudiante. En el procedimiento formal también se evalúa el paso
+intermedio (3x = 21).
+
 ## Islas en construcción
 
 | Isla | Nivel | OA | Propuesta |
 |---|---|---|---|
-| 6 · Ciudad de las Fórmulas | 6° | MA06 OA 9, OA 10, OA 11 | La figura n tiene 2n + 1 fichas; ecuaciones con balanza y luego formales |
 | 7 · Volcán de los Globos | 7° | MA07 OA 6 a OA 9 | Sacos de x, globos negativos, términos semejantes y proporcionalidad |
 | 8 · Castillo del Desequilibrio | 8° | MA08 OA 7 a OA 10 | Incógnita a ambos lados; la balanza genera la tabla y el gráfico de la función afín |
 

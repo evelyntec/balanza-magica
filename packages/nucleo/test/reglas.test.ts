@@ -167,7 +167,7 @@ describe('desbloqueo', () => {
     expect(mapa[3]!.accesible).toBe(true); // isla 4 (Montaña) disponible
     expect(mapa[4]!.accesible).toBe(true); // isla 5 (Desierto): la propia del curso
     expect(mapa[4]!.etapas.map((e) => e.accesible)).toEqual([true, false, false, false, false]);
-    expect(mapa[5]!.accesible).toBe(false); // isla 6 aún no está construida
+    expect(mapa[5]!.accesible).toBe(false); // isla 6: se abre al vencer al Escorpión
   });
 
   it('nivel inicial: repaso parte en 3 y repetir parte cerca del máximo logrado', () => {
