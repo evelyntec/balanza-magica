@@ -12,6 +12,9 @@ permissions:
 
 jobs:
   publicar:
+    # GitHub Pages gratuito solo funciona en repositorios públicos:
+    # mientras el repositorio sea privado, este paso se omite (sin error).
+    if: ${{ !github.event.repository.private }}
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -24,6 +27,8 @@ jobs:
           cache: npm
       - run: npm ci && npm run build:demo
       - uses: actions/configure-pages@v5
+        with:
+          enablement: true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: apps/juego/dist-demo
