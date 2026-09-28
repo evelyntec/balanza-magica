@@ -74,27 +74,57 @@ jobs:
         run: |
           set -euo pipefail
           : "${RUTA_APP:?Falta el secreto RUTA_APP (por ejemplo /home/tuusuario/balanza-app)}"
-          PUERTO="${SSH_PUERTO:-22}"
+          PUERTO="$(printf '%s' "${SSH_PUERTO:-22}" | tr -d '[:space:]')"
+          HOST="$(printf '%s' "$SSH_HOST" | tr -d '[:space:]')"
+          USUARIO="$(printf '%s' "$SSH_USUARIO" | tr -d '[:space:]')"
+          RUTA_APP="$(printf '%s' "$RUTA_APP" | tr -d '\r' | sed 's/[[:space:]]*$//; s#/*$##')"
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
-          printf '%s\n' "$SSH_CLAVE_PRIVADA" > ~/.ssh/id_despliegue
+          # Al copiar desde Windows se cuelan retornos de carro (\r) y espacios: se limpian.
+          # (Solo se quitan líneas vacías al inicio y al final: las claves con contraseña llevan una línea vacía interna obligatoria.)
+          printf '%s\n' "$SSH_CLAVE_PRIVADA" | tr -d '\r' | sed 's/^[[:space:]]*//; s/[[:space:]]*$//' \
+            | awk 'NF { if (vacias) for (i = 0; i < vacias; i++) print ""; vacias = 0; print; empezo = 1; next } empezo { vacias++ }' > ~/.ssh/id_despliegue
           chmod 600 ~/.ssh/id_despliegue
+          if ! head -n1 ~/.ssh/id_despliegue | grep -q -- '-----BEGIN .*PRIVATE KEY-----'; then
+            echo "::error title=Clave SSH::SSH_CLAVE_PRIVADA no empieza con '-----BEGIN ... PRIVATE KEY-----'. Vuelve a copiarla completa desde cPanel (Ver/Descargar)."
+            exit 1
+          fi
+          if ! tail -n1 ~/.ssh/id_despliegue | grep -q -- '-----END .*PRIVATE KEY-----'; then
+            echo "::error title=Clave SSH::SSH_CLAVE_PRIVADA no termina con '-----END ... PRIVATE KEY-----'. Faltó copiar el final."
+            exit 1
+          fi
           # Si cPanel exigió una contraseña para la clave, se quita solo en esta máquina temporal.
-          if [ -n "${SSH_FRASE:-}" ]; then
-            ssh-keygen -p -q -P "$SSH_FRASE" -N "" -f ~/.ssh/id_despliegue
+          FRASE="$(printf '%s' "${SSH_FRASE:-}" | tr -d '\r\n')"
+          if [ -n "$FRASE" ]; then
+            if ! salida="$(ssh-keygen -p -q -P "$FRASE" -N "" -f ~/.ssh/id_despliegue 2>&1)"; then
+              echo "::error title=Contraseña de la clave::No se pudo abrir la clave con SSH_FRASE ($salida). Revisa que SSH_FRASE sea exactamente la contraseña usada al generar la clave en cPanel."
+              exit 1
+            fi
+          elif ! ssh-keygen -y -P "" -f ~/.ssh/id_despliegue > /dev/null 2>&1; then
+            echo "::error title=Contraseña de la clave::La clave tiene contraseña: agrega el secreto SSH_FRASE."
+            exit 1
           fi
           if [ -n "${SSH_HOSTS_CONOCIDOS:-}" ]; then
-            printf '%s\n' "$SSH_HOSTS_CONOCIDOS" > ~/.ssh/known_hosts
+            printf '%s\n' "$SSH_HOSTS_CONOCIDOS" | tr -d '\r' > ~/.ssh/known_hosts
           else
             echo "::warning::Sin SSH_HOSTS_CONOCIDOS: se confía en la huella del servidor en el primer contacto."
-            ssh-keyscan -p "$PUERTO" "$SSH_HOST" > ~/.ssh/known_hosts 2>/dev/null
+            ssh-keyscan -T 15 -p "$PUERTO" "$HOST" > ~/.ssh/known_hosts 2>/dev/null || true
+            if [ ! -s ~/.ssh/known_hosts ]; then
+              echo "::error title=Servidor SSH::No hubo respuesta SSH en $HOST, puerto $PUERTO. Confirma el puerto SSH con el soporte de V2Networks y guárdalo en SSH_PUERTO."
+              exit 1
+            fi
           fi
-          SSH="ssh -i ~/.ssh/id_despliegue -p $PUERTO -o BatchMode=yes"
+          SSH="ssh -i ~/.ssh/id_despliegue -p $PUERTO -o BatchMode=yes -o ConnectTimeout=20"
+          if ! salida="$($SSH "$USUARIO@$HOST" "mkdir -p '$RUTA_APP' && echo conectado" 2>&1)"; then
+            echo "::error title=Conexión SSH::$(printf '%s' "$salida" | tail -n 2 | tr '\n' ' ') — Si dice 'Permission denied', revisa que la clave esté Autorizada en cPanel y que SSH_USUARIO sea profeso2."
+            exit 1
+          fi
           # --delete quita archivos viejos del juego, pero nunca .env, tmp/, registros ni node_modules.
           rsync -az --delete \
             --exclude '.env' --exclude 'tmp/' --exclude '*.log' --exclude 'node_modules' --exclude '.htaccess' \
-            -e "$SSH" apps/servidor/dist/ "$SSH_USUARIO@$SSH_HOST:$RUTA_APP/"
+            -e "$SSH" apps/servidor/dist/ "$USUARIO@$HOST:$RUTA_APP/"
           # Passenger (Setup Node.js App) reinicia la aplicación al tocar tmp/restart.txt.
-          $SSH "$SSH_USUARIO@$SSH_HOST" "mkdir -p '$RUTA_APP/tmp' && touch '$RUTA_APP/tmp/restart.txt'"
+          $SSH "$USUARIO@$HOST" "mkdir -p '$RUTA_APP/tmp' && touch '$RUTA_APP/tmp/restart.txt'"
+          echo "::notice title=Subida lista::Archivos sincronizados en $RUTA_APP y aplicación reiniciada."
           rm -f ~/.ssh/id_despliegue
 
       - name: Subir por FTP seguro (si no hay SSH)
