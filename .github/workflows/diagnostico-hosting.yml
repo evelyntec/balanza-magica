@@ -1,0 +1,29 @@
+# Diagnóstico manual: ¿qué puertos del hosting responden desde GitHub?
+# Actions → Diagnóstico del hosting → Run workflow. No cambia nada en el servidor.
+name: Diagnóstico del hosting
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  puertos:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      HOST: ${{ secrets.SSH_HOST }}
+    steps:
+      - name: Probar puertos SSH y FTP
+        run: |
+          H="$(printf '%s' "$HOST" | tr -d '[:space:]')"
+          abiertos=""
+          for p in 22 2222 2200 2022 22022 7822 21098 18765 1022 21 990 443; do
+            if timeout 6 bash -c "</dev/tcp/$H/$p" 2>/dev/null; then
+              banner="$(timeout 5 bash -c "exec 3<>/dev/tcp/$H/$p; head -c 60 <&3" 2>/dev/null | tr -dc '[:print:]' || true)"
+              abiertos="$abiertos $p"
+              echo "::notice title=Puerto $p abierto::${banner:-(sin mensaje inicial)}"
+            fi
+          done
+          echo "::notice title=Resumen::Puertos que responden:${abiertos:- ninguno}"
