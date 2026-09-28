@@ -129,10 +129,12 @@ async function resolverPorInterfaz(page: Page, almacen: AlmacenMemoria, itemId: 
       break;
     }
     case 'ecuacion_mult':
+    case 'inecuacion_lineal':
     case 'grafico_solucion': {
       const { valor, tipo } = r as { valor: number; tipo: string };
       await expect(page.getByRole('button', { name: '1', exact: true })).toBeEnabled();
-      await page.keyboard.type(String(valor));
+      if (valor < 0) await page.getByRole('button', { name: /^Signo del borde/ }).click();
+      await page.keyboard.type(String(Math.abs(valor)));
       const nombre = tipo === 'punto' ? 'Solo ese número' : tipo === 'izquierda' ? 'Todos los menores' : 'Todos los mayores';
       await page.getByRole('radio', { name: nombre }).click();
       await page.getByRole('button', { name: 'Revisar' }).click();
@@ -191,6 +193,52 @@ async function resolverPorInterfaz(page: Page, almacen: AlmacenMemoria, itemId: 
       for (let k = 0; k < valores.length; k++) {
         await casillas.nth(k).click();
         await page.keyboard.type(String(valores[k]));
+      }
+      await page.getByRole('button', { name: 'Revisar' }).click();
+      break;
+    }
+    case 'ecuacion_ambos_lados': {
+      const v = r as { k?: number; m?: number; x: number };
+      await expect(page.getByRole('button', { name: '1', exact: true })).toBeEnabled();
+      const pub = item.publico as { a: number; b: number; c: number; d: number };
+      const valores = v.k === undefined ? [v.x] : [v.k, v.m!, v.x];
+      if (v.k === undefined) {
+        // Como en la balanza: quitar cajas de ambos lados, quitar la pesa y repartir.
+        for (let i = 0; i < Math.min(pub.a, pub.c); i++) await page.getByRole('button', { name: /Quitar una .* de cada lado/ }).click();
+        const pesaMas = pub.a > pub.c ? pub.b : pub.d;
+        if (pesaMas > 0) await page.getByRole('button', { name: new RegExp(`Quitar ${pesaMas} de cada lado`) }).click();
+        await page.getByRole('button', { name: /Repartir/ }).click();
+      }
+      const grupos = page.locator('.casilla-con-signo');
+      for (let k = 0; k < valores.length; k++) {
+        const g = grupos.nth(k);
+        if (valores[k]! < 0) await g.getByRole('button', { name: /^Signo/ }).click();
+        await g.locator('.casilla').click();
+        await page.keyboard.type(String(Math.abs(valores[k]!)));
+      }
+      await page.getByRole('button', { name: 'Revisar' }).click();
+      break;
+    }
+    case 'funcion':
+    case 'afin': {
+      const v = r as { esFuncion?: boolean; culpable?: number; m: number; n: number; resultado?: number };
+      if (item.tipo === 'funcion') {
+        await page.getByRole('radio', { name: v.esFuncion ? 'Es función' : 'No es función', exact: true }).click();
+        if (!v.esFuncion) {
+          const t = v.culpable! < 0 ? `−${-v.culpable!}` : String(v.culpable);
+          await page.getByRole('button', { name: `Elemento ${t}`, exact: true }).click();
+          await page.getByRole('button', { name: 'Revisar' }).click();
+          break;
+        }
+      }
+      await expect(page.getByRole('button', { name: '1', exact: true })).toBeEnabled();
+      const valores = v.resultado === undefined ? [v.m, v.n] : [v.m, v.n, v.resultado];
+      const grupos = page.locator('.formula .casilla-con-signo');
+      for (let k = 0; k < valores.length; k++) {
+        const g = grupos.nth(k);
+        if (valores[k]! < 0) await g.getByRole('button', { name: /^Signo/ }).click();
+        await g.locator('.casilla').click();
+        await page.keyboard.type(String(Math.abs(valores[k]!)));
       }
       await page.getByRole('button', { name: 'Revisar' }).click();
       break;
@@ -568,6 +616,61 @@ test('isla 7: términos semejantes, proporciones, ecuaciones de lava y problemas
       if (n === 0) {
         await sinDesbordeHorizontal(page);
         await page.screenshot({ path: capturas(`isla7-${etapa.replace(/\s/g, '-')}`, proyecto) });
+      }
+      await continuar.click();
+      await expect.poll(() => seguimiento.itemId).not.toBe(id);
+    }
+    await page.getByRole('button', { name: 'Salir de la etapa' }).click();
+    await page.getByRole('button', { name: 'Salir', exact: true }).click();
+    await page.getByRole('button', { name: 'Volver' }).click();
+  }
+  expect(errores).toEqual([]);
+});
+
+test('isla 8: ambos lados, funciones, rectas e inecuaciones por la interfaz', async ({ page }, info) => {
+  const proyecto = info.project.name;
+  const curso = await srv.servicio.crearCurso({ nombre: `8°B ${proyecto}`, nivel: 8 });
+  const seguimiento = seguirItems(page);
+  const errores: string[] = [];
+  page.on('pageerror', (e) => errores.push(e.message));
+  await page.goto(srv.url);
+  await page.getByRole('button', { name: /Entrar con mi curso/ }).click();
+  await page.getByLabel('Código del curso').fill(curso.codigo);
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  await page.getByRole('button', { name: /Soy nueva o nuevo/ }).click();
+  await page.getByLabel('Apodo').fill('Chinchilla Real 88');
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  for (const f of ['pez', 'pato', 'oso']) await page.getByRole('button', { name: f, exact: true }).click();
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  for (const f of ['pez', 'pato', 'oso']) await page.getByRole('button', { name: f, exact: true }).click();
+  await page.getByRole('button', { name: /Crear mi gatito/ }).click();
+  await expect(page.getByText('El Reino del Equilibrio')).toBeVisible();
+  // La isla 8 es la del propio curso: sus etapas se abren en orden. Para probar todas, se marcan como superadas.
+  const [jugador] = await srv.almacen.listarJugadores(curso.id);
+  const superada = { estrellas: 1, mejorPuntaje: 1, superada: true, veces: 1, nivelMax: 1 };
+  await srv.almacen.actualizarJugador({ ...jugador!, progreso: { ...jugador!.progreso, '8-1': superada, '8-2': superada, '8-3': superada } });
+  await page.reload();
+  await expect(page.getByText('El Reino del Equilibrio')).toBeVisible();
+
+  for (const etapa of ['Balanzas de doble carga', 'La máquina de funciones', 'Rectas del castillo', 'Desigualdades del rey']) {
+    await page.getByRole('button', { name: /Castillo del Desequilibrio/ }).click();
+    seguimiento.itemId = '';
+    await page.getByRole('button', { name: new RegExp(etapa) }).click();
+    for (let n = 0; n < 3; n++) {
+      await expect.poll(() => seguimiento.itemId).not.toBe('');
+      const id = seguimiento.itemId;
+      if (n === 0) {
+        await page.waitForTimeout(1200);
+        await page.screenshot({ path: capturas(`isla8-antes-${etapa.replace(/\s/g, '-')}`, proyecto) });
+      }
+      await resolverPorInterfaz(page, srv.almacen, id);
+      const continuar = page.getByRole('button', { name: /Continuar →/ });
+      await expect(continuar).toBeVisible();
+      await expect(page.locator('.retro__titulo')).toHaveText(/Perfecto|Muy bien/);
+      if (n === 0) {
+        await sinDesbordeHorizontal(page);
+        await page.screenshot({ path: capturas(`isla8-${etapa.replace(/\s/g, '-')}`, proyecto) });
       }
       await continuar.click();
       await expect.poll(() => seguimiento.itemId).not.toBe(id);

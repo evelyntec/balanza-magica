@@ -122,11 +122,24 @@ intermedio (3x = 21).
 Desde esta isla aparecen los números negativos (en los coeficientes de 7-1). La tabla de 7-2 siempre deja al menos
 dos filas completas, para que el tipo de relación se pueda decidir con los datos.
 
-## Islas en construcción
+### 🏰 Isla 8 · Castillo del Desequilibrio · 8° básico
 
-| Isla | Nivel | OA | Propuesta |
-|---|---|---|---|
-| 8 · Castillo del Desequilibrio | 8° | MA08 OA 7 a OA 10 | Incógnita a ambos lados; la balanza genera la tabla y el gráfico de la función afín |
+| Etapa | Mecánica | OA |
+|---|---|---|
+| 8-1 Balanzas de doble carga | Incógnita a ambos lados (ax + b = cx + d) y paréntesis (a(x + b) = c). Primero en la balanza: quitar una caja de cada lado, quitar pesas y repartir. Después, con procedimiento formal (kx = m y x), negativos y soluciones negativas | MA08 OA 8 |
+| 8-2 La máquina de funciones | Diagramas sagitales: decidir si la relación es función (si no, tocar el elemento con dos imágenes o sin imagen) y escribir su regla f(x) = mx + n; evaluarla | MA08 OA 7 |
+| 8-3 Rectas del castillo | Función afín desde el gráfico, desde tablas con saltos distintos de 1 (Δy ÷ Δx), como traslación de una lineal y en el interés simple | MA08 OA 10 |
+| 8-4 Desigualdades del rey | Inecuaciones lineales (con x a ambos lados, divisiones y coeficientes negativos que invierten la desigualdad) y problemas modelados con ecuaciones: planes de celular, edades, perímetros | MA08 OA 8, OA 9 |
+| Jefe: Rey Desequilibrio | Todo lo anterior mezclado | MA08 OA 7 a 10 |
+
+- **MA08 OA 7:** Mostrar que comprenden la noción de función por medio de un cambio lineal: utilizando tablas; usando metáforas de máquinas; estableciendo reglas entre x e y; representando de manera gráfica (plano cartesiano, diagramas de Venn), de manera manual y/o con software educativo.
+- **MA08 OA 8:** Modelar situaciones de la vida diaria y de otras asignaturas, usando ecuaciones lineales de la forma: ax = b; x/a = b, a ≠ 0; ax + b = c; x/a + b = c; ax = b + cx; a(x + b) = c; ax + b = cx + d (a, b, c, d, e ϵ Q).
+- **MA08 OA 9:** Resolver inecuaciones lineales con coeficientes racionales en el contexto de la resolución de problemas, por medio de representaciones gráficas, simbólicas, de manera manual y/o con software educativo.
+- **MA08 OA 10:** Mostrar que comprenden la función afín: generalizándola como la suma de una constante con una función lineal; trasladando funciones lineales en el plano cartesiano; determinando el cambio constante de un intervalo a otro, de manera gráfica y simbólica, de manera manual y/o con software educativo; relacionándola con el interés simple; utilizándola para resolver problemas de la vida diaria y de otras asignaturas.
+
+En el procedimiento formal el paso kx = m se acepta en cualquiera de los dos lados (3x = 12 o −3x = −12). En esta
+versión los coeficientes son enteros o divisiones exactas (x/a); las soluciones y bordes siempre son enteros, para
+que se puedan escribir y dibujar sin aproximar.
 
 ## Transversalidad
 

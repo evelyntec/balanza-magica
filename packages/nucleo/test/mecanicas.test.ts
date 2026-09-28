@@ -21,7 +21,7 @@ import {
   type SecretoVerdaderoFalso,
 } from '../src/mecanicas';
 import type { Objeto, TipoItem } from '../src/tipos';
-import { aplicar, cumple, esMayor, describirSoluciones, termino, textoReglaFuncional, FIGURAS_LINEALES, relacionEfectiva, sucesion, graficoSolucion, expresion, ecuacionDosPasos, valorFormula, textoDosPasos, reducir, proporcion, ecuacionMult, textoMult, valorProporcion, type PublicoReducir, type SecretoReducir, type PublicoProporcion, type SecretoProporcion, type PublicoMult, type PublicoExpresion, type SecretoExpresion, type PublicoDosPasos, type SecretoDosPasos, type PublicoSucesion, type SecretoSucesion, type PublicoGrafico, type SecretoGrafico, resolver, textoEcuacion, type Operacion, type PublicoInecuacion, type PublicoTablaRegla, type SecretoInecuacion, type SecretoTablaRegla, type PublicoEcuacion, type PublicoProblema, type PublicoTabla100, type SecretoProblema, type SecretoTabla100 } from '../src/mecanicas';
+import { aplicar, cumple, esMayor, describirSoluciones, termino, textoReglaFuncional, FIGURAS_LINEALES, relacionEfectiva, sucesion, graficoSolucion, expresion, ecuacionDosPasos, valorFormula, textoDosPasos, reducir, proporcion, ecuacionMult, ecuacionAmbosLados, funcion, afin, inecuacionLineal, textoAmbosLados, textoInecLineal, coeficienteFinal, type PublicoAmbosLados, type SecretoAmbosLados, type PublicoFuncion, type SecretoFuncion, type PublicoAfin, type SecretoAfin, type PublicoInecLineal, textoMult, valorProporcion, type PublicoReducir, type SecretoReducir, type PublicoProporcion, type SecretoProporcion, type PublicoMult, type PublicoExpresion, type SecretoExpresion, type PublicoDosPasos, type SecretoDosPasos, type PublicoSucesion, type SecretoSucesion, type PublicoGrafico, type SecretoGrafico, resolver, textoEcuacion, type Operacion, type PublicoInecuacion, type PublicoTablaRegla, type SecretoInecuacion, type SecretoTablaRegla, type PublicoEcuacion, type PublicoProblema, type PublicoTabla100, type SecretoProblema, type SecretoTabla100 } from '../src/mecanicas';
 import { respuestaCorrecta, respuestaIncorrecta } from './ayudas';
 
 const POR_NIVEL = 1500;
@@ -210,6 +210,77 @@ function verificarEspecifico(tipo: TipoItem, publico: unknown, secreto: unknown,
     expect(p.c).toBeLessThanOrEqual(300);
     expect(p.representacion).toBe(nivel <= 3 ? 'balanza' : 'formal');
     if (p.representacion === 'balanza') expect(p.a).toBeLessThanOrEqual(6);
+    return;
+  }
+  const verdad = (texto: string) => {
+    const e = texto.replace(/−/g, '-').replace(/·/g, '*').replace(/(\d)\(/g, '$1*(');
+    const [izq, rel, der] = e.split(/(=|<|>)/) as [string, string, string];
+    const [l, r] = [eval(izq), eval(der)]; // eslint-disable-line no-eval
+    return rel === '=' ? Math.abs(l - r) < 1e-9 : rel === '<' ? l < r : l > r;
+  };
+  if (tipo === 'ecuacion_ambos_lados') {
+    const p = publico as PublicoAmbosLados;
+    const s = secreto as SecretoAmbosLados;
+    expect(verdad(textoAmbosLados(p, s.x))).toBe(true);
+    expect(verdad(textoAmbosLados(p, s.x + 1))).toBe(false);
+    expect(s.k * s.x).toBe(s.m);
+    expect(s.x).not.toBe(0);
+    expect(p.representacion).toBe(nivel <= 3 ? 'balanza' : 'formal');
+    if (p.representacion === 'balanza') {
+      // En la balanza todo es natural y hay cajas en los dos platillos.
+      for (const v of [p.a, p.b, p.c, p.d, s.x]) expect(v).toBeGreaterThanOrEqual(0);
+      expect(p.a).toBeGreaterThanOrEqual(1);
+      expect(p.c).toBeGreaterThanOrEqual(1);
+      expect(Math.max(p.a, p.c)).toBeLessThanOrEqual(6);
+    }
+    if (nivel === 4) expect(s.x).toBeGreaterThan(0);
+    return;
+  }
+  if (tipo === 'funcion') {
+    const p = publico as PublicoFuncion;
+    const s = secreto as SecretoFuncion;
+    const salidas = (x: number) => p.flechas.filter(([a]) => a === x).length;
+    const esFuncion = p.dominio.every((x) => salidas(x) === 1);
+    expect(esFuncion).toBe(s.esFuncion);
+    if (!s.esFuncion) {
+      expect(p.dominio.filter((x) => salidas(x) !== 1)).toEqual([s.culpable]);
+    } else {
+      for (const [x, y] of p.flechas) expect(y).toBe(s.m * x + s.n);
+    }
+    // Siempre hay un elemento de llegada sin flecha (está permitido).
+    expect(p.codominio.some((y) => !p.flechas.some(([, b]) => b === y))).toBe(true);
+    for (const [x, y] of p.flechas) {
+      expect(p.dominio).toContain(x);
+      expect(p.codominio).toContain(y);
+    }
+    return;
+  }
+  if (tipo === 'afin') {
+    const p = publico as PublicoAfin;
+    const s = secreto as SecretoAfin;
+    for (const [x, y] of p.puntos ?? []) {
+      expect(y).toBe(s.m * x + s.n);
+      expect(y).toBeGreaterThanOrEqual(p.ventana!.ymin);
+      expect(y).toBeLessThanOrEqual(p.ventana!.ymax);
+    }
+    for (const f of p.tabla ?? []) expect(f.y).toBe(s.m * f.x + s.n);
+    if (p.modo === 'tabla') expect(p.tabla!.some((f) => f.x === 0)).toBe(false); // hay que retroceder hasta x = 0
+    if (p.modo === 'tabla') expect(p.tabla![1]!.x - p.tabla![0]!.x).not.toBe(1);
+    if (p.evaluarEn !== undefined) expect(s.resultado).toBe(s.m * p.evaluarEn + s.n);
+    expect(s.m).not.toBe(0);
+    return;
+  }
+  if (tipo === 'inecuacion_lineal') {
+    const p = publico as PublicoInecLineal;
+    const s = secreto as SecretoGrafico;
+    expect(p.texto).toBe(textoInecLineal(p));
+    expect(s.borde).toBeGreaterThan(p.desde);
+    expect(s.borde).toBeLessThan(p.hasta);
+    const cumpleL = (x: number) => verdad(textoInecLineal(p, x).replace(/\//g, '/'));
+    expect(cumpleL(s.borde)).toBe(false);
+    expect(cumpleL(s.borde - 1)).toBe(s.tipo === 'izquierda');
+    expect(cumpleL(s.borde + 1)).toBe(s.tipo === 'derecha');
+    if (nivel <= 2) expect(coeficienteFinal(p)).toBeGreaterThan(0);
     return;
   }
   if (tipo === 'reducir') {
@@ -640,5 +711,49 @@ describe('diagnósticos de la isla 7', () => {
     expect(ecuacionMult.evaluar(p, { borde: 24, tipo: 'derecha' }, { valor: 24, tipo: 'derecha' }).correcto).toBe(true);
     const q: PublicoMult = { forma: 'ax=b', a: 3, b: 21, letra: 'x', texto: '3x = 21', desde: 0, hasta: 50, marca: 5 };
     expect(ecuacionMult.evaluar(q, { borde: 7, tipo: 'punto' }, { valor: 63, tipo: 'punto' }).diagnostico).toBe('operacion_inversa');
+  });
+});
+
+
+describe('diagnósticos de la isla 8', () => {
+  it('incógnita a ambos lados: 5x + 3 = 2x + 15', () => {
+    const p: PublicoAmbosLados = { forma: 'ambos', a: 5, b: 3, c: 2, d: 15, letra: 'x', representacion: 'formal' };
+    const s: SecretoAmbosLados = { x: 4, k: 3, m: 12 };
+    const e = (k: number, m: number, x: number) => ecuacionAmbosLados.evaluar(p, s, { k, m, x });
+    expect(e(3, 12, 4).correcto).toBe(true);
+    expect(e(-3, -12, 4).correcto).toBe(true); // también vale dejar las x a la derecha
+    expect(e(7, 12, 12).diagnostico).toBe('ambos_lados_suma');
+    expect(e(3, 18, 6).diagnostico).toBe('operacion_inversa');
+    expect(e(3, 12, 12).diagnostico).toBe('ecuacion_sin_dividir');
+    const q: PublicoAmbosLados = { forma: 'parentesis', a: 3, b: 4, c: 27, d: 0, letra: 'x', representacion: 'formal' };
+    expect(ecuacionAmbosLados.evaluar(q, { x: 5, k: 3, m: 15 }, { k: 3, m: 23, x: 23 }).diagnostico).toBe('parentesis_distributiva');
+    expect(ecuacionAmbosLados.evaluar(q, { x: 5, k: 3, m: 15 }, { k: 1, m: 5, x: 5 }).correcto).toBe(true); // dividir primero: x + 4 = 9
+  });
+
+  it('inecuación con coeficiente negativo: −2x + 5 < 11', () => {
+    const p: PublicoInecLineal = { forma: 'ax+b?c', a: -2, b: 5, c: 11, d: 0, relacion: '<', letra: 'x', texto: '−2x + 5 < 11', desde: -10, hasta: 10, marca: 2, negativos: true };
+    const s: SecretoGrafico = { borde: -3, tipo: 'derecha' };
+    expect(inecuacionLineal.evaluar(p, s, { valor: -3, tipo: 'derecha' }).correcto).toBe(true);
+    expect(inecuacionLineal.evaluar(p, s, { valor: -3, tipo: 'izquierda' }).diagnostico).toBe('inecuacion_no_invierte');
+    expect(inecuacionLineal.evaluar(p, s, { valor: 3, tipo: 'derecha' }).diagnostico).toBe('signo_despeje');
+  });
+
+  it('funciones: es / no es función', () => {
+    const p: PublicoFuncion = { dominio: [1, 2, 3], codominio: [5, 8, 11, 20], flechas: [[1, 5], [2, 8], [3, 11]] };
+    const s: SecretoFuncion = { esFuncion: true, m: 3, n: 2 };
+    expect(funcion.evaluar(p, s, { esFuncion: true, m: 3, n: 2 }).correcto).toBe(true);
+    expect(funcion.evaluar(p, s, { esFuncion: false, culpable: 1 }).diagnostico).toBe('funcion_si_es');
+    const q: PublicoFuncion = { ...p, flechas: [...p.flechas, [2, 20]] };
+    expect(funcion.evaluar(q, { esFuncion: false, culpable: 2, m: 3, n: 2 }, { esFuncion: false, culpable: 2 }).correcto).toBe(true);
+    expect(funcion.evaluar(q, { esFuncion: false, culpable: 2, m: 3, n: 2 }, { esFuncion: true, m: 3, n: 2 }).diagnostico).toBe('funcion_no_es');
+  });
+
+  it('función afín desde una tabla con saltos de 2', () => {
+    const p: PublicoAfin = { modo: 'tabla', tabla: [1, 3, 5, 9].map((x) => ({ x, y: 3 * x + 4 })), columnas: ['x', 'f(x)'] };
+    const s: SecretoAfin = { m: 3, n: 4 };
+    expect(afin.evaluar(p, s, { m: 3, n: 4 }).correcto).toBe(true);
+    expect(afin.evaluar(p, s, { m: 6, n: 1 }).diagnostico).toBe('afin_pendiente_paso');
+    expect(afin.evaluar(p, s, { m: 3, n: 7 }).diagnostico).toBe('afin_intercepto');
+    expect(afin.evaluar(p, s, { m: -3, n: 4 }).diagnostico).toBe('afin_signo');
   });
 });

@@ -153,4 +153,34 @@ export const DIAGNOSTICOS_DOCENTE: Record<string, { titulo: string; sugerencia: 
     titulo: 'Resuelve una proporción inversa como directa',
     sugerencia: 'Situaciones como "más personas, menos horas": verificar que el producto se mantiene.',
   },
+  ambos_lados_suma: {
+    titulo: 'Suma los términos con x en vez de restarlos (5x + 2x)',
+    sugerencia: 'En la balanza, quitar una caja de cada lado: el término con x "pasa" restando.',
+  },
+  parentesis_distributiva: {
+    titulo: 'Aplica mal la distributiva: 3(x + 4) = 3x + 4',
+    sugerencia: 'Modelo de área o de grupos: 3 grupos de (x + 4) son 3x y 3 · 4.',
+  },
+  signo_despeje: { titulo: 'Equivoca el signo al despejar (x = 4 en vez de −4)', sugerencia: 'Repasar la división con enteros y comprobar reemplazando.' },
+  funcion_no_es: {
+    titulo: 'Acepta como función una relación con un elemento con dos imágenes (o sin imagen)',
+    sugerencia: 'Contar flechas que salen de cada elemento del dominio: exactamente una.',
+  },
+  funcion_si_es: {
+    titulo: 'Cree que todo el conjunto de llegada debe tener flecha',
+    sugerencia: 'Mostrar funciones con elementos de llegada libres (máquinas que nunca producen ciertos números).',
+  },
+  afin_signo: { titulo: 'Equivoca el signo de la pendiente', sugerencia: 'Recorrer la recta de izquierda a derecha: ¿sube o baja?' },
+  afin_intercepto: {
+    titulo: 'Confunde el coeficiente de posición con el primer valor de la tabla',
+    sugerencia: 'n es f(0): retroceder en la tabla o prolongar la recta hasta el eje y.',
+  },
+  afin_pendiente_paso: {
+    titulo: 'Usa Δy como pendiente sin dividir por Δx',
+    sugerencia: 'Dibujar el "escalón" entre dos puntos y dividir lo que sube por lo que avanza.',
+  },
+  inecuacion_no_invierte: {
+    titulo: 'No invierte la desigualdad al dividir por un negativo',
+    sugerencia: 'Probar con números: −2 · 1 < −2 · 0 es falso aunque 1 > 0. Comprobar siempre con un valor de la solución.',
+  },
 };

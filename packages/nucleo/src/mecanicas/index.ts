@@ -19,6 +19,10 @@ import { ecuacionDosPasos } from './ecuacionDosPasos';
 import { reducir } from './reducir';
 import { proporcion } from './proporcion';
 import { ecuacionMult } from './ecuacionMult';
+import { ecuacionAmbosLados } from './ecuacionAmbosLados';
+import { funcion } from './funcion';
+import { afin } from './afin';
+import { inecuacionLineal } from './inecuacionLineal';
 
 export const MECANICAS: Record<TipoItem, Mecanica> = {
   inclinacion,
@@ -40,6 +44,10 @@ export const MECANICAS: Record<TipoItem, Mecanica> = {
   reducir,
   proporcion,
   ecuacion_mult: ecuacionMult,
+  ecuacion_ambos_lados: ecuacionAmbosLados,
+  funcion,
+  afin,
+  inecuacion_lineal: inecuacionLineal,
 };
 
 export function mecanica(tipo: TipoItem): Mecanica {
@@ -89,3 +97,13 @@ export { valorProporcion } from './proporcion';
 export type { PublicoMult, FormaMult } from './ecuacionMult';
 export { textoMult, resolverMult } from './ecuacionMult';
 export { generarProblemaVolcan } from './problemaVolcan';
+export { ecuacionAmbosLados, funcion, afin, inecuacionLineal };
+export type { PublicoAmbosLados, SecretoAmbosLados, RespuestaAmbosLados } from './ecuacionAmbosLados';
+export { textoAmbosLados } from './ecuacionAmbosLados';
+export type { PublicoFuncion, SecretoFuncion, RespuestaFuncion } from './funcion';
+export { textoRegla as textoReglaFuncion } from './funcion';
+export type { PublicoAfin, SecretoAfin, RespuestaAfin, ModoAfin } from './afin';
+export type { PublicoInecLineal, FormaLineal } from './inecuacionLineal';
+export { textoInecLineal, coeficienteFinal } from './inecuacionLineal';
+export { generarProblemaCastillo } from './problemaCastillo';
+export { lineal, terminoX, constante as constanteLineal, num, numP } from './lineal';

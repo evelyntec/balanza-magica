@@ -7,7 +7,7 @@
  */
 
 import type { Azar } from './azar';
-import { MECANICAS, generarSucesion, generarGrafico, generarExpresion, generarProblemaLetras, generarProblemaVolcan, type ContextoGeneracion, type ItemGenerado } from './mecanicas';
+import { MECANICAS, generarSucesion, generarGrafico, generarExpresion, generarProblemaLetras, generarProblemaVolcan, generarProblemaCastillo, type ContextoGeneracion, type ItemGenerado } from './mecanicas';
 import type { TipoItem } from './tipos';
 
 export interface ObjetivoAprendizaje {
@@ -204,8 +204,8 @@ export const ISLAS: Isla[] = [
     nivel: '8° básico',
     lema: 'De la balanza a la función',
     color: '#3b2a6e',
-    disponible: false,
-    jefe: { nombre: 'Rey Desequilibrio', descripcion: 'Gobierna con dos balanzas a la vez.', vida: 16 },
+    disponible: true,
+    jefe: { nombre: 'Rey Desequilibrio', descripcion: 'Gobierna con dos balanzas a la vez y da vuelta las desigualdades. ¡El último desafío del reino!', vida: 18 },
     oa: [
       {
         codigo: 'MA08 OA 7',
@@ -722,6 +722,77 @@ ETAPAS.push(
       { tipo: 'proporcion', generar: simple('proporcion') },
       { tipo: 'ecuacion_mult', generar: simple('ecuacion_mult') },
       { tipo: 'problema', generar: (nivel, azar) => generarProblemaVolcan(nivel, azar) },
+    ]),
+  }),
+);
+
+// Isla 8 ----------------------------------------------------------------------
+
+/** Desigualdades del rey: inecuaciones lineales y problemas con ecuaciones. */
+function desigualdadesRey(nivel: number, azar: Azar, ctx: ContextoGeneracion): ItemGenerado {
+  return azar.probabilidad(0.6) ? MECANICAS.inecuacion_lineal.generar(nivel, azar, ctx) : generarProblemaCastillo(nivel, azar);
+}
+
+ETAPAS.push(
+  etapa({
+    id: '8-1',
+    isla: 8,
+    orden: 1,
+    nombre: 'Balanzas de doble carga',
+    descripcion: 'Cajas en los dos platillos: 3x + 4 = x + 12. Primero en la balanza, después con negativos y paréntesis.',
+    oa: ['MA08 OA 8'],
+    esJefe: false,
+    mecanicas: ['ecuacion_ambos_lados'],
+    generar: simple('ecuacion_ambos_lados'),
+  }),
+  etapa({
+    id: '8-2',
+    isla: 8,
+    orden: 2,
+    nombre: 'La máquina de funciones',
+    descripcion: '¿Cada número tiene una sola flecha? Decide si es función y escribe su regla.',
+    oa: ['MA08 OA 7'],
+    esJefe: false,
+    mecanicas: ['funcion'],
+    generar: simple('funcion'),
+  }),
+  etapa({
+    id: '8-3',
+    isla: 8,
+    orden: 3,
+    nombre: 'Rectas del castillo',
+    descripcion: 'La función afín en gráficos, tablas, traslaciones e interés simple.',
+    oa: ['MA08 OA 10'],
+    esJefe: false,
+    mecanicas: ['afin'],
+    generar: simple('afin'),
+  }),
+  etapa({
+    id: '8-4',
+    isla: 8,
+    orden: 4,
+    nombre: 'Desigualdades del rey',
+    descripcion: 'Inecuaciones lineales (¡cuidado con los negativos!) y problemas con ecuaciones.',
+    oa: ['MA08 OA 8', 'MA08 OA 9'],
+    esJefe: false,
+    mecanicas: ['inecuacion_lineal', 'problema'],
+    generar: desigualdadesRey,
+  }),
+  etapa({
+    id: '8-J',
+    isla: 8,
+    orden: 5,
+    nombre: 'El Rey Desequilibrio',
+    descripcion: 'El desafío final del reino: ecuaciones, funciones, rectas e inecuaciones.',
+    oa: ['MA08 OA 7', 'MA08 OA 8', 'MA08 OA 9', 'MA08 OA 10'],
+    esJefe: true,
+    mecanicas: ['ecuacion_ambos_lados', 'funcion', 'afin', 'inecuacion_lineal', 'problema'],
+    generar: mezcla([
+      { tipo: 'ecuacion_ambos_lados', generar: simple('ecuacion_ambos_lados') },
+      { tipo: 'funcion', generar: simple('funcion') },
+      { tipo: 'afin', generar: simple('afin') },
+      { tipo: 'inecuacion_lineal', generar: simple('inecuacion_lineal') },
+      { tipo: 'problema', generar: (nivel, azar) => generarProblemaCastillo(nivel, azar) },
     ]),
   }),
 );

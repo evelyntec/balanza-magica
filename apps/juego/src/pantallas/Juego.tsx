@@ -36,6 +36,9 @@ import { UIExpresion } from '../mecanicas/UIExpresion';
 import { UIEcuacionDosPasos } from '../mecanicas/UIEcuacionDosPasos';
 import { UIReducir } from '../mecanicas/UIReducir';
 import { UIProporcion } from '../mecanicas/UIProporcion';
+import { UIEcuacionAmbosLados } from '../mecanicas/UIEcuacionAmbosLados';
+import { UIFuncion } from '../mecanicas/UIFuncion';
+import { UIAfin } from '../mecanicas/UIAfin';
 
 const UI: Record<TipoItem, ComponentType<PropsMecanica>> = {
   inclinacion: UIInclinacion,
@@ -57,6 +60,10 @@ const UI: Record<TipoItem, ComponentType<PropsMecanica>> = {
   reducir: UIReducir,
   proporcion: UIProporcion,
   ecuacion_mult: UIGraficoSolucion,
+  ecuacion_ambos_lados: UIEcuacionAmbosLados,
+  funcion: UIFuncion,
+  afin: UIAfin,
+  inecuacion_lineal: UIGraficoSolucion,
 };
 
 const TITULOS: Record<CierreItem['resultado'], { titulo: string; animo: Animo }> = {

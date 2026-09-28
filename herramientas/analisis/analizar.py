@@ -55,6 +55,10 @@ NOMBRES_TIPO = {
     "reducir": "Términos semejantes",
     "proporcion": "Proporcionalidad",
     "ecuacion_mult": "Ecuaciones e inecuaciones ax = b",
+    "ecuacion_ambos_lados": "Incógnita a ambos lados",
+    "funcion": "Funciones (diagramas)",
+    "afin": "Función afín",
+    "inecuacion_lineal": "Inecuaciones lineales",
 }
 
 DIAGNOSTICOS = {
@@ -114,6 +118,15 @@ DIAGNOSTICOS = {
     "proporcion_afin": "Cree que toda relación creciente es directa",
     "proporcion_aditiva": "Usa la estrategia aditiva",
     "proporcion_inversa_directa": "Resuelve una inversa como directa",
+    "ambos_lados_suma": "Suma los términos con x en vez de restarlos",
+    "parentesis_distributiva": "Aplica mal la distributiva",
+    "signo_despeje": "Equivoca el signo al despejar",
+    "funcion_no_es": "Acepta como función una que no lo es",
+    "funcion_si_es": "Cree que todo el conjunto de llegada debe usarse",
+    "afin_signo": "Equivoca el signo de la pendiente",
+    "afin_intercepto": "Confunde n con el primer valor de la tabla",
+    "afin_pendiente_paso": "Usa Δy como pendiente sin dividir por Δx",
+    "inecuacion_no_invierte": "No invierte la desigualdad con un negativo",
 }
 
 

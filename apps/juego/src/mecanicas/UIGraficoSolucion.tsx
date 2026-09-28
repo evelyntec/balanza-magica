@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { textoGrafico, type PublicoGrafico, type TipoGrafico } from '@balanza/nucleo';
 import { Teclado } from '../componentes/Comunes';
+import { BotonSigno, conSigno, texto as textoNum } from '../componentes/BotonSigno';
 import { sonidos } from '../sonido';
 import { tieneAyuda, type PropsMecanica } from './tipos';
 import { useCasillas } from './useCasillas';
@@ -22,7 +23,7 @@ function Recta({ p, dibujos, borde }: { p: PublicoGrafico; dibujos: { valor: num
         <g key={m}>
           <line x1={x(m)} y1={Y - 8} x2={x(m)} y2={Y + 8} className="recta-grafico__eje" />
           <text x={x(m)} y={Y + 34} textAnchor="middle" className="recta-grafico__numero">
-            {m}
+            {textoNum(m)}
           </text>
         </g>
       ))}
@@ -38,7 +39,7 @@ function Recta({ p, dibujos, borde }: { p: PublicoGrafico; dibujos: { valor: num
             {d.tipo === 'derecha' ? <path d={`M${ANCHO - 6} ${Y - 16} l-14 -8 v16 Z`} className="rayo__punta" /> : null}
             <circle cx={cx} cy={Y - 16} r={8} className={d.tipo === 'punto' ? 'punto--lleno' : 'punto--vacio'} />
             <text x={cx} y={Y - 32} textAnchor="middle" className="recta-grafico__valor">
-              {d.valor}
+              {textoNum(d.valor)}
             </text>
           </g>
         );
@@ -55,18 +56,22 @@ const OPCIONES: { tipo: TipoGrafico; icono: string; texto: string }[] = [
 
 export function UIGraficoSolucion({ item, bloqueado, cierre, pistas, reintentos, alResponder, pie }: PropsMecanica) {
   // También sirve para "Ecuaciones de lava" (7°), cuyo público trae el texto listo.
-  const p = item.publico as PublicoGrafico & { texto?: string };
+  const p = item.publico as PublicoGrafico & { texto?: string; negativos?: boolean };
   const texto = p.texto ?? textoGrafico(p);
   const [tipo, setTipo] = useState<TipoGrafico | null>(null);
-  useEffect(() => setTipo(null), [item.id]);
+  const [signo, setSigno] = useState<'+' | '-'>('+');
+  useEffect(() => {
+    setTipo(null);
+    setSigno('+');
+  }, [item.id]);
 
   const enviar = () => {
     if (!casillas.completo || !tipo || bloqueado || cierre) return;
-    alResponder({ valor: casillas.numeros[0], tipo });
+    alResponder({ valor: conSigno(signo, casillas.numeros[0]!), tipo });
   };
   const casillas = useCasillas(1, 4, item.id, enviar, !bloqueado && !cierre);
   const correcta = cierre ? (cierre.solucion.respuesta as { valor: number; tipo: TipoGrafico }) : null;
-  const propia = casillas.valores[0] ? Number(casillas.valores[0]) : null;
+  const propia = casillas.valores[0] ? conSigno(signo, Number(casillas.valores[0])) : null;
   const borde = tieneAyuda(pistas, 'mostrarTotales')?.valor;
 
   const dibujos: { valor: number; tipo: TipoGrafico; clase: string }[] = [];
@@ -91,8 +96,9 @@ export function UIGraficoSolucion({ item, bloqueado, cierre, pistas, reintentos,
       <div className="juego__panel">
         <div className="fila centro" style={{ gap: 10, fontWeight: 800, fontSize: '1.15rem' }}>
           <span>Borde:</span>
+          {p.negativos && !correcta ? <BotonSigno signo={signo} alCambiar={() => setSigno((s) => (s === '+' ? '-' : '+'))} deshabilitado={bloqueado} etiqueta="Signo del borde" /> : null}
           <button type="button" className={`casilla ${!cierre ? 'casilla--activa' : ''} ${casillas.valores[0] ? 'casilla--llena' : ''}`} aria-label="Número del borde" disabled={bloqueado || !!cierre}>
-            {correcta ? correcta.valor : casillas.valores[0] || ' '}
+            {correcta ? textoNum(correcta.valor) : casillas.valores[0] || ' '}
           </button>
         </div>
         <div className="opciones opciones--grafico" role="radiogroup" aria-label="Cómo se dibuja la solución">

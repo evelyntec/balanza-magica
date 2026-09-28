@@ -2304,3 +2304,107 @@ h3 {
   width: 100%;
   height: auto;
 }
+
+/* Castillo del Desequilibrio (Isla 8) */
+
+.casilla-con-signo {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.diagrama-funcion__marco {
+  padding: 6px;
+  width: min(100%, 360px);
+}
+
+.diagrama-funcion {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.diagrama-funcion [role='button']:focus-visible circle {
+  stroke: var(--fucsia-500);
+  stroke-width: 4;
+}
+
+.plano__marco {
+  padding: 6px;
+  width: min(100%, 360px);
+}
+
+.plano {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.plano__cuadricula {
+  stroke: #e3dcf2;
+  stroke-width: 1;
+}
+
+.plano__eje {
+  stroke: var(--tinta);
+  stroke-width: 2.2;
+}
+
+.plano__numero {
+  font-size: 10px;
+  font-weight: 800;
+  fill: var(--tinta);
+}
+
+.plano__recta {
+  stroke: var(--violeta-500);
+  stroke-width: 3.5;
+}
+
+.plano__base {
+  stroke: var(--tinta);
+  stroke-width: 2;
+  stroke-dasharray: 6 5;
+  opacity: 0.6;
+}
+
+.plano__correcta {
+  stroke: var(--verde-500);
+  stroke-width: 3;
+  stroke-dasharray: 8 5;
+}
+
+.plano__escalon {
+  fill: none;
+  stroke: var(--fucsia-500);
+  stroke-width: 2.5;
+  stroke-dasharray: 4 3;
+}
+
+.plano__punto {
+  fill: var(--fucsia-500);
+  stroke: var(--tinta);
+  stroke-width: 1.5;
+}
+
+.plano__coordenada {
+  font-size: 11px;
+  font-weight: 900;
+  fill: var(--tinta);
+  paint-order: stroke;
+  stroke: #fff;
+  stroke-width: 3px;
+}
+
+.plano__leyenda {
+  margin: 4px 0 0;
+  font-weight: 800;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.plano__numero--fondo {
+  paint-order: stroke;
+  stroke: #fffdf7;
+  stroke-width: 3px;
+}

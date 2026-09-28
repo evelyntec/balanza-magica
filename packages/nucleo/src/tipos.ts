@@ -51,7 +51,11 @@ export type TipoItem =
   | 'ecuacion_dos_pasos'
   | 'reducir'
   | 'proporcion'
-  | 'ecuacion_mult';
+  | 'ecuacion_mult'
+  | 'ecuacion_ambos_lados'
+  | 'funcion'
+  | 'afin'
+  | 'inecuacion_lineal';
 
 /** Resultado de un ejercicio, del mejor al peor. */
 export type Resultado = 'perfecto' | 'logrado' | 'con_ayuda' | 'fallido';
@@ -134,6 +138,15 @@ export type CodigoDiagnostico =
   | 'proporcion_afin'
   | 'proporcion_aditiva'
   | 'proporcion_inversa_directa'
+  | 'ambos_lados_suma'
+  | 'parentesis_distributiva'
+  | 'signo_despeje'
+  | 'funcion_no_es'
+  | 'funcion_si_es'
+  | 'afin_signo'
+  | 'afin_intercepto'
+  | 'afin_pendiente_paso'
+  | 'inecuacion_no_invierte'
   | 'generico';
 
 export interface Evaluacion {

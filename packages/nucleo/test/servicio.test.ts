@@ -201,7 +201,8 @@ describe('antitrampas', () => {
     expect((await espera(t.servicio.iniciarEtapa(t.ctx, '5-1'))).codigo).toBe('ETAPA_BLOQUEADA');
     expect((await espera(t.servicio.iniciarEtapa(t.ctx, '6-1'))).codigo).toBe('ETAPA_BLOQUEADA');
     expect((await espera(t.servicio.iniciarEtapa(t.ctx, '7-1'))).codigo).toBe('ETAPA_BLOQUEADA');
-    expect((await espera(t.servicio.iniciarEtapa(t.ctx, '8-1'))).codigo).toBe('NO_ENCONTRADO');
+    expect((await espera(t.servicio.iniciarEtapa(t.ctx, '8-1'))).codigo).toBe('ETAPA_BLOQUEADA');
+    expect((await espera(t.servicio.iniciarEtapa(t.ctx, '9-1'))).codigo).toBe('NO_ENCONTRADO');
     expect((await espera(t.servicio.iniciarEtapa(t.ctx, { id: '1-1' }))).codigo).toBe('NO_ENCONTRADO');
   });
 
@@ -356,7 +357,18 @@ describe('recorrido completo', () => {
     }
     const perfil = await t.servicio.perfil(t.ctx.jugadorId);
     expect(perfil.insignias).toEqual(expect.arrayContaining(['vence_7-J', 'isla_7_dorada', 'sin_mezclar']));
-    expect(perfil.islas[7]!.accesible).toBe(false); // la isla 8 aún no existe
+    expect(perfil.islas[7]!.accesible).toBe(true); // vencer al Dragón abre el Castillo
+  });
+
+  it('8° básico: jugar perfecto la isla 8 da 3 estrellas y vence al Rey', async () => {
+    const t = await preparar({ nivel: 8 });
+    for (const id of ['8-1', '8-2', '8-3', '8-4', '8-J']) {
+      const fin = await completarEtapa(t, id);
+      expect(fin.estrellas).toBe(3);
+    }
+    const perfil = await t.servicio.perfil(t.ctx.jugadorId);
+    expect(perfil.insignias).toEqual(expect.arrayContaining(['vence_8-J', 'isla_8_dorada', 'mundo_al_reves']));
+    expect(perfil.islas).toHaveLength(8);
   });
 
   it('adivinar al azar rinde mucho menos que pensar', async () => {

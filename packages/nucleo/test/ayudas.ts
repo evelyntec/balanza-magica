@@ -5,6 +5,10 @@
 
 import type { ItemGuardado } from '../src/servicio/modelos';
 import type {
+  PublicoAmbosLados,
+  SecretoAmbosLados,
+  SecretoFuncion,
+  SecretoAfin,
   SecretoReducir,
   PublicoReducir,
   SecretoProporcion,
@@ -102,9 +106,24 @@ export function respuestaCorrecta(tipo: TipoItem, publico: unknown, secreto: unk
       const s = secreto as SecretoProporcion;
       return { tipo: s.tipo, valores: p.filas.flatMap((f, i) => (f.y === null ? [s.completas[i]] : [])) };
     }
-    case 'ecuacion_mult': {
+    case 'ecuacion_mult':
+    case 'inecuacion_lineal': {
       const s = secreto as SecretoGrafico;
       return { valor: s.borde, tipo: s.tipo };
+    }
+    case 'ecuacion_ambos_lados': {
+      const p = publico as PublicoAmbosLados;
+      const s = secreto as SecretoAmbosLados;
+      return p.representacion === 'formal' ? { k: s.k, m: s.m, x: s.x } : { x: s.x };
+    }
+    case 'funcion': {
+      const s = secreto as SecretoFuncion;
+      if (!s.esFuncion) return { esFuncion: false, culpable: s.culpable };
+      return { esFuncion: true, m: s.m, n: s.n, ...(s.resultado !== undefined ? { resultado: s.resultado } : {}) };
+    }
+    case 'afin': {
+      const s = secreto as SecretoAfin;
+      return { m: s.m, n: s.n, ...(s.resultado !== undefined ? { resultado: s.resultado } : {}) };
     }
   }
 }
@@ -185,9 +204,23 @@ export function respuestaIncorrecta(tipo: TipoItem, publico: unknown, secreto: u
       const r = buena as { tipo: string; valores: number[] };
       return { ...r, tipo: r.tipo === 'directa' ? 'inversa' : 'directa' };
     }
-    case 'ecuacion_mult': {
+    case 'ecuacion_mult':
+    case 'inecuacion_lineal': {
       const s = secreto as SecretoGrafico;
       return { valor: s.borde, tipo: s.tipo === 'punto' ? 'derecha' : 'punto' };
+    }
+    case 'ecuacion_ambos_lados': {
+      const r = buena as { k?: number; m?: number; x: number };
+      return { ...r, x: r.x + 1 };
+    }
+    case 'funcion': {
+      const s = secreto as SecretoFuncion;
+      if (!s.esFuncion) return { esFuncion: true, m: 1, n: 0 };
+      return { esFuncion: false, culpable: (publico as { dominio: number[] }).dominio[0] };
+    }
+    case 'afin': {
+      const r = buena as { m: number; n: number; resultado?: number };
+      return { ...r, n: r.n + 1 };
     }
   }
 }

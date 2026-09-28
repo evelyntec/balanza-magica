@@ -38,6 +38,10 @@ Creado por **Evelyn Álvarez Vásquez**, Profesora de Educación General Básica
 |---|---|
 | ![Términos semejantes con sacos y globos](docs/capturas/celular-globos-sacos.png) | ![Tabla y gráfico de proporcionalidad](docs/capturas/computador-proporcion.png) |
 
+| Balanzas de doble carga (8°) | La máquina de funciones (8°) | Rectas del castillo (8°) |
+|---|---|---|
+| ![Incógnita a ambos lados](docs/capturas/celular-ambos-lados.png) | ![Diagrama sagital](docs/capturas/celular-funcion.png) | ![Función afín en el plano](docs/capturas/celular-afin.png) |
+
 | Retroalimentación (computador) | Panel docente |
 |---|---|
 | ![Retroalimentación](docs/capturas/computador-retroalimentacion.png) | ![Panel docente](docs/capturas/computador-docente.png) |
@@ -60,7 +64,7 @@ Así se ataca de raíz el error que más daño hace después en álgebra: creer 
 
 Fundamentación completa, con referencias (colección ReFIP, Castro y Molina, Vlassis, Kieran…): [docs/didactica.md](docs/didactica.md).
 
-## Qué incluye esta primera versión
+## Las 8 islas (1° a 8° básico)
 
 | Isla | Nivel | Etapas | OA |
 |---|---|---|---|
@@ -79,7 +83,7 @@ Cada etapa tiene **5 niveles de dificultad adaptativa** y ejercicios generados a
 
 - **Puntos acumulados** durante todo el juego y **rangos**: Aprendiz → Explorador/a → Guardián/a → Maestro/a del Equilibrio → Leyenda.
 - **Estrellas (1 a 3)** por etapa: exigen precisión, pocas pistas y llegar a los niveles altos.
-- **Rachas** que multiplican los puntos (×1,5, ×2, ×3), **32 insignias** y **jefes** con barra de vida.
+- **Rachas** que multiplican los puntos (×1,5, ×2, ×3), **35 insignias** y **jefes** con barra de vida.
 - **Monedas** para la tienda de Gatito (sombrero de mago, corona, balanza dorada…). Nunca sirven para comprar respuestas.
 - **Desafiante sin frustrar:** dos aciertos seguidos suben el nivel; dos errores seguidos bajan un nivel y activan un ejercicio con apoyo.
 - **Pesadas limitadas:** en "completar la caja", acertar con **una sola pesada** da el máximo. Probar al azar no conviene.
@@ -141,7 +145,7 @@ npm run test:e2e         # Playwright: juego completo en celular y computador
 python -m pytest herramientas/analisis
 ```
 
-- **262 500 ejercicios generados y verificados** en cada ejecución: solución única, números dentro del ámbito del OA
+- **300 000 ejercicios generados y verificados** en cada ejecución: solución única, números dentro del ámbito del OA
   (0 a 20 en la balanza de 1° y 2°), sin negativos, respuesta que nunca aparece en la vista pública y retroalimentación para cada error.
 - **Pruebas de propiedades** (fast-check) de la aritmética exacta y de la física de la balanza.
 - **Cada trampa de la tabla anterior tiene su prueba.**
@@ -181,7 +185,8 @@ También hay consultas SQL de ejemplo en [apps/servidor/sql/consultas_docente.sq
 - [x] Isla 5: sucesiones con predicción (numéricas y figuras de palitos y baldosas), gráfico de soluciones de ecuaciones e inecuaciones y problemas hasta 1000
 - [x] Isla 6: fórmulas con letras escritas desde tablas, figuras y situaciones; ecuaciones a · x + b = c en la balanza y con procedimiento formal; problemas con letras
 - [x] Isla 7: términos semejantes con sacos y globos (negativos), proporcionalidad directa, inversa o ninguna con gráfico, ax = b y x/a = b con sus inecuaciones, y modelación
-- [ ] Isla 8: incógnita a ambos lados y de la balanza a la función afín
+- [x] Isla 8: incógnita a ambos lados (balanza y procedimiento formal), funciones en diagramas sagitales, función afín (gráfico, tabla, traslación e interés simple) e inecuaciones lineales con coeficientes negativos
+- [ ] Despliegue automático desde GitHub al hosting y reporte semanal para la docente por correo
 - [ ] Modo Detective: encontrar el error en la resolución de otro personaje
 - [ ] Tutor de pistas con IA
 

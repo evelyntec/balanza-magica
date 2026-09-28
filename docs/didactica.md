@@ -105,6 +105,14 @@ Se marcan como *relacionales*, tienen su propia insignia y su pista de nivel 1 i
 | `proporcion_inversa_directa` | Resuelve una inversa como directa | Ríos proporcionales |
 | `proporcion_afin` | Cree que toda relación creciente es directa (el taxi) | Ríos proporcionales |
 | `proporcion_tipo` | Confunde directa con inversa | Ríos proporcionales |
+| `ambos_lados_suma` | 5x + 3 = 2x + 15 → 7x = 12 (suma en vez de restar) | Balanzas de doble carga |
+| `parentesis_distributiva` | 3(x + 4) = 3x + 4 | Balanzas de doble carga |
+| `signo_despeje` | x = 4 en vez de −4 | Balanzas de doble carga, Desigualdades |
+| `funcion_no_es` | Acepta un elemento con dos imágenes o sin imagen | Máquina de funciones |
+| `funcion_si_es` | Cree que todo el conjunto de llegada debe tener flecha | Máquina de funciones |
+| `afin_pendiente_paso` | Usa Δy como pendiente sin dividir por Δx | Rectas del castillo |
+| `afin_signo`, `afin_intercepto` | Signo de la pendiente; confunde n con el primer valor de la tabla | Rectas del castillo, Máquina de funciones |
+| `inecuacion_no_invierte` | −2x < 6 → x < −3 (no invierte al dividir por un negativo) | Desigualdades del rey |
 
 El panel docente agrupa estos diagnósticos y sugiere una intervención para cada uno.
 
@@ -176,7 +184,23 @@ El panel docente agrupa estos diagnósticos y sugiere una intervención para cad
 - **Interpretar la solución:** en "¿cuántas entradas como máximo?" la respuesta no es el borde de la inecuación,
   sino el mayor número natural que cumple.
 
-## 12. Desafío, adaptatividad y motivación
+## 12. De la balanza a la función (8° básico)
+
+- **Incógnita a ambos lados:** la balanza con cajas en los dos platillos da sentido a "restar 2x en ambos lados"
+  (quitar una caja de cada lado). Filloy y Rojano (1989) muestran que este es el punto donde la aritmética ya no
+  alcanza y hace falta operar con la incógnita; por eso la balanza aparece justo antes del procedimiento formal.
+- **Negativos y paréntesis:** en el nivel formal hay soluciones negativas y paréntesis; se diagnostican la
+  distributiva incompleta y el signo al despejar.
+- **¿Es función?** No se puede responder con un sí o un no al azar: si no es función hay que tocar el elemento que
+  falla. Siempre hay un elemento de llegada sin flecha, porque creer que "hay que usarlos todos" es una concepción
+  errónea frecuente (Vinner, 1983).
+- **Función afín:** tablas con saltos de 2 o 3 obligan a calcular Δy ÷ Δx; el coeficiente de posición nunca aparece
+  en la tabla, hay que retroceder hasta x = 0. La traslación muestra y = mx punteada, y el interés simple conecta con
+  la vida diaria, como pide el OA 10.
+- **Inecuaciones lineales:** el error característico de 8° (no invertir la desigualdad al dividir por un negativo)
+  tiene su diagnóstico y su insignia, "Mundo al revés" (Tsamir y Bazzini, 2004).
+
+## 13. Desafío, adaptatividad y motivación
 
 - **Dos aciertos seguidos** suben un nivel; **dos errores seguidos** bajan un nivel y el siguiente ejercicio llega
   **con apoyo** (vale la mitad y no puede ser perfecto).
@@ -201,6 +225,10 @@ El panel docente agrupa estos diagnósticos y sugiere una intervención para cad
 - Booth, L. (1984). *Algebra: Children's Strategies and Errors*. NFER-Nelson.
 - Hart, K. (1984). *Ratio: Children's Strategies and Errors*. NFER-Nelson.
 - Modestou, M. y Gagatsis, A. (2007). Students' improper proportional reasoning: a result of the epistemological obstacle of "linearity". *Educational Psychology*, 27(1).
+- Filloy, E. y Rojano, T. (1989). Solving equations: the transition from arithmetic to algebra. *For the Learning of Mathematics*, 9(2).
+- Vinner, S. (1983). Concept definition, concept image and the notion of function. *International Journal of Mathematical Education in Science and Technology*, 14(3).
+- Tsamir, P. y Bazzini, L. (2004). Consistencies and inconsistencies in students' reasoning about inequalities. *Proceedings of the 28th Conference of the International Group for the Psychology of Mathematics Education (PME 28)*, vol. 4.
+- Leinhardt, G., Zaslavsky, O. y Stein, M. K. (1990). Functions, graphs, and graphing: tasks, learning, and teaching. *Review of Educational Research*, 60(1).
 - Garrote, M., Hidalgo, M. J. y Blanco, L. J. (2004). Dificultades en el aprendizaje de las desigualdades e inecuaciones. *Suma*, 46.
 - MacGregor, M. y Stacey, K. (1993). Cognitive models underlying students' formulation of simple linear equations. *Journal for Research in Mathematics Education*, 24(3).
 - Stacey, K. (1989). Finding and using patterns in linear generalising problems. *Educational Studies in Mathematics*, 20(2).
