@@ -161,7 +161,7 @@ jobs:
             put -O '$TMP' reinicio/restart.txt;
             bye" "$HOST" 2>&1)"; then
             printf '%s\n' "$salida" | tail -n 25
-            motivo="$(printf '%s\n' "$salida" | grep -iE 'login|denied|incorrect|certificate|fatal|error|refused|timed out' | tail -n 2 | tr '\n' ' ')"
+            motivo="$(printf '%s\n' "$salida" | grep -v '^[[:space:]]*$' | tail -n 3 | tr '\n' ' ' || true)"
             echo "::error title=FTP::${motivo:-la subida falló} — Si dice 'Login incorrect', revisa FTP_USUARIO (usuario@profesoraevelyn.com) y FTP_CLAVE."
             exit 1
           fi
