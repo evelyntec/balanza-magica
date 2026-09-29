@@ -135,7 +135,14 @@ jobs:
           FTP_RUTA: ${{ secrets.FTP_RUTA }}
         run: |
           set -euo pipefail
-          sudo apt-get install -y -qq lftp > /dev/null
+          trap 'echo "::error title=FTP::El paso falló en la línea $LINENO del script (antes o después de conectar)."' ERR
+          if ! command -v lftp > /dev/null; then
+            sudo apt-get update -qq > /dev/null 2>&1 || true
+            if ! sudo apt-get install -y -qq lftp > /dev/null 2>&1; then
+              echo "::error title=FTP::No se pudo instalar lftp en la máquina de GitHub. Reintenta en unos minutos."
+              exit 1
+            fi
+          fi
           HOST="$(printf '%s' "$FTP_HOST" | tr -d '[:space:]')"
           USUARIO="$(printf '%s' "$FTP_USUARIO" | tr -d '[:space:]')"
           DESTINO="$(printf '%s' "${FTP_RUTA:-/}" | tr -d '\r' | sed 's/[[:space:]]*$//')"
