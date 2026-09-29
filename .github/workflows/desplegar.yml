@@ -151,15 +151,23 @@ jobs:
           mkdir -p reinicio && date > reinicio/restart.txt
           # La contraseña va por variable de entorno: así funciona aunque tenga comillas o símbolos.
           export LFTP_PASSWORD="$(printf '%s' "$FTP_CLAVE" | tr -d '\r\n')"
-          if ! salida="$(lftp -d -u "$USUARIO" --env-password -e "
-            set cmd:fail-exit true; set ftp:ssl-force true; set ftp:ssl-protect-data true; set ssl:verify-certificate true;
-            set net:max-retries 3; set net:timeout 30; set net:connection-limit 1;
-            mirror --reverse --delete --verbose=1 \
-              --exclude-glob .env --exclude-glob '*.log' --exclude tmp/ --exclude node_modules/ --exclude-glob .htaccess \
-              apps/servidor/dist '$DESTINO';
-            mkdir -p -f '$TMP';
-            put -O '$TMP' reinicio/restart.txt;
-            bye" "$HOST" 2>&1)"; then
+          # Los comandos van en un archivo que PRIMERO abre la conexión (con -e y saltos de línea,
+          # lftp ejecutaría el mirror antes de conectarse).
+          cat > subir.lftp <<LFTP
+          set cmd:fail-exit true
+          set ftp:ssl-force true
+          set ftp:ssl-protect-data true
+          set ssl:verify-certificate true
+          set net:max-retries 3
+          set net:timeout 30
+          set net:connection-limit 1
+          open -u "$USUARIO" --env-password "$HOST"
+          mirror --reverse --delete --verbose=1 --exclude-glob .env --exclude-glob *.log --exclude ^tmp/ --exclude ^node_modules/ --exclude-glob .htaccess apps/servidor/dist "$DESTINO"
+          mkdir -p -f "$TMP"
+          put -O "$TMP" reinicio/restart.txt
+          bye
+          LFTP
+          if ! salida="$(lftp -d -f subir.lftp 2>&1)"; then
             printf '%s\n' "$salida" | tail -n 25
             motivo="$(printf '%s\n' "$salida" | grep -vi 'PASS' | grep -v '^[[:space:]]*$' | tail -n 6 | tr '\n' ' ' || true)"
             echo "::error title=FTP::${motivo:-la subida falló} — Si dice 'Login incorrect', revisa FTP_USUARIO (usuario@profesoraevelyn.com) y FTP_CLAVE."
