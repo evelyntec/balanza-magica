@@ -151,22 +151,22 @@ jobs:
           mkdir -p reinicio && date > reinicio/restart.txt
           # La contraseña va por variable de entorno: así funciona aunque tenga comillas o símbolos.
           export LFTP_PASSWORD="$(printf '%s' "$FTP_CLAVE" | tr -d '\r\n')"
-          if ! salida="$(lftp -u "$USUARIO" --env-password -e "
+          if ! salida="$(lftp -d -u "$USUARIO" --env-password -e "
             set cmd:fail-exit true; set ftp:ssl-force true; set ftp:ssl-protect-data true; set ssl:verify-certificate true;
-            set net:max-retries 2; set net:timeout 30; set net:reconnect-interval-base 5;
-            mirror --reverse --delete --verbose=1 --parallel=4 \
+            set net:max-retries 3; set net:timeout 30; set net:connection-limit 1;
+            mirror --reverse --delete --verbose=1 \
               --exclude-glob .env --exclude-glob '*.log' --exclude tmp/ --exclude node_modules/ --exclude-glob .htaccess \
               apps/servidor/dist '$DESTINO';
             mkdir -p -f '$TMP';
             put -O '$TMP' reinicio/restart.txt;
             bye" "$HOST" 2>&1)"; then
             printf '%s\n' "$salida" | tail -n 25
-            motivo="$(printf '%s\n' "$salida" | grep -v '^[[:space:]]*$' | tail -n 3 | tr '\n' ' ' || true)"
+            motivo="$(printf '%s\n' "$salida" | grep -vi 'PASS' | grep -v '^[[:space:]]*$' | tail -n 6 | tr '\n' ' ' || true)"
             echo "::error title=FTP::${motivo:-la subida falló} — Si dice 'Login incorrect', revisa FTP_USUARIO (usuario@profesoraevelyn.com) y FTP_CLAVE."
             exit 1
           fi
-          printf '%s\n' "$salida" | tail -n 8
-          echo "::notice title=Subida lista::$(printf '%s\n' "$salida" | grep -c '^Transferring\|^Removing' || true) cambios sincronizados en la carpeta de la aplicación y reinicio solicitado."
+          printf '%s\n' "$salida" | grep -vi 'PASS' | grep -E "^(Transferring|Removing|Making)" | tail -n 20 || true
+          echo "::notice title=Subida lista::$(printf '%s\n' "$salida" | grep -cE '^(Transferring|Removing)' || true) cambios sincronizados en la carpeta de la aplicación y reinicio solicitado."
 
       - name: Comprobar que la nueva versión está en línea
         if: steps.config.outputs.listo == 'si' && env.BALANZA_URL != ''
