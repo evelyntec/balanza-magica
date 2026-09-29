@@ -22,7 +22,10 @@ Mientras no configures los secretos, ambos flujos terminan sin hacer nada y sin 
 
 ## 1. Elegir cómo se conecta GitHub con el hosting
 
-### Opción A (recomendada): SSH
+> **En V2Networks usa la opción B (FTP seguro).** El diagnóstico (Actions → *Diagnóstico del hosting*) mostró que
+> su servidor no acepta SSH desde fuera; FTP con TLS sí. El servidor FTP se identifica como `s540.v2nets.com`.
+
+### Opción A: SSH (si tu hosting lo permite desde fuera)
 
 1. cPanel → **Acceso SSH** (*SSH Access*) → **Administrar claves SSH** → **Generar una nueva clave**.
    - Nombre: `github-balanza`
@@ -41,7 +44,7 @@ Mientras no configures los secretos, ambos flujos terminan sin hacer nada y sin 
 Si **Acceso SSH** no aparece en tu cPanel, pídele al soporte de V2Networks que lo active (el plan Corporativo suele
 incluirlo) o usa la opción B.
 
-### Opción B: FTP seguro (si no hay SSH)
+### Opción B: FTP seguro (la que funciona en V2Networks)
 
 1. cPanel → **Cuentas FTP** → crear:
    - Usuario: `despliegue` (queda `despliegue@profesoraevelyn.com`)
@@ -50,7 +53,8 @@ incluirlo) o usa la opción B.
    - `FTP_HOST`: el nombre del servidor de *Información del servidor* (así el certificado es válido).
    - `FTP_USUARIO`: `despliegue@profesoraevelyn.com`
    - `FTP_CLAVE`: la clave de esa cuenta
-   - `FTP_RUTA`: `/` (la raíz de esa cuenta ya es `balanza-app`)
+   - `FTP_RUTA`: no hace falta (por defecto `/`, que ya es `balanza-app`). Si lo creas con `/`, GitHub oculta
+     todas las barras de los registros como `***`, porque es el valor de un secreto.
 
 ## 2. Guardar los secretos en GitHub
 
@@ -66,7 +70,7 @@ GitHub → repositorio **balanza-magica** → **Settings** → **Secrets and var
 | `SSH_CLAVE_PRIVADA` | `-----BEGIN RSA PRIVATE KEY----- …` | Opción A |
 | `SSH_FRASE` | la contraseña de la clave | Opción A, solo si cPanel exigió una |
 | `RUTA_APP` | `/home/tuusuario/balanza-app` | Opción A |
-| `FTP_HOST`, `FTP_USUARIO`, `FTP_CLAVE`, `FTP_RUTA` | ver arriba | Solo si usas la opción B |
+| `FTP_HOST`, `FTP_USUARIO`, `FTP_CLAVE` | `s540.v2nets.com`, `balanza@profesoraevelyn.com`, … | Opción B (V2Networks) |
 
 Los secretos quedan cifrados: nadie puede volver a leerlos, ni siquiera tú (solo reemplazarlos).
 
@@ -78,7 +82,9 @@ GitHub → **Actions** → **Desplegar** → **Run workflow**. En unos 3 minutos
 
 Desde entonces, cada `git push` a `main` que pase las pruebas se publica solo.
 
-**Si falla:**
+Si FTP está configurado, el despliegue lo usa aunque también existan los secretos de SSH.
+
+**Si falla:** el mensaje del error en GitHub (anotación en rojo) dice en palabras simples qué paso falló.
 - *Permission denied (publickey)*: falta **Autorizar** la clave en cPanel o el usuario o el puerto no coinciden.
 - *No respondió con la versión…*: la app no arrancó. Revisa el registro de errores en *Setup Node.js App*
   (líneas con `[balanza]`); lo más común es una variable de entorno de la base de datos.
