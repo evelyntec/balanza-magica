@@ -32,3 +32,20 @@ jobs:
           H="$(printf '%s' "$HOST" | tr -d '[:space:]')"
           cert="$(timeout 20 openssl s_client -starttls ftp -connect "$H:21" -servername "$H" </dev/null 2>/dev/null | openssl x509 -noout -subject -ext subjectAltName 2>/dev/null | tr '\n' ' ' || true)"
           echo "::notice title=Certificado FTP::${cert:-no se pudo leer}"
+      - name: Probar la conexión FTP (solo lista la carpeta)
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USUARIO: ${{ secrets.FTP_USUARIO }}
+          FTP_CLAVE: ${{ secrets.FTP_CLAVE }}
+        run: |
+          if [ -z "$FTP_HOST" ]; then echo "::notice title=FTP::sin FTP_HOST"; exit 0; fi
+          command -v lftp > /dev/null || { sudo apt-get update -qq > /dev/null 2>&1; sudo apt-get install -y -qq lftp > /dev/null 2>&1; }
+          H="$(printf '%s' "$FTP_HOST" | tr -d '[:space:]')"
+          echo "::notice title=DNS::$H → $(getent hosts "$H" | awk '{print $1}' | tr '\n' ' ')"
+          export LFTP_PASSWORD="$(printf '%s' "$FTP_CLAVE" | tr -d '\r\n')"
+          U="$(printf '%s' "$FTP_USUARIO" | tr -d '[:space:]')"
+          for modo in "set ssl:verify-certificate true" "set ssl:verify-certificate false"; do
+            salida="$(timeout 60 lftp -d -u "$U" --env-password -e "set ftp:ssl-force true; set ftp:ssl-protect-data true; $modo; set net:max-retries 1; set net:timeout 20; cls -1; bye" "$H" 2>&1 || true)"
+            resumen="$(printf '%s\n' "$salida" | grep -vi 'PASS' | grep -E '^(<---|--->|\*\*\*\*|[a-zA-Z])' | tail -n 6 | tr '\n' ' ')"
+            echo "::notice title=FTP ($modo)::$resumen"
+          done
